@@ -131,3 +131,10 @@ DegradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
     );
 
 ```
+
+# Notes
+The default implementations are thread safe.  You can re-use a single proxy across threads, assuming the target object
+is also safe.
+
+# Extension Points
+Feel free to write your own DegradationStrategy and pop it into the DegradationHandler
