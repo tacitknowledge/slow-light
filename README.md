@@ -14,7 +14,8 @@ Just Java, no third party libraries outside the test classes.
 
 The ClientDriverTest shows a number of different modes, but in general you just need to do these things:
 ```
-
+ //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
+ //  supporting concrete classes without interfaces is a TODO
  Object targetToWrapInProxy;
  .
  .
@@ -95,6 +96,7 @@ long serviceTimeout = 1500L;
 // the system will throw an Exception randomly selected from an array
 double passRate = 0.9;
 //Exceptions to throw.  Will try and use the new Exception(String s) constructor, then fall back on default.
+//    don't add any checked exceptions which aren't part of the API on your target object.
 Class exceptions = new Class[]{MyException.class}
 
 DegradationStrategy degradationStrategy
