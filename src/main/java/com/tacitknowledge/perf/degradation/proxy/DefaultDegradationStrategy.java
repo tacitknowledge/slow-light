@@ -152,12 +152,12 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
         return shouldFail;
     }
 
-    @Override
+
     public Object getErrorObject() {
         return errorObject;
     }
 
-    @Override
+
     public Exception generateRandomException() {
         Exception exception = null;
         if (randomExceptions.length != 0) {

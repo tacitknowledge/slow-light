@@ -74,8 +74,9 @@ public class ClientDriverTest {
         final long serviceDemandTime = 500L;
         final long serviceTimeout = serviceDemandTime;
         final double passRate = 1.0;
+        final Class[] randomExceptions = {RuntimeException.class};
         DefaultDegradationStrategy degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime, serviceTimeout, passRate,
-                new Class[]{RuntimeException.class}, null, FailurePriority.EXCEPTION, FastFail.FALSE, true);
+                randomExceptions, null, FailurePriority.EXCEPTION, FastFail.FALSE, true);
         runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
     }
 
