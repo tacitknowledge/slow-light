@@ -1,0 +1,42 @@
+# Maven	
+target
+
+# VM
+.vagrant
+.user_vagrant.rb
+
+# OS
+.DS_Store
+._*
+
+# Logs
+*.log
+
+# IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+.idea
+.idea/
+
+# Eclipse
+.classpath
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+.buildpath
+*.project
+
+# Netbeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Derby
+devBootcampDS/
+derby.log
