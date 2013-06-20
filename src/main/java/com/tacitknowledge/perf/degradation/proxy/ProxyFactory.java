@@ -1,4 +1,4 @@
-package com.tacitknowledge.perf.degradation;
+package com.tacitknowledge.perf.degradation.proxy;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;

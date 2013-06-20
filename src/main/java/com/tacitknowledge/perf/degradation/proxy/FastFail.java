@@ -1,13 +1,13 @@
-package com.tacitknowledge.perf.degradation;
+package com.tacitknowledge.perf.degradation.proxy;
 
 /**
  * Created by IntelliJ IDEA.
  * User: mshort
  * Date: 6/19/13
- * Time: 10:17 AM
+ * Time: 10:13 AM
  * To change this template use File | Settings | File Templates.
  */
-public enum FailurePriority {
-    ERROR_OBJECT,
-    EXCEPTION;
+public enum FastFail {
+    TRUE,
+    FALSE;
 }

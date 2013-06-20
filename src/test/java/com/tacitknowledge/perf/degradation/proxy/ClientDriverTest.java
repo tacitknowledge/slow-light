@@ -1,7 +1,8 @@
-package com.tacitknowledge.perf.degradation;
+package com.tacitknowledge.perf.degradation.proxy;
 
 import static org.junit.Assert.*;
 
+import com.tacitknowledge.perf.degradation.proxy.*;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -137,7 +138,7 @@ public class ClientDriverTest {
         final Integer errorObject = new Integer(25);
         StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, new DegradationHandler(stub,
                 executorService, new DefaultDegradationStrategy(1L, 1L, passRate,new Class[]{FileNotFoundException.class},
-                errorObject,FailurePriority.ERROR_OBJECT,FastFail.TRUE,false)));
+                errorObject, FailurePriority.ERROR_OBJECT, FastFail.TRUE,false)));
         assertEquals(errorObject, proxy.callService());
     }
 

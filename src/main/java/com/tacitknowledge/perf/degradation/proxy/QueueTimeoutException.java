@@ -1,4 +1,4 @@
-package com.tacitknowledge.perf.degradation;
+package com.tacitknowledge.perf.degradation.proxy;
 
 /**
  * Created by IntelliJ IDEA.

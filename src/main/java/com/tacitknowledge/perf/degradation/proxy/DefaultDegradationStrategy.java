@@ -1,4 +1,4 @@
-package com.tacitknowledge.perf.degradation;
+package com.tacitknowledge.perf.degradation.proxy;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
