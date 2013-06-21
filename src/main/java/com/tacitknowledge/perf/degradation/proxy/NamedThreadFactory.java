@@ -44,17 +44,25 @@ public class NamedThreadFactory implements ThreadFactory {
                      Thread.currentThread().getThreadGroup();
         this.factoryGroupNumber = POOL_NUMBER.getAndIncrement();
         this.factoryName = factoryName;
-        this.group = new ThreadGroup(this.parentGroup, PARENTGROUP + parentGroup.getName() +
-                GROUPNAME + factoryName + factoryGroupNumber);
+        this.group = new ThreadGroup(this.parentGroup, getGroupName());
 
+    }
+
+    /**
+     * This group name includes the parent group name
+     * format is parentgroup-<name>-groupname-<factoryName><factoryGroupNumber>
+     * @return
+     */
+    private String getGroupName() {
+        return PARENTGROUP + parentGroup.getName() +
+                GROUPNAME + this.factoryName + factoryGroupNumber;
     }
 
     // ThreadFactory -------------------------------------------------------------
 
     public Thread newThread(Runnable r) {
 
-        String threadName = THREADFACTORY + this.factoryName + GROUPNUMBER +
-                          factoryGroupNumber + THREAD + this.threadNumber.getAndIncrement() + "]";
+        String threadName = getThreadName();
 
         Thread t = new Thread(this.group, r, threadName, 0L);
         if (t.isDaemon()) {
@@ -64,5 +72,10 @@ public class NamedThreadFactory implements ThreadFactory {
             t.setPriority(Thread.NORM_PRIORITY);
         }
         return t;
+    }
+
+    public String getThreadName() {
+        return THREADFACTORY + this.factoryName + GROUPNUMBER +
+                          factoryGroupNumber + THREAD + this.threadNumber.getAndIncrement() + "]";
     }
 }

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * Date: 6/21/13
  * Time: 9:54 AM
  */
-public class NamedThreadPoolFactoryTest {
+public class NamedThreadFactoryTest {
 
 
     @Test
