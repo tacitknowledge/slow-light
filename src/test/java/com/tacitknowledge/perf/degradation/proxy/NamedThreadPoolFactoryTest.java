@@ -2,7 +2,6 @@ package com.tacitknowledge.perf.degradation.proxy;
 
 import org.junit.Test;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import static org.junit.Assert.*;
 
@@ -34,7 +33,8 @@ public class NamedThreadPoolFactoryTest {
         //should contain parent group name and group # for factory
         String expectedThreadGroupName = NamedThreadFactory.PARENTGROUP
                 + group.getName()
-                + NamedThreadFactory.GROUP
+                + NamedThreadFactory.GROUPNAME
+                + factoryName
                 + 1;
 
         assertEquals("thread name problem",
@@ -42,7 +42,7 @@ public class NamedThreadPoolFactoryTest {
                         + "["
                         + NamedThreadFactory.THREADFACTORY
                         + factoryName
-                        + NamedThreadFactory.POOL
+                        + NamedThreadFactory.GROUPNUMBER
                         + 1 //should be the first factory pool for first factory instance
                         + NamedThreadFactory.THREAD
                         + 1 //first thread, so 1

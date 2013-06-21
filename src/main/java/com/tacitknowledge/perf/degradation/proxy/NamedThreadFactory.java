@@ -19,10 +19,10 @@ public class NamedThreadFactory implements ThreadFactory {
 
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
     public static final String THREADFACTORY = "threadfactory-";
-    public static final String POOL = "-pool/group-";
+    public static final String GROUPNUMBER = "-groupnumber-";
     public static final String THREAD = "-thread-";
     public static final String PARENTGROUP = "parentgroup-";
-    public static final String GROUP = "-group-";
+    public static final String GROUPNAME = "-groupname-";
 
     // internal vars -------------------------------------------------------------
 
@@ -43,15 +43,17 @@ public class NamedThreadFactory implements ThreadFactory {
         this.parentGroup = (s != null) ? s.getThreadGroup() :
                      Thread.currentThread().getThreadGroup();
         this.factoryGroupNumber = POOL_NUMBER.getAndIncrement();
-        this.group = new ThreadGroup(this.parentGroup, PARENTGROUP + parentGroup.getName() + GROUP + factoryGroupNumber);
         this.factoryName = factoryName;
+        this.group = new ThreadGroup(this.parentGroup, PARENTGROUP + parentGroup.getName() +
+                GROUPNAME + factoryName + factoryGroupNumber);
+
     }
 
     // ThreadFactory -------------------------------------------------------------
 
     public Thread newThread(Runnable r) {
 
-        String threadName = THREADFACTORY + this.factoryName + POOL +
+        String threadName = THREADFACTORY + this.factoryName + GROUPNUMBER +
                           factoryGroupNumber + THREAD + this.threadNumber.getAndIncrement() + "]";
 
         Thread t = new Thread(this.group, r, threadName, 0L);

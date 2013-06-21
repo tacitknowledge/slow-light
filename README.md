@@ -29,7 +29,7 @@ The ClientDriverTest shows a number of different modes, but in general you just 
           );
  //Set up a NamedThreadFactory. optional but highly suggested to make debugging and monitoring easier.
  //The below code would generate threads with names similar to the below
- // Thread[threadfactory-<factoryname>-pool/group-1-thread-1],5,parentgroup-main-group-1]
+ // Thread[threadfactory-<factoryname>-groupnumber-1-thread-1],5,parentgroup-main-groupname-<factoryname>1]
  //Spring users may wish to use CustomizableThreadFactory, which supports naming
  ThreadFactory threadFactory = new NamedThreadFactory("<factoryname>");
  //set up a fixed thread pool
