@@ -22,4 +22,8 @@ public class ProxyFactory {
         return stub.getClass().getInterfaces();
 
     }
+
+    public Object createProxy(Object obj, InvocationHandler handler) {
+        return proxy(obj, handler);
+    }
 }
