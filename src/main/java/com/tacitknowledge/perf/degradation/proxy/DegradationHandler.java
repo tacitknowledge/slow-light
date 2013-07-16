@@ -1,6 +1,7 @@
 package com.tacitknowledge.perf.degradation.proxy;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.*;
 
@@ -35,6 +36,10 @@ public class DegradationHandler implements InvocationHandler {
     public Object invoke(final Object proxy, final Method method,
                          final Object[] args) throws Throwable {
 
+        if (degradationStrategy.shouldSkip()) {
+            return callDirectly(proxy,method,args);
+        }
+
         try {
             Callable callable = new DegradationCallable(method,target,degradationStrategy,this,args);
 
@@ -60,6 +65,19 @@ public class DegradationHandler implements InvocationHandler {
             throw e.getCause();
         }
     }
+
+
+       public Object callDirectly(Object target, Method method,  Object[] args) throws Exception {
+           try {
+               return method.invoke(target, args);
+           } catch (IllegalAccessException e) {
+               throw e;
+           } catch (IllegalArgumentException e) {
+               throw e;
+           } catch (InvocationTargetException e) {
+               throw (Exception) e.getCause();
+           }
+       }
 
     public static class DegradationCallable implements Callable {
         final private Method method;

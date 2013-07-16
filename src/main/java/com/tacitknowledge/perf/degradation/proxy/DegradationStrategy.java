@@ -11,6 +11,8 @@ import java.lang.reflect.Method;
  */
 public interface DegradationStrategy {
     Long getServiceDemandTime();
+    
+    Double getPassRate();
 
     Long getRandomizedServiceDemandTime();
 
@@ -25,4 +27,6 @@ public interface DegradationStrategy {
     Boolean isTimeoutQueues();
 
     public Object overrideResult(Method method, Object target, Object[] args) throws Exception;
+
+    Boolean shouldSkip();
 }

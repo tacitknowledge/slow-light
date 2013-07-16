@@ -200,4 +200,12 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
     public Boolean isTimeoutQueues() {
         return timeoutQueues;
     }
+
+    public Double getPassRate() {
+        return passRate;
+    }
+
+    public Boolean shouldSkip() {
+        return getPassRate() == 1.0 && getServiceDemandTime() == 0L && getServiceTimeout() == 0L;
+    }
 }
