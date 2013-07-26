@@ -35,7 +35,7 @@ The ClientDriverTest shows a number of different modes, but in general you just 
  //set up a fixed thread pool
  ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(capacity,threadFactory);
  //set up InvocationHandler with execution pool and strategy
- final DegradationHandler handler = new DegradationHandler(stub,
+ final DegradationHandler handler = new DegradationHandler(conversation,
                 executorService, degradationStrategy);
  Object wrappedProxy = Proxy.newProxyInstance(targetToWrapInProxy.getClass().getClassLoader(),
                 targetToWrapInProxy.getClass().getInterfaces(),

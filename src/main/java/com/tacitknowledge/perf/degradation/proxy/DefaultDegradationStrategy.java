@@ -3,6 +3,9 @@ package com.tacitknowledge.perf.degradation.proxy;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -27,6 +30,7 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
     final private Object errorObject;
     final private FailurePriority failurePriority;
     final private FastFail fastFail;
+    final private List<Method> degradedMethods;
     //todo - mws - maybe move this? really part of handler
     final private Boolean timeoutQueues;
 
@@ -37,7 +41,8 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
                                       Object errorObject,
                                       FailurePriority failurePriority,
                                       FastFail fastFail,
-                                      Boolean timeoutQueues) {
+                                      Boolean timeoutQueues,
+                                      Method[] degradedMethods) {
         this.serviceDemandTime = Math.max(0L,serviceDemandTime);
         this.serviceTimeout = Math.max(serviceDemandTime,serviceTimeout);
         this.passRate = passRate;
@@ -46,8 +51,32 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
         this.failurePriority = failurePriority;
         this.fastFail = fastFail;
         this.timeoutQueues = timeoutQueues;
+        this.degradedMethods = Arrays.asList(degradedMethods);
 
     }
+    public DefaultDegradationStrategy(Long serviceDemandTime,
+                                      Long serviceTimeout,
+                                      double passRate,
+                                      Class<Exception>[] randomExceptions,
+                                      Object errorObject,
+                                      FailurePriority failurePriority,
+                                      FastFail fastFail,
+                                      Boolean timeoutQueues
+                                      ) {
+        this(
+                serviceDemandTime,
+                serviceTimeout,
+                passRate,
+                randomExceptions,
+                errorObject,
+                failurePriority,
+                fastFail,
+                timeoutQueues,
+                new Method[]{}
+            );
+
+    }
+
 
     public DefaultDegradationStrategy(Long serviceDemandTime,
                                       Long serviceTimeout,
@@ -57,10 +86,22 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
                 serviceTimeout,
                 passRate,
                 randomExceptions,
+                new Method[] {}
+        );
+    }
+    public DefaultDegradationStrategy(Long serviceDemandTime,
+                                      Long serviceTimeout,
+                                      double passRate,
+                                      Class<Exception>[] randomExceptions, Method[] degradedMethods) {
+        this(serviceDemandTime,
+                serviceTimeout,
+                passRate,
+                randomExceptions,
                 null,
                 FailurePriority.EXCEPTION,
                 FastFail.FALSE,
-                Boolean.FALSE
+                Boolean.FALSE,
+                degradedMethods
         );
     }
 
@@ -68,7 +109,15 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
         this(serviceDemandTime,
                 serviceTimeout,
                 passRate,
-                new Class[]{}
+                new Method[]{}
+        );
+    }
+    public DefaultDegradationStrategy(Long serviceDemandTime, Long serviceTimeout, double passRate,
+                                      Method[] degradedMethods) {
+        this(serviceDemandTime,
+                serviceTimeout,
+                passRate,
+                new Class[]{}, degradedMethods
         );
     }
 
@@ -207,5 +256,26 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
 
     public Boolean shouldSkip() {
         return getPassRate() == 1.0 && getServiceDemandTime() == 0L && getServiceTimeout() == 0L;
+    }
+
+    /**
+     * If degraded methods was empty, return false as all methods should be degraded.  If its non-empty, only return
+     * false for methods matching the list.
+     * @param method
+     * @return false if method should not be degraded.
+     */
+    public Boolean isMethodExcluded(Method method) {
+        //fast exit for none specified.  should always degrade when empty
+        if (degradedMethods.isEmpty()) {
+            return Boolean.FALSE;
+        }
+        //attempt to match method
+        for (Method degradedMethod : degradedMethods) {
+            if (method.getName().equals(degradedMethod.getName())) {
+                return Boolean.FALSE;
+            }
+        }
+        return Boolean.TRUE;
+
     }
 }

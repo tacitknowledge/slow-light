@@ -18,7 +18,7 @@ public interface DegradationStrategy {
 
     Long getServiceTimeout();
 
-    public Object getErrorObject();
+    Object getErrorObject();
 
     DegradationPlan generateDegradationPlan(DegradationHandler handler);
 
@@ -26,7 +26,9 @@ public interface DegradationStrategy {
 
     Boolean isTimeoutQueues();
 
-    public Object overrideResult(Method method, Object target, Object[] args) throws Exception;
+    Object overrideResult(Method method, Object target, Object[] args) throws Exception;
 
     Boolean shouldSkip();
+
+    Boolean isMethodExcluded(Method method);
 }

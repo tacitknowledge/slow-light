@@ -36,7 +36,7 @@ public class DegradationHandler implements InvocationHandler {
     public Object invoke(final Object proxy, final Method method,
                          final Object[] args) throws Throwable {
 
-        if (degradationStrategy.shouldSkip()) {
+        if (degradationStrategy.shouldSkip() || degradationStrategy.isMethodExcluded(method)) {
             return callDirectly(target,method,args);
         }
 

@@ -35,6 +35,28 @@ public class ClientDriverTest {
         assertTrue("Should have been less than 626 ms, but was " + totalTime, totalTime < serviceDemandTime * 1.3);
 
     }
+    @Test
+    public void testDegradeOnlyNamedMethods() throws Exception {
+        long timestamp = System.currentTimeMillis();
+        final int concurrentLoad = 2;
+        final int capacity = 1;
+        final long serviceDemandTime = 500L;
+        final long serviceTimeout = 500L;
+        final double passRate = 1.0;
+        DefaultDegradationStrategy degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
+                serviceTimeout,
+                passRate,
+                new Method[] {StubbedService.class.getMethod("callOtherService")});
+        long totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
+        assertTrue("Should have been less than 500 ms, but was " + totalTime, totalTime < 500);
+        degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
+                serviceTimeout,
+                passRate,
+                new Method[] {StubbedService.class.getMethod("callService")});
+        totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
+        assertTrue("Should have been more than 500 ms, but was " + totalTime, totalTime > 500);
+
+    }
 
     @Test
     public void testDegradationHandlerWhereLoadExceedsCapacity() throws Exception {
@@ -207,6 +229,7 @@ public class ClientDriverTest {
 
     public static interface StubbedService {
         Integer callService() throws ConnectException, FileNotFoundException;
+        Integer callOtherService() throws ConnectException, FileNotFoundException;
 
 
     }
@@ -216,12 +239,18 @@ public class ClientDriverTest {
             throw new ConnectException();
         }
 
+        public Integer callOtherService() throws ConnectException, FileNotFoundException {
+            return 0;
+        }
     }
     public static class StubbedServiceImpl implements StubbedService{
         public Integer callService() throws ConnectException, FileNotFoundException {
             return 0;
         }
 
+        public Integer callOtherService() throws ConnectException, FileNotFoundException {
+            return 0;
+        }
     }
 
 
