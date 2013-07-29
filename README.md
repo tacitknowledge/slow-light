@@ -1,9 +1,8 @@
+=======
+perf-degradation
+================
 
-# THIS HAS MOVED TO GITHUB.  PLEASE MAKE CHANGES THERE
-
-https://github.com/tacitknowledge/perf-degradation.git
-
-Our github Simulator depends on this library.  We're putting both out there in case we OSS it
+Proxy classes that slow and degrade response times
 
 # Introduction and Motivation
 
@@ -152,3 +151,4 @@ is also safe.
 
 # Extension Points
 Feel free to write your own DegradationStrategy and pop it into the DegradationHandler
+
