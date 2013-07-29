@@ -1,3 +1,10 @@
+
+# THIS HAS MOVED TO GITHUB.  PLEASE MAKE CHANGES THERE
+
+https://github.com/tacitknowledge/perf-degradation.git
+
+Our github Simulator depends on this library.  We're putting both out there in case we OSS it
+
 # Introduction and Motivation
 
 Allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread pool
