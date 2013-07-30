@@ -9,8 +9,7 @@ Proxy classes that slow and degrade response times
 Allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread pool
 which constrains and slows throughput.  Also can generate error responses and exceptions as pool utilization increases.
 
-Originally, something similar was used on Motorola MRC to degrade response times on integration points and introduce
-errors.  Newly updated, it includes more flexible support for failure modes, checked exception handling, and
+Newly updated, it includes more flexible support for failure modes, checked exception handling, and
 general degradation configuration.
 
 # Dependencies

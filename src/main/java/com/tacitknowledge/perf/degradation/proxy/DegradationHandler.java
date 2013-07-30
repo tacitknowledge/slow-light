@@ -78,6 +78,12 @@ public class DegradationHandler implements InvocationHandler {
                throw (Exception) e.getCause();
            }
        }
+    public DegradationStrategy getDegradationStrategy() {
+        return degradationStrategy;
+    }
+    public ThreadPoolExecutor getExecutorService() {
+        return executorService;
+    }
 
     public static class DegradationCallable implements Callable {
         final private Method method;
@@ -117,6 +123,6 @@ public class DegradationHandler implements InvocationHandler {
             return degradationStrategy.overrideResult(method,target,args);
         }
 
-
     }
+
 }
