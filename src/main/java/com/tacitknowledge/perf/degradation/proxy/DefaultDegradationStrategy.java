@@ -121,12 +121,10 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
         );
     }
 
-    @Override
     public Long getServiceDemandTime() {
         return serviceDemandTime;
     }
 
-    @Override
     public Long getServiceTimeout() {
         return serviceTimeout;
     }
@@ -137,13 +135,11 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
         return Math.max(0, Math.round(result));
     }
 
-    @Override
     public Long getRandomizedServiceDemandTime() {
         double betweenNegativeOneQuarterandOneQuarter = randomInRange(-0.25,0.25);
         return Math.round(getServiceDemandTime() * (ONE_HUNDRED_PERCENT + betweenNegativeOneQuarterandOneQuarter));
     }
 
-    @Override
     public DegradationPlan generateDegradationPlan(DegradationHandler handler) {
         //solve for area under exp curve such that errorThresholdPercent represents the point accurately
         // for instance, 10% error rate will have a passRate of approx. exp(0.9347) == 90%
@@ -231,7 +227,6 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
     }
 
 
-    @Override
     public Object overrideResult(Method method, Object target, Object[] args) throws Exception {
         try {
             return method.invoke(target, args);
@@ -245,7 +240,6 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
     }
 
 
-    @Override
     public Boolean isTimeoutQueues() {
         return timeoutQueues;
     }
