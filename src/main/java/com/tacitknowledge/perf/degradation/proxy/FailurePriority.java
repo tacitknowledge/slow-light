@@ -1,13 +1,18 @@
 package com.tacitknowledge.perf.degradation.proxy;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mshort
  * Date: 6/19/13
  * Time: 10:17 AM
- * To change this template use File | Settings | File Templates.
+ * Should the proxy return an error object or throw an exception
  */
 public enum FailurePriority {
+    /**
+     * return an error object if possible. if not available, will fallback to throwing an exception
+     */
     ERROR_OBJECT,
+    /**
+     * throw an exception.
+     */
     EXCEPTION;
 }

@@ -10,26 +10,61 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Date: 6/21/13
  * Time: 9:50 AM
  *
+ * Simple ThreadFactory implementation that provides names for threads and thread groups so its easier to log
+ * and debug
  * If you are using Spring, consider the CustomizableThreadFactory instead
- *
+ * @see java.util.concurrent.ThreadFactory
  */
 public class NamedThreadFactory implements ThreadFactory {
 
     // constants -----------------------------------------------------------------
 
+    /**
+     * Atomic for tracking the pool number when using multiple NamedThreadFactory objects
+     */
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
+    /**
+     * standard threadfactory key
+     */
     public static final String THREADFACTORY = "threadfactory-";
+    /**
+     * standard group number key
+     */
     public static final String GROUPNUMBER = "-groupnumber-";
+    /**
+     * standard thread key
+     */
     public static final String THREAD = "-thread-";
+    /**
+     * standard parent group key
+     */
     public static final String PARENTGROUP = "parentgroup-";
+    /**
+     *  standard group name key
+     */
     public static final String GROUPNAME = "-groupname-";
 
     // internal vars -------------------------------------------------------------
 
+    /**
+     * Parent thread group from which the factory group descends
+     */
     private final ThreadGroup parentGroup;
+    /**
+     * The factory thread group
+     */
     private final ThreadGroup group;
+    /**
+     * Thread number counter
+     */
     private final AtomicInteger threadNumber = new AtomicInteger(1);
+    /**
+     * the custom factory name
+     */
     private final String factoryName;
+    /**
+     * The group's pool number from the static POOL_NUMBER
+     */
     private final int factoryGroupNumber;
 
     // constructors --------------------------------------------------------------
@@ -59,7 +94,9 @@ public class NamedThreadFactory implements ThreadFactory {
     }
 
     // ThreadFactory -------------------------------------------------------------
-
+    /**
+     * {@inheritDoc}
+     */
     public Thread newThread(Runnable r) {
 
         String threadName = getThreadName();
@@ -74,7 +111,11 @@ public class NamedThreadFactory implements ThreadFactory {
         return t;
     }
 
-    public String getThreadName() {
+    /**
+     * Generates the thread name to be used in the factory
+     * @return thread name
+     */
+    String getThreadName() {
         return THREADFACTORY + this.factoryName + GROUPNUMBER +
                           factoryGroupNumber + THREAD + this.threadNumber.getAndIncrement() + "]";
     }

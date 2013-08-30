@@ -1,13 +1,20 @@
 package com.tacitknowledge.perf.degradation.proxy;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mshort
  * Date: 6/19/13
  * Time: 10:13 AM
- * To change this template use File | Settings | File Templates.
+ * Enum to set whether new calls should fail immediately if planned for failure
  */
 public enum FastFail {
+    /**
+     * Fail immediately if the DegradationPlan indicates
+     * @see DegradationPlan
+     */
     TRUE,
+    /**
+     * Wait until time out, then fail
+     * @see DegradationPlan
+     */
     FALSE;
 }
