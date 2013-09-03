@@ -9,7 +9,7 @@
 
     <groupId>com.tacitknowledge.perf</groupId>
     <artifactId>degradation</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Performance Degradation</name>
@@ -33,11 +33,6 @@
             <id>witherspore</id>
             <name>Matthew Short</name>
             <email>witherspore@gmail.com</email>
-        </developer>
-        <developer>
-            <id>saskew</id>
-            <name>Scott Askew</name>
-            <email>scott@tacitknowledge.com</email>
         </developer>
     </developers>
 
