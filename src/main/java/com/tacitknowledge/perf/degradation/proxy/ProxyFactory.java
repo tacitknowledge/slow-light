@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 /**
- * User: mshort
+ * User: witherspore
  * Date: 6/19/13
  * Time: 7:59 AM
  * Convenience class for proxying objects

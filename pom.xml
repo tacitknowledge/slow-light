@@ -1,14 +1,45 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tacitknowledge</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>2</version>
+    </parent>
 
     <groupId>com.tacitknowledge.perf</groupId>
     <artifactId>degradation</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
 
-    <name>perf-degradation</name>
-    <url>http://maven.apache.org</url>
+    <name>Performance Degradation</name>
+    <description>Proxying framework for causing scalability issues with objects and services</description>
+    <url>https://github.com/tacitknowledge/perf-degradation</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/tacitknowledge/perf-degradation.git</connection>
+        <developerConnection>scm:git:git@github.com:tacitknowledge/perf-degradation.git</developerConnection>
+        <url>https://github.com/tacitknowledge/perf-degradation</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>witherspore</id>
+            <name>Matthew Short</name>
+            <email>witherspore@gmail.com</email>
+        </developer>
+        <developer>
+            <id>saskew</id>
+            <name>Scott Askew</name>
+            <email>scott@tacitknowledge.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

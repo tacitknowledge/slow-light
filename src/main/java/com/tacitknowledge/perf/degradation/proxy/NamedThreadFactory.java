@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by IntelliJ IDEA.
- * User: mshort
+ * User: witherspore
  * Date: 6/21/13
  * Time: 9:50 AM
  *

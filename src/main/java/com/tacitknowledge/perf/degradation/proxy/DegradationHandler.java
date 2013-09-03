@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.*;
 
 /**
- * User: mshort
+ * User: witherspore
  * Date: 6/19/13
  * Time: 7:58 AM
  * InvocationHandler for proxied target which manages calls via a ThreadPoolExecutor and DegradationStrategy

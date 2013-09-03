@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * User: mshort
+ * User: witherspore
  * Date: 6/18/13
  * Time: 8:53 AM
  *

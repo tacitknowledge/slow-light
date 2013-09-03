@@ -3,7 +3,7 @@ package com.tacitknowledge.perf.degradation.proxy;
 import java.lang.reflect.Method;
 
 /**
- * User: mshort
+ * User: witherspore
  * Date: 6/19/13
  * Time: 9:04 AM
  * Core configuration interface for degradation behavior. DegradationHandler and the DegradationPlan query

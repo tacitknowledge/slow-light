@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * User: mshort
+ * User: witherspore
  * Date: 9/3/13
  * Time: 12:05 PM
  *

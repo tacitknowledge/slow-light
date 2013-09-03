@@ -1,7 +1,7 @@
 package com.tacitknowledge.perf.degradation.proxy;
 
 /**
- * User: mshort
+ * User: witherspore
  * Date: 6/19/13
  * Time: 9:27 AM
  *

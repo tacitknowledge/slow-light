@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 /**
  * Created by IntelliJ IDEA.
- * User: mshort
+ * User: witherspore
  * Date: 6/21/13
  * Time: 9:54 AM
  */
