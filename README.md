@@ -12,15 +12,19 @@ which constrains and slows throughput.  Also can generate error responses and ex
 Newly updated, it includes more flexible support for failure modes, checked exception handling, and
 general degradation configuration.
 
+We've used it to discover where services and third party integrations can cause problems . . . often due to repeatedly
+calling the service when the response can be cached, unexpected system error events, and other scalability related
+events.
+
 # Dependencies
 Just Java, no third party libraries outside the test classes.
 
 # Use it!
 
-The ClientDriverTest shows a number of different modes, but in general you just need to do these things:
+The DegradationHandlerIntegrationTest shows a number of different modes, but in general you just need to do these things:
 ```
  //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
- //  supporting concrete classes without interfaces is a TODO
+ //  supporting concrete classes without interfaces is a future TODO
  Object targetToWrapInProxy;
  .
  .
@@ -150,4 +154,8 @@ is also safe.
 
 # Extension Points
 Feel free to write your own DegradationStrategy and pop it into the DegradationHandler
+
+The tacitknowledge/simulator and tacitknowledge/degradation-proxy projects make use of this handler for externalizing
+performance degradation out of process.  With those extension tools you no longer need to wrap in-process objects - just
+point your endpoints at the simulator or the external proxy.
 
