@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
  * Time: 9:28 AM
  * <p/>
  * Callable responsible for delaying thread execution and throwing or returning errors as per the degradation
- * strategy's generateDegradationPlan method and querying the Thread Pool in the handler.
+ * strategy's generated DegradationPlan
  */
 public class DegradationCallable implements Callable {
     /**

@@ -14,13 +14,17 @@ import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * Created by IntelliJ IDEA.
  * User: mshort
  * Date: 6/18/13
  * Time: 8:53 AM
- * To change this template use File | Settings | File Templates.
+ *
+ * Integration tests using a multi-threaded client driver to apply load on stubbed services wrapped in the
+ * DegradationHandler and DefaultDegradationStrategy
+ *
+ * @see DefaultDegradationStrategy
+ * @see DegradationHandler
  */
-public class ClientDriverTest {
+public class IntegrationTest {
 
     @Test
     public void testDegradationHandlerWhereLoadDoesNotExceedCapacity() throws Exception {
