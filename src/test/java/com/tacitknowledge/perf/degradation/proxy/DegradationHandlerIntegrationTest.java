@@ -23,10 +23,12 @@ import java.util.concurrent.*;
  * Integration tests using a multi-threaded client driver to apply load on stubbed services wrapped in the
  * DegradationHandler and DefaultDegradationStrategy
  *
+ * This covers testing for the DegradationHandler
+ *
  * @see DefaultDegradationStrategy
  * @see DegradationHandler
  */
-public class IntegrationTest {
+public class DegradationHandlerIntegrationTest {
 
     @Test
     public void testDegradationHandlerWhereLoadDoesNotExceedCapacity() throws Exception {

@@ -65,7 +65,10 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
      * List of methods to degrade.  If empty, all methods are degraded.
      */
     final private List<Method> degradedMethods;
-    //todo - mws - maybe move this? really part of handler
+
+    /**
+     * should the handler use future.get or future.get(timeout)
+     */
     final private Boolean timeoutQueues;
 
     public DefaultDegradationStrategy(Long serviceDemandTime,

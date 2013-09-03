@@ -5,6 +5,11 @@ package com.tacitknowledge.perf.degradation.proxy;
  * Date: 6/19/13
  * Time: 10:13 AM
  * Enum to set whether new calls should fail immediately if planned for failure
+ *
+ * This is to simulate a service where its blocking queue and pool are full and the call is immediately rejected
+ *
+ * @see java.util.concurrent.RejectedExecutionHandler
+ * @see java.util.concurrent.RejectedExecutionException
  */
 public enum FastFail {
     /**
