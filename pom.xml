@@ -67,27 +67,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
-        <extensions>
-            <!-- Enabling the use of FTP -->
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh-external</artifactId>
-                <version>1.0-beta-6</version>
-            </extension>
-        </extensions>
-    </build>
-    <distributionManagement>
-        <repository>
-            <id>tk-private-ssh</id>
-            <name>TK Public Repository</name>
-            <url>scpexe://repo1.tacitknowledge.com:/opt/maven-repo/public</url>
-        </repository>
 
-        <snapshotRepository>
-            <id>tk-private-ssh</id>
-            <name>TK Public Repository</name>
-            <url>scpexe://repo1.tacitknowledge.com:/opt/maven-repo/public</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
