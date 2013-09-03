@@ -56,7 +56,7 @@ public class DegradationCallable implements Callable {
     public Object call() throws Exception {
         DegradationPlan plan = degradationStrategy.generateDegradationPlan(handlerCallback);
 
-        //readibility is improved with this short cicruit
+        //readability is improved with this short cicruit
         if (FastFail.TRUE == plan.getFastFail() && plan.hasPlannedFailure()) {
             return plan.fail();
         }

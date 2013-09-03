@@ -2,7 +2,9 @@ package com.tacitknowledge.perf.degradation.proxy;
 
 import static org.junit.Assert.*;
 
-import com.tacitknowledge.perf.degradation.proxy.*;
+import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedService;
+import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedServiceErrorImpl;
+import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedServiceImpl;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -228,33 +230,6 @@ public class IntegrationTest {
             );
         }
         return futures;
-    }
-
-
-    public static interface StubbedService {
-        Integer callService() throws ConnectException, FileNotFoundException;
-        Integer callOtherService() throws ConnectException, FileNotFoundException;
-
-
-    }
-
-    public static class StubbedServiceErrorImpl implements StubbedService {
-        public Integer callService() throws ConnectException, FileNotFoundException {
-            throw new ConnectException();
-        }
-
-        public Integer callOtherService() throws ConnectException, FileNotFoundException {
-            return 0;
-        }
-    }
-    public static class StubbedServiceImpl implements StubbedService{
-        public Integer callService() throws ConnectException, FileNotFoundException {
-            return 0;
-        }
-
-        public Integer callOtherService() throws ConnectException, FileNotFoundException {
-            return 0;
-        }
     }
 
 
