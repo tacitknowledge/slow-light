@@ -155,7 +155,4 @@ is also safe.
 # Extension Points
 Feel free to write your own DegradationStrategy and pop it into the DegradationHandler
 
-The tacitknowledge/simulator and tacitknowledge/degradation-proxy projects make use of this handler for externalizing
-performance degradation out of process.  With those extension tools you no longer need to wrap in-process objects - just
-point your endpoints at the simulator or the external proxy.
 
