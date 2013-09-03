@@ -97,20 +97,39 @@ public class DegradationPlan {
         return errorObject;
     }
 
+    /**
+     * Tells the degradation handler whether this specific call should fail
+     *
+     * @return true if should fail
+     */
     public Boolean hasPlannedFailure() {
         return shouldFail;
     }
 
+    /**
+     * either returns the error object or throws the exception for a failure as per priority and a non-null error object
+     *
+     * @return the error object
+     * @throws Exception
+     */
     public Object fail() throws Exception {
         if (FailurePriority.EXCEPTION == getFailurePriority() && getRandomException() != null)
             throw getRandomException();
         return getErrorObject();
     }
 
+    /**
+     * Should error objects or exceptions be thrown
+     * @return FailurePriority
+     */
     public FailurePriority getFailurePriority() {
         return failurePriority;
     }
 
+    /**
+     * Should this fail before the response delay or after the delay
+     * @return FastFail.TRUE for early failure.  FastFail.FALSE for delayed failure
+     */
     public FastFail getFastFail() {
         return fastFail;
     }

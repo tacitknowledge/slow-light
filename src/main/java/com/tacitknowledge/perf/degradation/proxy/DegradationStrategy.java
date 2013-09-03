@@ -73,18 +73,20 @@ public interface DegradationStrategy {
      * @return object for a successful call.  Typically, this just calls the object proxy
      * @throws Exception
      */
-    Object overrideResult(Method method, Object target, Object[] args) throws Exception;
+    Object overrideResult( Object target, Method method, Object[] args) throws Exception;
 
     /**
      *
      * @return true if the proxy should skip degradation and call normally
      */
-    Boolean shouldSkip();
+    Boolean shouldSkipDegradation();
 
     /**
      * Is the specific method on the proxy configured to be bypassed and called normally?
+     *
      * @param method
      * @return true if the method should not be proxied
+     * @see DefaultDegradationStrategy
      */
     Boolean isMethodExcluded(Method method);
 }
