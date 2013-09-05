@@ -40,7 +40,7 @@ public class DegradationHandlerIntegrationTest {
         final double passRate = 1.0;
         DefaultDegradationStrategy degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime, serviceTimeout, passRate);
         final long totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
-        assertTrue("Should have been less than 626 ms, but was " + totalTime, totalTime < serviceDemandTime * 1.3);
+        assertTrue("Should have been less than 750 ms, but was " + totalTime, totalTime < serviceDemandTime * 1.5);
 
     }
     @Test
@@ -56,7 +56,7 @@ public class DegradationHandlerIntegrationTest {
                 passRate,
                 new Method[] {StubbedService.class.getMethod("callOtherService")});
         long totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
-        assertTrue("Should have been less than 500 ms, but was " + totalTime, totalTime < 500);
+        assertTrue("Should have been less than 1000 ms, but was " + totalTime, totalTime < 1000);
         degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
                 serviceTimeout,
                 passRate,
