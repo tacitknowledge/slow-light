@@ -23,4 +23,4 @@
  * @see DefaultDegradationStrategy
  *
  */
-package com.tacitknowledge.perf.degradation.proxy;
+package com.tacitknowledge.slowlight.proxy;

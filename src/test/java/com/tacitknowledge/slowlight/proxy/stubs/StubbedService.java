@@ -1,4 +1,4 @@
-package com.tacitknowledge.perf.degradation.proxy.stubs;
+package com.tacitknowledge.slowlight.proxy.stubs;
 
 import java.io.FileNotFoundException;
 import java.net.ConnectException;

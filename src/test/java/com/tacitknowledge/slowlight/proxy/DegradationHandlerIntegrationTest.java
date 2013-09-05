@@ -1,10 +1,10 @@
-package com.tacitknowledge.perf.degradation.proxy;
+package com.tacitknowledge.slowlight.proxy;
 
 import static org.junit.Assert.*;
 
-import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedService;
-import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedServiceErrorImpl;
-import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedServiceImpl;
+import com.tacitknowledge.slowlight.proxy.stubs.StubbedService;
+import com.tacitknowledge.slowlight.proxy.stubs.StubbedServiceErrorImpl;
+import com.tacitknowledge.slowlight.proxy.stubs.StubbedServiceImpl;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;

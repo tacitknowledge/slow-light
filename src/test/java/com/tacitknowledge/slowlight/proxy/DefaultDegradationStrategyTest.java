@@ -1,9 +1,8 @@
-package com.tacitknowledge.perf.degradation.proxy;
+package com.tacitknowledge.slowlight.proxy;
 
 import static org.junit.Assert.*;
 
-import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedService;
-import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedServiceImpl;
+import com.tacitknowledge.slowlight.proxy.stubs.StubbedService;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 

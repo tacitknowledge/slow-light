@@ -1,4 +1,4 @@
-package com.tacitknowledge.perf.degradation.proxy;
+package com.tacitknowledge.slowlight.proxy;
 
 
 import java.util.concurrent.ThreadFactory;

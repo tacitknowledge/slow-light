@@ -1,12 +1,11 @@
-package com.tacitknowledge.perf.degradation.proxy;
+package com.tacitknowledge.slowlight.proxy;
 
-import com.tacitknowledge.perf.degradation.proxy.stubs.StubbedServiceImpl;
+import com.tacitknowledge.slowlight.proxy.stubs.StubbedServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 
 import org.mockito.Matchers;
-import org.mockito.Mock;
 
 import java.lang.reflect.Method;
 
