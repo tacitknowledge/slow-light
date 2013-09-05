@@ -2,19 +2,22 @@
 Slow Light
 ================
 
-Proxy classes that slow and degrade response times
+In 1999, Danish physicist Lene Vestergaard Hau led a combined team from Harvard University and the Rowland Institute
+for Science which succeeded in slowing a beam of light to about 17 meters per second.
+
+Slow Light is a Java Proxying tool that degrades response times of object methods as concurrency increases.
+
+We've used it primarily to test monitoring and fault tolerance of integration points under scalability tests.
 
 # Introduction and Motivation
 
-Allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread pool
-which constrains and slows throughput.  Also can generate error responses and exceptions as pool utilization increases.
+Slow Light allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread
+pool which constrains and slows throughput through an object or class.  Slow Light can be configured to generate error
+responses and exceptions as pool utilization increases and response time degrades.
 
 Newly updated, it includes more flexible support for failure modes, checked exception handling, and
 general degradation configuration.
 
-We've used it to discover where services and third party integrations can cause problems . . . often due to repeatedly
-calling the service when the response can be cached, unexpected system error events, and other scalability related
-events.
 
 # Dependencies
 Just Java, no third party libraries outside the test classes.
@@ -22,7 +25,7 @@ Just Java, no third party libraries outside the test classes.
 # Use it!
 
 The DegradationHandlerIntegrationTest shows a number of different modes, but in general you just need to do these things:
-```
+```java
  //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
  //  supporting concrete classes without interfaces is a future TODO
  Object targetToWrapInProxy;
@@ -60,7 +63,7 @@ Setting up a pass through configuration with no degradation.
 
 While pool size is constrained,  service calls immediately
 execute, response times are never delayed, and no errors are created or Exceptions thrown.
-```
+```java
 long serviceDemandTime = 0L;
 long serviceTimeout = 0L;
 double passRate = 1.0;
@@ -71,7 +74,7 @@ DegradationStrategy degradationStrategy
           );
 ```
 Setting up a roughly constant delay on response times.
-```
+```java
 // set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
 long serviceDemandTime = 500L;
 //When timeout matches demand time, response times do not increase as utilization increases
@@ -85,7 +88,7 @@ DegradationStrategy degradationStrategy
 ```
 
 Setting up a a degradation curve.
-```
+```java
 // set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
 long serviceDemandTime = 500L;
 //When service timeout is greater than response time, responses will be delayed by a general scaling function
@@ -100,7 +103,7 @@ DegradationStrategy degradationStrategy
 ```
 
 Setting up a a degradation curve and throwing errors
-```
+```java
 // set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
 long serviceDemandTime = 500L;
 //When service timeout is greater than response time, responses will be delayed by a general scaling function
@@ -124,7 +127,7 @@ DegradationStrategy degradationStrategy
 Setting up a a degradation curve and returning an error object
 You may want to do this if the interface short circuits errors and returns a default object, such as something
 representing "Service not available.  Please try later".  Not really an exception, but a valid and not helpful response.
-```
+```java
 long serviceDemandTime = 500L;
 long serviceTimeout = 1500L;
 double passRate = 0.9;
