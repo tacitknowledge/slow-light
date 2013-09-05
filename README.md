@@ -21,7 +21,7 @@ general degradation configuration.
 
 
 # Dependencies
-Just Java, no third party libraries outside the test classes.
+Just Java, no third party libraries outside the unit testing frameworks.
 
 # Use it!
 
