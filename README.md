@@ -7,7 +7,8 @@ for Science which succeeded in slowing a beam of light to about 17 meters per se
 
 Slow Light is a Java Proxying tool that degrades response times of object methods as concurrency increases.
 
-We've used it primarily to test monitoring and fault tolerance of integration points under scalability tests.
+We've used it primarily to test monitoring and fault tolerance of integration points under scalability tests.  We love
+using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and configurations.
 
 # Introduction and Motivation
 
