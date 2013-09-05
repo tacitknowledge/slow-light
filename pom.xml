@@ -7,14 +7,14 @@
         <version>2</version>
     </parent>
 
-    <groupId>com.tacitknowledge.perf</groupId>
-    <artifactId>degradation</artifactId>
+    <groupId>com.tacitknowledge</groupId>
+    <artifactId>slowlight</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Performance Degradation</name>
-    <description>Proxying framework for causing scalability issues with objects and services</description>
-    <url>https://github.com/tacitknowledge/perf-degradation</url>
+    <description>Proxying framework for causing concurrent scalability issues with objects and services</description>
+    <url>https://github.com/tacitknowledge/slow-light</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -24,9 +24,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/tacitknowledge/perf-degradation.git</connection>
-        <developerConnection>scm:git:git@github.com:tacitknowledge/perf-degradation.git</developerConnection>
-        <url>https://github.com/tacitknowledge/perf-degradation</url>
+        <connection>scm:git:https://github.com/tacitknowledge/slow-light.git</connection>
+        <developerConnection>scm:git:git@github.com:tacitknowledge/slow-light.git</developerConnection>
+        <url>https://github.com/tacitknowledge/slow-light</url>
     </scm>
     <developers>
         <developer>
@@ -34,6 +34,12 @@
             <name>Matthew Short</name>
             <email>witherspore@gmail.com</email>
         </developer>
+        <developer>
+            <id>ivanfrolovmd</id>
+            <name>Ivan Frolov</name>
+            <email>ifrolov@tacitknowledge.com</email>
+        </developer>
+
     </developers>
 
     <properties>

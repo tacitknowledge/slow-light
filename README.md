@@ -1,5 +1,5 @@
 =======
-perf-degradation
+Slow Light
 ================
 
 Proxy classes that slow and degrade response times
