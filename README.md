@@ -1,6 +1,5 @@
-=======
-Slow Light
-================
+Slow Light [![Build Status](https://secure.travis-ci.org/tacitknowledge/slow-light.png?branch=master)](http://travis-ci.org/tacitknowledge/slow-light)
+==========
 
 In 1999, Danish physicist Lene Vestergaard Hau led a combined team from Harvard University and the Rowland Institute
 for Science which succeeded in slowing a beam of light to about 17 meters per second.
@@ -22,6 +21,20 @@ general degradation configuration.
 
 # Dependencies
 Just Java, no third party libraries outside the unit testing frameworks.
+
+# Where do I get Slow Light?
+-------------------------
+AutoPatch is open source and is hosted at
+[Github](http://github.com/tacitknowledge/slow-light).
+
+You can include AutoPath in your Maven project via:
+
+    <dependency>
+      <groupId>com.tacitknowledge</groupId>
+      <artifactId>slowlight</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+
 
 # Use it!
 
