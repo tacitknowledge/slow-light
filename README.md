@@ -24,10 +24,10 @@ Just Java, no third party libraries outside the unit testing frameworks.
 
 # Where do I get Slow Light?
 -------------------------
-AutoPatch is open source and is hosted at
+Slow Light is open source and is hosted at
 [Github](http://github.com/tacitknowledge/slow-light).
 
-You can include AutoPath in your Maven project via:
+You can include Slow Light in your Maven project via:
 
     <dependency>
       <groupId>com.tacitknowledge</groupId>
