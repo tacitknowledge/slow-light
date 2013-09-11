@@ -2,17 +2,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.tacitknowledge</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>2</version>
+        <artifactId>slowlight</artifactId>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <groupId>com.tacitknowledge</groupId>
-    <artifactId>slowlight</artifactId>
+    <artifactId>slowlight-proxy</artifactId>
     <version>1.0.2-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
-    <name>Slow Light</name>
-    <description>Proxying framework for causing concurrent scalability issues with objects and services</description>
+    <name>Slow Light Embedded</name>
+    <description>Standalone proxy tool for creating issues with synchronous RPC calls</description>
     <url>https://github.com/tacitknowledge/slow-light</url>
     <licenses>
         <license>
@@ -42,26 +42,15 @@
     </developers>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <coverage.totalBranchRate>75</coverage.totalBranchRate>
+        <coverage.totalLineRate>75</coverage.totalLineRate>
+        <coverage.packageLineRate>75</coverage.packageLineRate>
+        <coverage.packageBranchRate>75</coverage.packageBranchRate>
+        <!-- per class requirements -->
+        <coverage.branchRate>0</coverage.branchRate>
+        <coverage.lineRate>0</coverage.lineRate>
+
     </properties>
 
-    <modules>
-        <module>embedded</module>
-        <module>proxy</module>
-    </modules>
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
 </project>
