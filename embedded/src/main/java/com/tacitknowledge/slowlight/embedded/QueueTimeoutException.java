@@ -1,4 +1,4 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 /**
  * User: witherspore

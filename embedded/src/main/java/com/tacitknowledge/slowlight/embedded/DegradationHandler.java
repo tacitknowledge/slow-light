@@ -1,4 +1,4 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -55,7 +55,7 @@ public class DegradationHandler implements InvocationHandler {
      * 2. Creates a Callable, DegradationCallable.java, and submits it to the ThreadPoolExecutor
      * 3. Handles the future.get appropriately with or without timeouts as specified in the DegradationStrategy
      *
-     * @param proxy  The proxy instance.  Note this is not the target instance
+     * @param proxy  The embedded instance.  Note this is not the target instance
      * @param method method to be invoked
      * @param args   arguments to use during invocation
      * @return target result or error object

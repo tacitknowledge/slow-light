@@ -1,10 +1,10 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 import static org.junit.Assert.*;
 
-import com.tacitknowledge.slowlight.proxy.stubs.StubbedService;
-import com.tacitknowledge.slowlight.proxy.stubs.StubbedServiceErrorImpl;
-import com.tacitknowledge.slowlight.proxy.stubs.StubbedServiceImpl;
+import com.tacitknowledge.slowlight.embedded.stubs.StubbedService;
+import com.tacitknowledge.slowlight.embedded.stubs.StubbedServiceErrorImpl;
+import com.tacitknowledge.slowlight.embedded.stubs.StubbedServiceImpl;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -185,7 +185,7 @@ public class DegradationHandlerIntegrationTest {
         final DegradationHandler handler = new DegradationHandler(stub,
                 executorService, degradationStrategy);
 
-        //set up proxy with handler
+        //set up embedded with handler
         final StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, handler);
 
         //set up concurrent load provider
@@ -195,7 +195,7 @@ public class DegradationHandlerIntegrationTest {
         for (int i = 0; i < concurrentLoad; i++) {
             serviceCalls.add(proxy);
         }
-        //add list of proxy calls to provider and get futures.   basically service.callService() wrapped in callable
+        //add list of embedded calls to provider and get futures.   basically service.callService() wrapped in callable
         //  only for unit testing purposes
         List<Future<Integer>> futures = setUpLoadingThreads(loadProvider, serviceCalls);
         for (Future future : futures) {

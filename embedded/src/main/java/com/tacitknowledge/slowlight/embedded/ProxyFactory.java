@@ -1,4 +1,4 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;

@@ -1,4 +1,4 @@
-package com.tacitknowledge.slowlight.proxy.stubs;
+package com.tacitknowledge.slowlight.embedded.stubs;
 
 import java.io.FileNotFoundException;
 import java.net.ConnectException;

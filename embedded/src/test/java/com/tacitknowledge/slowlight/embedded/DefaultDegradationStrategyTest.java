@@ -1,8 +1,8 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 import static org.junit.Assert.*;
 
-import com.tacitknowledge.slowlight.proxy.stubs.StubbedService;
+import com.tacitknowledge.slowlight.embedded.stubs.StubbedService;
 import org.junit.Test;
 import static org.mockito.Mockito.*;
 

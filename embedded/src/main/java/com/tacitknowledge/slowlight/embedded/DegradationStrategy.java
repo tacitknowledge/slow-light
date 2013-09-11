@@ -1,4 +1,4 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 import java.lang.reflect.Method;
 
@@ -16,7 +16,7 @@ public interface DegradationStrategy {
 
     /**
      *
-     * @return value, in millis, for any base delay in proxy response
+     * @return value, in millis, for any base delay in embedded response
      */
     Long getServiceDemandTime();
 
@@ -27,7 +27,7 @@ public interface DegradationStrategy {
     Double getPassRate();
 
     /**
-     * How long to delay the actual proxy call, generally randomized as a number between serviceDemandTIme and
+     * How long to delay the actual embedded call, generally randomized as a number between serviceDemandTIme and
      * serviceTimeout
      * @return  value in millis for the delay
      */
@@ -61,7 +61,7 @@ public interface DegradationStrategy {
 
     /**
      *
-     * @return  true or false if handler should timeout proxy calls
+     * @return  true or false if handler should timeout embedded calls
      */
     Boolean isTimeoutQueues();
 
@@ -70,19 +70,19 @@ public interface DegradationStrategy {
      * @param method
      * @param target
      * @param args
-     * @return object for a successful call.  Typically, this just calls the object proxy
+     * @return object for a successful call.  Typically, this just calls the object embedded
      * @throws Exception
      */
     Object overrideResult( Object target, Method method, Object[] args) throws Exception;
 
     /**
      *
-     * @return true if the proxy should skip degradation and call normally
+     * @return true if the embedded should skip degradation and call normally
      */
     Boolean shouldSkipDegradation();
 
     /**
-     * Is the specific method on the proxy configured to be bypassed and called normally?
+     * Is the specific method on the embedded configured to be bypassed and called normally?
      *
      * @param method
      * @return true if the method should not be proxied

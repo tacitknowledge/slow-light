@@ -1,10 +1,10 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
 /**
  * User: witherspore
  * Date: 6/19/13
  * Time: 10:17 AM
- * Should the proxy return an error object or throw an exception
+ * Should the embedded return an error object or throw an exception
  */
 public enum FailurePriority {
     /**

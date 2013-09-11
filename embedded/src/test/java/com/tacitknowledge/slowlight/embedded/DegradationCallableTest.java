@@ -1,6 +1,6 @@
-package com.tacitknowledge.slowlight.proxy;
+package com.tacitknowledge.slowlight.embedded;
 
-import com.tacitknowledge.slowlight.proxy.stubs.StubbedServiceImpl;
+import com.tacitknowledge.slowlight.embedded.stubs.StubbedServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.mockito.Mockito.*;

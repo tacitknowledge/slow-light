@@ -11,7 +11,7 @@
     <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Slow Light</name>
+    <name>Slow Light Embedded</name>
     <description>Proxying framework for causing concurrent scalability issues with objects and services</description>
     <url>https://github.com/tacitknowledge/slow-light</url>
     <licenses>
