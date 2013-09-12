@@ -11,7 +11,7 @@
     <version>1.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Slow Light Embedded</name>
+    <name>Slow Light Proxy</name>
     <description>Standalone proxy tool for creating issues with synchronous RPC calls</description>
     <url>https://github.com/tacitknowledge/slow-light</url>
     <licenses>
