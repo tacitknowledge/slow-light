@@ -29,7 +29,7 @@ triggers fault tolerance code and sets of alarms.
 
 # Slow Light Architectures
 
-**Slow Light Embedded**
+[Slow Light Embedded][embedded]
 Slow Light Embedded runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
 responses according to configuration and concurrency rules.
@@ -84,7 +84,7 @@ Slow Light Proxy is not yet released as a jar, but you can build it from code in
 
 # Use it!
 
-__[A Sample from Slow Light Embedded][embedded]__
+__A Sample from Slow Light Embedded__
 
 In general you just need to do these things:
 ```java
@@ -118,7 +118,7 @@ In general you just need to do these things:
  //                  AOP stuff, or JNDI
 ```
 
-__[A Sample from Slow Light Proxy][proxy]__
+__A Sample from Slow Light Proxy__
 
 This configuration proxies calls between port *10011* and *google.com:80*. It contains three scenarios:
 * Simple Proxy (60% of requests)
