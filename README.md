@@ -31,7 +31,7 @@ triggers fault tolerance code and sets of alarms.
 
 **Slow Light Embedded**
 
-[Slow Light Embedded](embedded) runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
+[Slow Light Embedded](embedded) runs inside a Java Process and wraps service interfaces with a [Java Proxy](http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Proxy.html) that incorporates a
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
 responses according to configuration and concurrency rules.
 
