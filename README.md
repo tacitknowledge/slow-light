@@ -11,7 +11,7 @@ using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and 
 
 # Introduction and Motivation
 
-Slow Light consists of two sibling tools, Slow Light Embedded and Slow Light Proxy. Both tools interpose themselves
+Slow Light consists of two sibling tools, [Slow Light Embedded](embedded) and [Slow Light Proxy](proxy). Both tools interpose themselves
 between a caller and an API to degrade responses, either with response times or error creation.
 
 _Why do this?_ We've found that certain points in system architectures will inevitably experience degradation and
@@ -29,10 +29,7 @@ triggers fault tolerance code and sets of alarms.
 
 # Slow Light Architectures
 
-[Slow Light Embedded](embedded)
-[ugh] (https://github.com/tacitknowledge/slow-light/tree/development/embedded)
-
-Slow Light Embedded runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
+[Slow Light Embedded](embedded)runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
 responses according to configuration and concurrency rules.
 
@@ -50,13 +47,14 @@ Slow Light itself wraps
 ![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightEmbeddedWithHystrix.png "Embedded With Hystrix")
 
 **Slow Light Proxy**
-Slow Light Proxy is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
-altering code in client applications as it runs external to the process.  Slow Light Proxy uses Netty and some special
+[Slow Light Proxy](Proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
+altering code in client applications as it runs external to the process.  Slow Light Proxy uses [Netty](http://netty.io/) and some special
 ChannelHandler implementations to slow, delay, discard, forward, and generally play mischevious games with remote
 calls.
 
 ![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightProxy.png "Proxy Architecture")
 
+![alt text](images/SlowLightProxy.png)
 
 _with Hystrix_
 
