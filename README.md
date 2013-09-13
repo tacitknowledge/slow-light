@@ -50,7 +50,7 @@ Slow Light itself wraps
 
 **Slow Light Proxy Server**
 
-[Slow Light Proxy Server](Proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
+[Slow Light Proxy Server](proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
 altering code in client applications as it runs external to the process.  Slow Light Proxy Server uses [Netty](http://netty.io/) and some special
 ChannelHandler implementations to slow, delay, discard, forward, and generally play mischevious games with remote
 calls.
