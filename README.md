@@ -29,11 +29,13 @@ triggers fault tolerance code and sets of alarms.
 
 # Slow Light Architectures
 
-[Slow Light Embedded](embedded)runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
+**Slow Light Embedded**
+
+[Slow Light Embedded](embedded) runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
 responses according to configuration and concurrency rules.
 
-![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightEmbedded.png "Embedded Architecture")
+![alt text](images/SlowLightEmbedded.png "Embedded Architecture")
 
 Slow Light Embedded requires altering code within your application or IoC configuration.  This is a fairly simple
 process when using Spring, Guice, PicoContainer, or other IoC injectors that support an AOP model.  When not using one
@@ -44,24 +46,23 @@ _with Hystrix_
 With a Fault Tolerance tool like Hystrix, which also proxies/wraps Service APIs, we insert Hystrix around Slow Light.
 Slow Light itself wraps
 
-![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightEmbeddedWithHystrix.png "Embedded With Hystrix")
+![alt text](images/SlowLightEmbeddedWithHystrix.png "Embedded With Hystrix")
 
 **Slow Light Proxy**
+
 [Slow Light Proxy](Proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
 altering code in client applications as it runs external to the process.  Slow Light Proxy uses [Netty](http://netty.io/) and some special
 ChannelHandler implementations to slow, delay, discard, forward, and generally play mischevious games with remote
 calls.
 
-![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightProxy.png "Proxy Architecture")
-
-![alt text](images/SlowLightProxy.png)
+![alt text](images/SlowLightProxy.png "Proxy Architecture)
 
 _with Hystrix_
 
 When using Slow Light Proxy with a Fault Tolerance tool like Hystrix, you can achieve the same smoke and smoke alarm
 behavior as Slow Light Embedded.
 
-![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightProxyWithHystrix.png "Embedded With Hystrix")
+![alt text](images/SlowLightProxyWithHystrix.png "Proxy With Hystrix")
 
 A disadvantage of Slow Light Proxy is that it can't create faults and degradation with system resources like file I/O.
 If you need to simulate failures in non-network resources, use Slow Light Embedded.
