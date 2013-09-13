@@ -95,6 +95,8 @@ Scenario is selected proportionally to the request count in each of the scenario
     </servers>
 <com.tacitknowledge.slowlight.proxyserver.ServersConfiguration>
 ```
+## configuration notes
+Slow Light Proxy Server uses XStream to load the ServersConfiguration object graph.
 
 ## Running several servers on different ports
 One can run as many servers as needed on different ports. Each server may contain different set of scenarios or
