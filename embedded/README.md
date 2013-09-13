@@ -11,7 +11,7 @@ using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and 
 
 # Introduction and Motivation
 
-Slow Light allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread
+Slow Light Embedded allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread
 pool which constrains and slows throughput through an object or class.  Slow Light can be configured to generate error
 responses and exceptions as pool utilization increases and response time degrades.
 
@@ -23,7 +23,7 @@ Just Java, no third party libraries outside the unit testing frameworks.
 
 # Where do I get Slow Light?
 -------------------------
-Slow Light is open source and is hosted at
+Slow Light Embedded is open source and is hosted at
 [Github](http://github.com/tacitknowledge/slow-light).
 
 You can include Slow Light in your Maven project via:

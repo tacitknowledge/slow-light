@@ -11,12 +11,7 @@ using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and 
 
 # Introduction and Motivation
 
-Slow Light allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread
-pool which constrains and slows throughput through an object or class.  Slow Light can be configured to generate error
-responses and exceptions as pool utilization increases and response time degrades.
-
-Newly updated, it includes more flexible support for failure modes, checked exception handling, and
-general degradation configuration.
+Slow Light actually represents
 
 # Slow Light Architectures
 
