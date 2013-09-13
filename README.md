@@ -34,6 +34,7 @@ Slow Light Embedded runs inside a Java Process and wraps service interfaces with
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
 responses according to configuration and concurrency rules.
 
+![alt text][images/SlowLightEmbedded.png]
 ![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightEmbedded.png "Embedded Architecture")
 
 Slow Light Embedded requires altering code within your application or IoC configuration.  This is a fairly simple
@@ -66,11 +67,6 @@ behavior as Slow Light Embedded.
 A disadvantage of Slow Light Proxy is that it can't create faults and degradation with system resources like file I/O.
 If you need to simulate failures in non-network resources, use Slow Light Embedded.
 
-
-
-# Dependencies
-Just Java, no third party libraries outside the unit testing frameworks.
-
 # Where do I get Slow Light?
 -------------------------
 Slow Light is open source and is hosted at
@@ -89,7 +85,9 @@ Slow Light Proxy is not yet released as a jar, but you can build it from code in
 
 # Use it!
 
-The DegradationHandlerIntegrationTest shows a number of different modes, but in general you just need to do these things:
+__[A Sample from Slow Light Embedded][embedded]__
+
+In general you just need to do these things:
 ```java
  //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
  //  supporting concrete classes without interfaces is a future TODO
@@ -121,100 +119,52 @@ The DegradationHandlerIntegrationTest shows a number of different modes, but in 
  //                  AOP stuff, or JNDI
 ```
 
-# Some Sample Configurations
-Most everything is driven through the DefaultDegradationStrategy.
+__[A Sample from Slow Light Proxy][proxy]__
 
-Setting up a pass through configuration with no degradation.
+This configuration proxies calls between port *10011* and *google.com:80*. It contains three scenarios:
+* Simple Proxy (60% of requests)
+* Proxy with timed delays for 10 sec (40% of requests)
 
-While pool size is constrained,  service calls immediately
-execute, response times are never delayed, and no errors are created or Exceptions thrown.
-```java
-long serviceDemandTime = 0L;
-long serviceTimeout = 0L;
-double passRate = 1.0;
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate
-          );
-```
-Setting up a roughly constant delay on response times.
-```java
-// set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
-long serviceDemandTime = 500L;
-//When timeout matches demand time, response times do not increase as utilization increases
-long serviceTimeout = 500L;
-double passRate = 1.0; // 100% pass rate so no errors occur
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate
-          );
-```
+Scenario is selected proportionally to the request count in each of the scenario.
 
-Setting up a a degradation curve.
-```java
-// set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
-long serviceDemandTime = 500L;
-//When service timeout is greater than response time, responses will be delayed by a general scaling function
-// of Math.exp(pool utilization).  This scaling function maxes at around the serviceTimeout value
-long serviceTimeout = 1500L;
-double passRate = 1.0; // 100% pass rate so no errors occur
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate
-          );
-```
+```xml
+<com.tacitknowledge.performance.ServersConfiguration>
+    <servers>
+        <com.tacitknowledge.performance.Server>
+            <port>10011</port>
+            <scenarios>
+                <!-- Normal scenario -->
+                <com.tacitknowledge.performance.Scenario>
+                    <components>
+                        <com.tacitknowledge.performance.data.Proxy>
+                            <remoteHost>google.com</remoteHost>
+                            <remotePort>80</remotePort>
+                        </com.tacitknowledge.performance.data.Proxy>
+                    </components>
+                    <weight>6</weight>
+                </com.tacitknowledge.performance.Scenario>
 
-Setting up a a degradation curve and throwing errors
-```java
-// set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
-long serviceDemandTime = 500L;
-//When service timeout is greater than response time, responses will be delayed by a general scaling function
-// of Math.exp(pool utilization).  This scaling function maxes at around the serviceTimeout value
-long serviceTimeout = 1500L;
-// 90% pass rate.  Roughly, this means that when the adjusted response time is over 93% of the service timeout
-// the system will throw an Exception randomly selected from an array
-double passRate = 0.9;
-//Exceptions to throw.  Will try and use the new Exception(String s) constructor, then fall back on default.
-//    don't add any checked exceptions which aren't part of the API on your target object.
-Class exceptions = new Class[]{MyException.class}
-
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate,
-                exceptions
-          );
+                <!-- Timed delay: 10 sec before passing request to proxy delegate -->
+                <com.tacitknowledge.performance.Scenario>
+                    <components>
+                        <com.tacitknowledge.performance.degrade.Delay>
+                            <delay>10000</delay>
+                            <delayOnRead>true</delayOnRead>
+                        </com.tacitknowledge.performance.degrade.Delay>
+                        <com.tacitknowledge.performance.data.Proxy>
+                            <remoteHost>google.com</remoteHost>
+                            <remotePort>80</remotePort>
+                        </com.tacitknowledge.performance.data.Proxy>
+                    </components>
+                    <weight>4</weight>
+                </com.tacitknowledge.performance.Scenario>
+            </scenarios>
+            <scenarioSelector class="com.tacitknowledge.performance.scenario.ProprotionalCountSelector"/>
+        </com.tacitknowledge.performance.Server>
+    </servers>
+<com.tacitknowledge.performance.ServersConfiguration>
 ```
 
-Setting up a a degradation curve and returning an error object
-You may want to do this if the interface short circuits errors and returns a default object, such as something
-representing "Service not available.  Please try later".  Not really an exception, but a valid and not helpful response.
-```java
-long serviceDemandTime = 500L;
-long serviceTimeout = 1500L;
-double passRate = 0.9;
-//can be any Object.  Here, just using a non-zero int
-final Integer errorObject = new Integer(25);
-DegradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
-        serviceTimeout,
-        //again, 90%.
-        passRate,
-        new Class[]{FileNotFoundException.class},
-        //here's the errorObject we want to return when the 10% failures occur
-        errorObject,
-        //setting this priority causes error objects to be returned rather than Exceptions thrown
-        FailurePriority.ERROR_OBJECT,
-        //FastFail true causes the response to immediately return rather than be delayed
-        FastFail.TRUE,
-        //this boolean will cause pool items to timeout if set to true.
-        //  basically future.get(serviceTimeout,TimeUnit.MILLIS)
-        false
-    );
-
-```
 
 # Notes
 The default implementations are thread safe.  You can re-use a single proxy across threads, assuming the target object
