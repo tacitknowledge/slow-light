@@ -34,7 +34,6 @@ Slow Light Embedded runs inside a Java Process and wraps service interfaces with
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
 responses according to configuration and concurrency rules.
 
-![alt text][images/SlowLightEmbedded.png]
 ![alt text](https://raw.github.com/tacitknowledge/slow-light/development/images/SlowLightEmbedded.png "Embedded Architecture")
 
 Slow Light Embedded requires altering code within your application or IoC configuration.  This is a fairly simple
