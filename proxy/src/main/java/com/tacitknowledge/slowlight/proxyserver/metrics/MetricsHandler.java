@@ -11,7 +11,7 @@ import io.netty.util.AttributeKey;
 @ChannelHandler.Sharable
 public class MetricsHandler extends ChannelDuplexHandler
 {
-    private final static AttributeKey<Long> START_TIME = new AttributeKey<>("attr.StartTime");
+    private final static AttributeKey<Long> START_TIME = new AttributeKey("attr.StartTime");
 
     private final MetricsHolder metrics;
 
