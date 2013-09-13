@@ -67,22 +67,6 @@ behavior as Slow Light Embedded.
 A disadvantage of Slow Light Proxy Server is that it can't create faults and degradation with system resources like file I/O.
 If you need to simulate failures in non-network resources, use Slow Light Embedded.
 
-# Where do I get Slow Light?
--------------------------
-Slow Light is open source and is hosted at
-[Github](http://github.com/tacitknowledge/slow-light).
-
-You can include Slow Light Embedded in your Maven project via:
-
-    <dependency>
-      <groupId>com.tacitknowledge</groupId>
-      <artifactId>slowlight</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-
-Slow Light Proxy Server is not yet released as a jar, but you can build it from code in our _development_ branch
-
-
 # Use it!
 
 __A Sample from Slow Light Embedded__
@@ -165,6 +149,20 @@ Scenario is selected proportionally to the request count in each of the scenario
 <com.tacitknowledge.performance.ServersConfiguration>
 ```
 
+# Where do I get Slow Light?
+-------------------------
+Slow Light is open source and is hosted at
+[Github](http://github.com/tacitknowledge/slow-light).
+
+You can include Slow Light Embedded in your Maven project via:
+
+    <dependency>
+      <groupId>com.tacitknowledge</groupId>
+      <artifactId>slowlight</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+
+Slow Light Proxy Server is not yet released as a jar, but you can build it from code in our _development_ branch
 
 # Notes
 The default implementations are thread safe.  You can re-use a single proxy across threads, assuming the target object
@@ -186,7 +184,7 @@ Currently the _master_ branch and release version slowlight-1.0.1 reflects the e
        <version>1.0.1</version>
      </dependency>
 ```
-**unproven stuff - use at your own risk**
+**unproven stuff**
 
 Slowlight-Proxy is available in the _development_ branch.  You may need to modify code for your needs.
 
