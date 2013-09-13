@@ -1,4 +1,4 @@
-# Performance Degradation Proxy
+# Slow Light Proxy Server
 
 ## How to run
 First, build the project with maven:
@@ -7,7 +7,7 @@ First, build the project with maven:
 mvn clean install
 ```
 
-Run degradation proxy with
+Run *Slow Light Proxy Server* with
 
 ```
 java -jar degradation-proxy-1.0-SNAPSHOT-jar-with-dependencies.jar config.xml
@@ -15,7 +15,7 @@ java -jar degradation-proxy-1.0-SNAPSHOT-jar-with-dependencies.jar config.xml
 
 ## Sample configurations
 
-### No delays, just proxying.
+### No delays, just proxying TCP/IP.
 This configuration will run server on localhost:10011 and will proxy requests to google:80
 
 ```xml
@@ -97,4 +97,5 @@ Scenario is selected proportionally to the request count in each of the scenario
 ```
 
 ## Running several servers on different ports
-One can run as many servers as needed on different ports. Each server may contain different set of scenarios or different proxy delegates.
+One can run as many servers as needed on different ports. Each server may contain different set of scenarios or
+different proxy delegates.
