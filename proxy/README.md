@@ -10,7 +10,7 @@ mvn clean install
 Run *Slow Light Proxy Server* with
 
 ```
-java -jar degradation-proxy-1.0-SNAPSHOT-jar-with-dependencies.jar config.xml
+java -jar slowlight-proxy-<version>.jar config.xml
 ```
 
 ## Sample configurations
