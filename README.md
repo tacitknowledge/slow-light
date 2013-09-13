@@ -76,13 +76,15 @@ Just Java, no third party libraries outside the unit testing frameworks.
 Slow Light is open source and is hosted at
 [Github](http://github.com/tacitknowledge/slow-light).
 
-You can include Slow Light in your Maven project via:
+You can include Slow Light Embedded in your Maven project via:
 
     <dependency>
       <groupId>com.tacitknowledge</groupId>
       <artifactId>slowlight</artifactId>
       <version>1.0.1</version>
     </dependency>
+
+Slow Light Proxy is not yet released as a jar, but you can build it from code in our _development_ branch
 
 
 # Use it!
