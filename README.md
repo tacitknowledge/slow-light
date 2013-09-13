@@ -29,8 +29,8 @@ triggers fault tolerance code and sets of alarms.
 
 # Slow Light Architectures
 
-[Slow Light Embedded](1)
-[1](https://github.com/tacitknowledge/slow-light/tree/development/embedded)
+[Slow Light Embedded](embedded)
+[ugh] (https://github.com/tacitknowledge/slow-light/tree/development/embedded)
 
 Slow Light Embedded runs inside a Java Process and wraps service interfaces with a Java Proxy that incorporates a
 ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
