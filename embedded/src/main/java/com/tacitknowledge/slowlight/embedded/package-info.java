@@ -1,5 +1,5 @@
 /**
- * The performance degradation package provides a simple proxying api to cause delays and failures
+ * The proxyserver degradation package provides a simple proxying api to cause delays and failures
  * when calling an object under a concurrency situation.
  *
  * In short, if you have a service and wrap it in this embedded, you can simulate increased latency or scalability

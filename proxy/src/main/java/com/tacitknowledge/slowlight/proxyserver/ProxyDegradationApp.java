@@ -1,4 +1,4 @@
-package com.tacitknowledge.performance;
+package com.tacitknowledge.slowlight.proxyserver;
 
 import java.io.File;
 import java.util.List;

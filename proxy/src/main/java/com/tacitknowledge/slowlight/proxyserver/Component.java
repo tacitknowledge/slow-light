@@ -1,4 +1,4 @@
-package com.tacitknowledge.performance;
+package com.tacitknowledge.slowlight.proxyserver;
 
 import io.netty.channel.socket.SocketChannel;
 

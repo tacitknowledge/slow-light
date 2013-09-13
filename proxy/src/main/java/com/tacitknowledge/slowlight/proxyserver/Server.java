@@ -1,8 +1,8 @@
-package com.tacitknowledge.performance;
+package com.tacitknowledge.slowlight.proxyserver;
 
 import java.util.List;
 
-import com.tacitknowledge.performance.scenario.ScenarioSelector;
+import com.tacitknowledge.slowlight.proxyserver.scenario.ScenarioSelector;
 
 /** @author Ivan Frolov (ifrolov@tacitknowledge.com) */
 public class Server

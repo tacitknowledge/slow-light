@@ -1,4 +1,4 @@
-package com.tacitknowledge.performance.metrics;
+package com.tacitknowledge.slowlight.proxyserver.metrics;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelDuplexHandler;

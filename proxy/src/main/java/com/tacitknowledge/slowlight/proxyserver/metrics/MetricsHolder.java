@@ -1,4 +1,4 @@
-package com.tacitknowledge.performance.metrics;
+package com.tacitknowledge.slowlight.proxyserver.metrics;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;

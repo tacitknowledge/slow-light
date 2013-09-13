@@ -1,10 +1,10 @@
-package com.tacitknowledge.performance.scenario;
+package com.tacitknowledge.slowlight.proxyserver.scenario;
 
 import java.util.List;
 
 import org.apache.commons.lang.math.RandomUtils;
 
-import com.tacitknowledge.performance.Scenario;
+import com.tacitknowledge.slowlight.proxyserver.Scenario;
 
 /** @author Ivan Frolov (ifrolov@tacitknowledge.com) */
 public class RandomScenarioSelector implements ScenarioSelector

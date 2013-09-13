@@ -1,6 +1,6 @@
-package com.tacitknowledge.performance.data;
+package com.tacitknowledge.slowlight.proxyserver.data;
 
-import com.tacitknowledge.performance.Component;
+import com.tacitknowledge.slowlight.proxyserver.Component;
 
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;

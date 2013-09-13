@@ -1,11 +1,11 @@
-package com.tacitknowledge.performance.scenario;
+package com.tacitknowledge.slowlight.proxyserver.scenario;
 
 import java.util.List;
 
-import com.tacitknowledge.performance.Scenario;
+import com.tacitknowledge.slowlight.proxyserver.Scenario;
 
 /** @author Ivan Frolov (ifrolov@tacitknowledge.com) */
-public class ProprotionalCountSelector implements ScenarioSelector
+public class ProprotionalTimeSelector implements ScenarioSelector
 {
     @Override
     public Scenario select(final List<Scenario> scenarios)
@@ -21,7 +21,7 @@ public class ProprotionalCountSelector implements ScenarioSelector
             if(scenario.getWeight() == 0) {
                 continue;
             }
-            double weighedCount = scenario.getMetrics().counter.get()/scenario.getWeight();
+            double weighedCount = scenario.getMetrics().time.get()/scenario.getWeight();
 
             if(weighedCount<min) {
                 min = weighedCount;

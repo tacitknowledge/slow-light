@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.tacitknowledge.performance.data;
+package com.tacitknowledge.slowlight.proxyserver.data;
 
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;

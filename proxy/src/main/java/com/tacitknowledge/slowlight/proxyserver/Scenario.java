@@ -1,11 +1,11 @@
-package com.tacitknowledge.performance;
+package com.tacitknowledge.slowlight.proxyserver;
 
 import java.io.Serializable;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.tacitknowledge.performance.metrics.MetricsHolder;
+import com.tacitknowledge.slowlight.proxyserver.metrics.MetricsHolder;
 
 /** @author Ivan Frolov (ifrolov@tacitknowledge.com) */
 public class Scenario implements Serializable

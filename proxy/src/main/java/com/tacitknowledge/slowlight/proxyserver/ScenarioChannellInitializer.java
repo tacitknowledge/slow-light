@@ -1,9 +1,9 @@
-package com.tacitknowledge.performance;
+package com.tacitknowledge.slowlight.proxyserver;
 
 import java.util.List;
 
-import com.tacitknowledge.performance.metrics.MetricsHandler;
-import com.tacitknowledge.performance.scenario.ScenarioSelector;
+import com.tacitknowledge.slowlight.proxyserver.metrics.MetricsHandler;
+import com.tacitknowledge.slowlight.proxyserver.scenario.ScenarioSelector;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;

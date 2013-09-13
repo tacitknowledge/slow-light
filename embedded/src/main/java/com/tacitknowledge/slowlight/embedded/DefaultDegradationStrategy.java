@@ -365,7 +365,7 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
     }
 
     /**
-     * If pass rate is 1.0, service demand time is 0, and service timeout is 0, then no performance degradation
+     * If pass rate is 1.0, service demand time is 0, and service timeout is 0, then no proxyserver degradation
      * will occur.  Handler uses this to skip adding the call to the Thread Pool and just executes the call in
      * the current thread
      * @return true if it should run in current thread

@@ -1,6 +1,6 @@
-package com.tacitknowledge.performance.degrade;
+package com.tacitknowledge.slowlight.proxyserver.degrade;
 
-import com.tacitknowledge.performance.Component;
+import com.tacitknowledge.slowlight.proxyserver.Component;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

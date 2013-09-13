@@ -112,41 +112,41 @@ This configuration proxies calls between port *10011* and *google.com:80*. It co
 Scenario is selected proportionally to the request count in each of the scenario.
 
 ```xml
-<com.tacitknowledge.performance.ServersConfiguration>
+<com.tacitknowledge.slowlight.proxyserver.ServersConfiguration>
     <servers>
-        <com.tacitknowledge.performance.Server>
+        <com.tacitknowledge.slowlight.proxyserver.Server>
             <port>10011</port>
             <scenarios>
                 <!-- Normal scenario -->
-                <com.tacitknowledge.performance.Scenario>
+                <com.tacitknowledge.slowlight.proxyserver.Scenario>
                     <components>
-                        <com.tacitknowledge.performance.data.Proxy>
+                        <com.tacitknowledge.slowlight.proxyserver.data.Proxy>
                             <remoteHost>google.com</remoteHost>
                             <remotePort>80</remotePort>
-                        </com.tacitknowledge.performance.data.Proxy>
+                        </com.tacitknowledge.slowlight.proxyserver.data.Proxy>
                     </components>
                     <weight>6</weight>
-                </com.tacitknowledge.performance.Scenario>
+                </com.tacitknowledge.slowlight.proxyserver.Scenario>
 
                 <!-- Timed delay: 10 sec before passing request to proxy delegate -->
-                <com.tacitknowledge.performance.Scenario>
+                <com.tacitknowledge.slowlight.proxyserver.Scenario>
                     <components>
-                        <com.tacitknowledge.performance.degrade.Delay>
+                        <com.tacitknowledge.slowlight.proxyserver.degrade.Delay>
                             <delay>10000</delay>
                             <delayOnRead>true</delayOnRead>
-                        </com.tacitknowledge.performance.degrade.Delay>
-                        <com.tacitknowledge.performance.data.Proxy>
+                        </com.tacitknowledge.slowlight.proxyserver.degrade.Delay>
+                        <com.tacitknowledge.slowlight.proxyserver.data.Proxy>
                             <remoteHost>google.com</remoteHost>
                             <remotePort>80</remotePort>
-                        </com.tacitknowledge.performance.data.Proxy>
+                        </com.tacitknowledge.slowlight.proxyserver.data.Proxy>
                     </components>
                     <weight>4</weight>
-                </com.tacitknowledge.performance.Scenario>
+                </com.tacitknowledge.slowlight.proxyserver.Scenario>
             </scenarios>
-            <scenarioSelector class="com.tacitknowledge.performance.scenario.ProprotionalCountSelector"/>
-        </com.tacitknowledge.performance.Server>
+            <scenarioSelector class="com.tacitknowledge.slowlight.proxyserver.scenario.ProprotionalCountSelector"/>
+        </com.tacitknowledge.slowlight.proxyserver.Server>
     </servers>
-<com.tacitknowledge.performance.ServersConfiguration>
+<com.tacitknowledge.slowlight.proxyserver.ServersConfiguration>
 ```
 
 # Where do I get Slow Light?

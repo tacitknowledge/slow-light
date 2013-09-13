@@ -137,7 +137,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.tacitknowledge.performance.ProxyDegradationApp</mainClass>
+                            <mainClass>com.tacitknowledge.slowlight.proxyserver.ProxyDegradationApp</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

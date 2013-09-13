@@ -1,8 +1,8 @@
-package com.tacitknowledge.performance.data;
+package com.tacitknowledge.slowlight.proxyserver.data;
 
 import org.apache.commons.lang.math.RandomUtils;
 
-import com.tacitknowledge.performance.Component;
+import com.tacitknowledge.slowlight.proxyserver.Component;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
