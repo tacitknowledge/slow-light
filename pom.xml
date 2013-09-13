@@ -84,15 +84,15 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.12</version>
-                <!-- this prevents cobertura from breaking on Java 7 and higher -->
-                <configuration>
-                    <argLine>-XX:-UseSplitVerifier</argLine>
-                </configuration>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-surefire-plugin</artifactId>-->
+                <!--<version>2.12</version>-->
+                <!--&lt;!&ndash; this prevents cobertura from breaking on Java 7 and higher &ndash;&gt;-->
+                <!--<configuration>-->
+                    <!--<argLine>-XX:-UseSplitVerifier</argLine>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
