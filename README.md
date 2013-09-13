@@ -11,7 +11,7 @@ using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and 
 
 # Introduction and Motivation
 
-Slow Light consists of two sibling tools, [Slow Light Embedded](embedded) and [Slow Light Proxy](proxy). Both tools interpose themselves
+Slow Light consists of two sibling tools, [Slow Light Embedded](embedded) and [Slow Light Proxy Server](proxy). Both tools interpose themselves
 between a caller and an API to degrade responses, either with response times or error creation.
 
 _Why do this?_ We've found that certain points in system architectures will inevitably experience degradation and
@@ -48,23 +48,23 @@ Slow Light itself wraps
 
 ![alt text](images/SlowLightEmbeddedWithHystrix.png "Embedded With Hystrix")
 
-**Slow Light Proxy**
+**Slow Light Proxy Server**
 
-[Slow Light Proxy](Proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
-altering code in client applications as it runs external to the process.  Slow Light Proxy uses [Netty](http://netty.io/) and some special
+[Slow Light Proxy Server](Proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
+altering code in client applications as it runs external to the process.  Slow Light Proxy Server uses [Netty](http://netty.io/) and some special
 ChannelHandler implementations to slow, delay, discard, forward, and generally play mischevious games with remote
 calls.
 
-![alt text](images/SlowLightProxy.png "Proxy Architecture)
+![alt text](images/SlowLightProxy.png "Proxy Architecture")
 
 _with Hystrix_
 
-When using Slow Light Proxy with a Fault Tolerance tool like Hystrix, you can achieve the same smoke and smoke alarm
+When using Slow Light Proxy Server with a Fault Tolerance tool like Hystrix, you can achieve the same smoke and smoke alarm
 behavior as Slow Light Embedded.
 
 ![alt text](images/SlowLightProxyWithHystrix.png "Proxy With Hystrix")
 
-A disadvantage of Slow Light Proxy is that it can't create faults and degradation with system resources like file I/O.
+A disadvantage of Slow Light Proxy Server is that it can't create faults and degradation with system resources like file I/O.
 If you need to simulate failures in non-network resources, use Slow Light Embedded.
 
 # Where do I get Slow Light?
@@ -80,7 +80,7 @@ You can include Slow Light Embedded in your Maven project via:
       <version>1.0.1</version>
     </dependency>
 
-Slow Light Proxy is not yet released as a jar, but you can build it from code in our _development_ branch
+Slow Light Proxy Server is not yet released as a jar, but you can build it from code in our _development_ branch
 
 
 # Use it!
@@ -119,7 +119,7 @@ In general you just need to do these things:
  //                  AOP stuff, or JNDI
 ```
 
-__A Sample from Slow Light Proxy__
+__A Sample from Slow Light Proxy Server__
 
 This configuration proxies calls between port *10011* and *google.com:80*. It contains three scenarios:
 * Simple Proxy (60% of requests)
@@ -198,8 +198,8 @@ Neither are ready for public release
 
 Slow Light development progresses against the _development_ branch, with merges into master at releases.
 
-Currently Slow Light only supports embedded mode in its first release. Slow Light Proxy is on track for the second
-release. If you are feeling lucky, you can grab the Slow Light Proxy code in the development branch.
+Currently Slow Light only supports embedded mode in its first release. Slow Light Proxy Server is on track for the second
+release. If you are feeling lucky, you can grab the Slow Light Proxy Server code in the development branch.
 
 
 
