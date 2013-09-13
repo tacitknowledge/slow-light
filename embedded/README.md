@@ -18,7 +18,6 @@ responses and exceptions as pool utilization increases and response time degrade
 Newly updated, it includes more flexible support for failure modes, checked exception handling, and
 general degradation configuration.
 
-
 # Dependencies
 Just Java, no third party libraries outside the unit testing frameworks.
 

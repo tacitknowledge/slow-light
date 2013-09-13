@@ -18,6 +18,14 @@ responses and exceptions as pool utilization increases and response time degrade
 Newly updated, it includes more flexible support for failure modes, checked exception handling, and
 general degradation configuration.
 
+# Slow Light Architectures
+
+**Embedded**
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+**Proxy**
+
+see release management notes
+
 
 # Dependencies
 Just Java, no third party libraries outside the unit testing frameworks.
@@ -172,4 +180,28 @@ is also safe.
 # Extension Points
 Feel free to write your own DegradationStrategy and pop it into the DegradationHandler
 
+# Future Feature Notes
+
+**stable releases**
+
+Currently the _master_ branch and release version slowlight-1.0.1 reflects the embedded framework capabilities only.
+ It is available in the public maven repository as com.tacitknowledge:slowlight:1.0.1
+```
+     <dependency>
+       <groupId>com.tacitknowledge</groupId>
+       <artifactId>slowlight</artifactId>
+       <version>1.0.1</version>
+     </dependency>
+```
+**unproven stuff - use at your own risk**
+
+Slowlight-Proxy is available in the _development_ branch.  You may need to modify code for your needs.
+
+Feature development for embedded mode on concrete objects is also in the development branch.
+
+Neither are ready for public release
+
+# Release Notes
+
+Currently Slow Light only supports embedded mode in its first release.
 
