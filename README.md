@@ -16,8 +16,18 @@ Slow Light actually represents
 # Slow Light Architectures
 
 **Embedded**
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://github.com/tacitknowledge/slow-light/tree/development/images/SlowLightEmbedded.png "Embedded Architecture")
+
+_with Hystrix_
+![alt text](https://github.com/tacitknowledge/slow-light/tree/development/images/SlowLightEmbeddedWithHystrix.png "Embedded With Hystrix")
+
 **Proxy**
+![alt text](https://github.com/tacitknowledge/slow-light/tree/development/images/SlowLightProxy.png "Proxy Architecture")
+
+_with Hystrix_
+![alt text](https://github.com/tacitknowledge/slow-light/tree/development/images/SlowLightProxyWithHystrix.png "Embedded With Hystrix")
+
+
 
 see release management notes
 
