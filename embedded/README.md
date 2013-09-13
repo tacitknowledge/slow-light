@@ -1,32 +1,13 @@
-Slow Light [![Build Status](https://secure.travis-ci.org/tacitknowledge/slow-light.png?branch=master)](http://travis-ci.org/tacitknowledge/slow-light)
-==========
+#Slow Light Embedded
 
-In 1999, Danish physicist Lene Vestergaard Hau led a combined team from Harvard University and the Rowland Institute
-for Science which succeeded in slowing a beam of light to about 17 meters per second.
+Slow Light Embedded is a sister tool to [Slow Light Proxy Server](../proxy).
 
-Slow Light is a Java Proxying tool that degrades response times of object methods as concurrency increases.
-
-We've used it primarily to test monitoring and fault tolerance of integration points under scalability tests.  We love
-using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and configurations.
-
-# Introduction and Motivation
-
-Slow Light Embedded allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread
-pool which constrains and slows throughput through an object or class.  Slow Light can be configured to generate error
-responses and exceptions as pool utilization increases and response time degrades.
-
-Newly updated, it includes more flexible support for failure modes, checked exception handling, and
-general degradation configuration.
-
-# Dependencies
-Just Java, no third party libraries outside the unit testing frameworks.
-
-# Where do I get Slow Light?
+# Where do I get Slow Light Embedded?
 -------------------------
 Slow Light Embedded is open source and is hosted at
 [Github](http://github.com/tacitknowledge/slow-light).
 
-You can include Slow Light in your Maven project via:
+You can include Slow Light Embedded in your Maven project via:
 
     <dependency>
       <groupId>com.tacitknowledge</groupId>
