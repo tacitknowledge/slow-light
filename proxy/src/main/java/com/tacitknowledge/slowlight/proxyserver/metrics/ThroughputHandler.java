@@ -50,13 +50,13 @@ public class ThroughputHandler extends AbstractChannelHandler
     @Monitor(name = "FrameThroughput(bytes_per_second)", type = DataSourceType.GAUGE)
     public long getFrameThroughput()
     {
-        return frameReadBytes / SECONDS.convert(getFrameTimeElapsed(), MILLISECONDS);
+        return getFrameReadBytes() / SECONDS.convert(getFrameTimeElapsed(), MILLISECONDS);
     }
 
     @Monitor(name = "ChannelThroughput(bytes_per_second)", type = DataSourceType.GAUGE)
     public long getChannelThroughput()
     {
-        return channelReadBytes / SECONDS.convert(getSessionTimeElapsed(), MILLISECONDS);
+        return getChannelReadBytes() / SECONDS.convert(getSessionTimeElapsed(), MILLISECONDS);
     }
 
     protected void timerCallback()
@@ -64,12 +64,12 @@ public class ThroughputHandler extends AbstractChannelHandler
         frameReadBytes = 0;
     }
 
-    private long getSessionTimeElapsed()
+    public long getSessionTimeElapsed()
     {
         return System.currentTimeMillis() - startDate.getTime();
     }
 
-    private long getFrameTimeElapsed()
+    public long getFrameTimeElapsed()
     {
         return getSessionTimeElapsed() % (MILLISECONDS.convert(getTimeFrame(), SECONDS));
     }
