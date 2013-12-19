@@ -7,13 +7,15 @@ import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
 import com.tacitknowledge.slowlight.proxyserver.handler.AbstractChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 public class ExceptionCountHandler extends AbstractChannelHandler
 {
     @Monitor(name = "ExceptionCount", type = DataSourceType.GAUGE)
-    private int exceptionCount;
+    private AtomicInteger exceptionCount = new AtomicInteger(0);
 
     public ExceptionCountHandler(final HandlerConfig handlerConfig)
     {
@@ -24,11 +26,11 @@ public class ExceptionCountHandler extends AbstractChannelHandler
     @Override
     public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) throws Exception
     {
-        exceptionCount++;
+        exceptionCount.getAndIncrement();
     }
 
     protected int getExceptionCount()
     {
-        return exceptionCount;
+        return exceptionCount.intValue();
     }
 }

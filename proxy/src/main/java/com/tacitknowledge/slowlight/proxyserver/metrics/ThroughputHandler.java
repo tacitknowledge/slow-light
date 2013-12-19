@@ -10,24 +10,24 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 public class ThroughputHandler extends AbstractChannelHandler
 {
-    private long frameReadBytes;
-    private long channelReadBytes;
 
     public static final TimeUnit SECONDS = TimeUnit.SECONDS;
     public static final TimeUnit MILLISECONDS = TimeUnit.MILLISECONDS;
 
-    private Date startDate;
+    private Date startDate = new Date();
+    private AtomicLong frameReadBytes = new AtomicLong(0);
+    private AtomicLong channelReadBytes = new AtomicLong(0);
 
     public ThroughputHandler(final HandlerConfig handlerConfig)
     {
         super(handlerConfig);
-        startDate = new Date();
 
         Monitors.registerObject(handlerConfig.getName(), this);
     }
@@ -37,13 +37,14 @@ public class ThroughputHandler extends AbstractChannelHandler
     {
         final long readableBytes = ((ByteBuf) msg).readableBytes();
 
-        if(readableBytes > Long.MAX_VALUE - channelReadBytes)
+        if(readableBytes > Long.MAX_VALUE - channelReadBytes.longValue())
         {
-            channelReadBytes = 0;
+            channelReadBytes.getAndSet(0);
         }
 
-        frameReadBytes += readableBytes;
-        channelReadBytes += readableBytes;
+        frameReadBytes.getAndAdd(readableBytes);
+        channelReadBytes.getAndAdd(readableBytes);
+
         super.channelRead(ctx, msg);
     }
 
@@ -61,7 +62,7 @@ public class ThroughputHandler extends AbstractChannelHandler
 
     protected void timerCallback()
     {
-        frameReadBytes = 0;
+        frameReadBytes.getAndSet(0);
     }
 
     public long getSessionTimeElapsed()
@@ -76,11 +77,11 @@ public class ThroughputHandler extends AbstractChannelHandler
 
     public long getFrameReadBytes()
     {
-        return frameReadBytes;
+        return frameReadBytes.longValue();
     }
 
     public long getChannelReadBytes()
     {
-        return channelReadBytes;
+        return channelReadBytes.longValue();
     }
 }
