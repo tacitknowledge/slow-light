@@ -10,6 +10,9 @@ import io.netty.channel.ChannelHandlerContext;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * A {@link io.netty.channel.ChannelHandler} implementation that counts
+ * open connections.
+ *
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 public class ConnectionCountHandler extends AbstractChannelHandler

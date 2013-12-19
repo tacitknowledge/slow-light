@@ -10,6 +10,9 @@ import io.netty.channel.ChannelHandlerContext;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * A {@link io.netty.channel.ChannelHandler} implementation that counts
+ * exception occurred inside channel.
+ *
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 public class ExceptionCountHandler extends AbstractChannelHandler

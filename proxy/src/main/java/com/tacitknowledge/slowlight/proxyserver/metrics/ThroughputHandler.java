@@ -13,11 +13,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * A {@link io.netty.channel.ChannelHandler} implementation that computes
+ * throughput as bytes per second. The metric is determined at two levels :
+ *
+ *  <b>Frame</b>  - inside a specified time frame
+ *  <b>Channel</b> - throughput determined per test session
+ *
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 public class ThroughputHandler extends AbstractChannelHandler
 {
-
     public static final TimeUnit SECONDS = TimeUnit.SECONDS;
     public static final TimeUnit MILLISECONDS = TimeUnit.MILLISECONDS;
 
