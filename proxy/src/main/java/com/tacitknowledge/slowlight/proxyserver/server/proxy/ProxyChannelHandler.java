@@ -96,4 +96,19 @@ public class ProxyChannelHandler extends AbstractChannelHandler
 
         return remoteChannelFuture.channel();
     }
+
+    public String getTargetHost()
+    {
+        return targetHost;
+    }
+
+    public int getTargetPort()
+    {
+        return targetPort;
+    }
+
+    public EventLoopGroup getClientWorkerGroup()
+    {
+        return clientWorkerGroup;
+    }
 }

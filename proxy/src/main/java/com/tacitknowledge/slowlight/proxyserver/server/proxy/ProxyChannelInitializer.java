@@ -4,15 +4,14 @@ import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
 import com.tacitknowledge.slowlight.proxyserver.config.ServerConfig;
 import com.tacitknowledge.slowlight.proxyserver.server.DynamicChannelInitializer;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
 
 /** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
 public class ProxyChannelInitializer extends DynamicChannelInitializer
 {
-    private static final String PROXY_HANDLER_NAME = "proxyHandler";
-    private static final String PARAM_HOST = "host";
-    private static final String PARAM_PORT = "port";
+    public static final String PROXY_HANDLER_NAME = "proxyHandler";
+    public static final String PARAM_HOST = "host";
+    public static final String PARAM_PORT = "port";
 
     private EventLoopGroup clientWorkerGroup;
 
@@ -27,13 +26,12 @@ public class ProxyChannelInitializer extends DynamicChannelInitializer
     protected void initChannel(Channel ch) throws Exception
     {
         super.initChannel(ch);
-
         ch.config().setAutoRead(false);
 
-        final ChannelPipeline pipeline = ch.pipeline();
+        final String host = serverConfig.getParam(PARAM_HOST);
+        final int port = Integer.parseInt(serverConfig.getParam(PARAM_PORT));
+        final ProxyChannelHandler handler = new ProxyChannelHandler(HandlerConfig.EMPTY, host, port, clientWorkerGroup);
 
-        pipeline.addLast(PROXY_HANDLER_NAME,
-                new ProxyChannelHandler(HandlerConfig.EMPTY, serverConfig.getParam(PARAM_HOST),
-                Integer.parseInt(serverConfig.getParam(PARAM_PORT)), clientWorkerGroup));
+        ch.pipeline().addLast(PROXY_HANDLER_NAME, handler);
     }
 }
