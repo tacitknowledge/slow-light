@@ -12,7 +12,6 @@ public class ProxyChannelInitializer extends DynamicChannelInitializer
     public static final String PROXY_HANDLER_NAME = "proxyHandler";
     public static final String PARAM_HOST = "host";
     public static final String PARAM_PORT = "port";
-
     private EventLoopGroup clientWorkerGroup;
 
     public ProxyChannelInitializer(final ServerConfig serverConfig, final EventLoopGroup clientWorkerGroup)
@@ -33,5 +32,15 @@ public class ProxyChannelInitializer extends DynamicChannelInitializer
         final ProxyChannelHandler handler = new ProxyChannelHandler(HandlerConfig.EMPTY, host, port, clientWorkerGroup);
 
         ch.pipeline().addLast(PROXY_HANDLER_NAME, handler);
+    }
+
+    protected ServerConfig getServerConfig()
+    {
+        return serverConfig;
+    }
+
+    protected EventLoopGroup getClientWorkerGroup()
+    {
+        return clientWorkerGroup;
     }
 }
