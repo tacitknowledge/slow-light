@@ -20,7 +20,7 @@ class ProxyTargetChannelHandler extends AbstractChannelHandler
     }
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception
+    public void channelActive(final ChannelHandlerContext ctx) throws Exception
     {
         ctx.read();
     }
@@ -30,25 +30,38 @@ class ProxyTargetChannelHandler extends AbstractChannelHandler
     {
         if (sourceChannel.isActive())
         {
-            sourceChannel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    if (future.isSuccess())
-                    {
-                        ctx.channel().read();
-                    }
-                    else
-                    {
-                        future.channel().close();
-                    }
-                }
-            });
+            final ChannelFutureListener channelFutureListener = getChannelFutureListener(ctx);
+            sourceChannel.writeAndFlush(msg).addListener(channelFutureListener);
         }
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception
+    public void channelInactive(final ChannelHandlerContext ctx) throws Exception
     {
         closeOnFlush(sourceChannel);
+    }
+
+    protected Channel getSourceChannel()
+    {
+        return sourceChannel;
+    }
+
+    protected ChannelFutureListener getChannelFutureListener(final ChannelHandlerContext ctx)
+    {
+        return new ChannelFutureListener()
+        {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception
+            {
+                if (future.isSuccess())
+                {
+                    ctx.channel().read();
+                }
+                else
+                {
+                    future.channel().close();
+                }
+            }
+        };
     }
 }

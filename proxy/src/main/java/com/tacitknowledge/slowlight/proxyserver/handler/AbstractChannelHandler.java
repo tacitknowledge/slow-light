@@ -24,13 +24,10 @@ import java.util.concurrent.TimeUnit;
 @ChannelHandler.Sharable
 public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractChannelHandler.class);
-
     public static final String TIME_FRAME = "timeFrame";
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractChannelHandler.class);
     private static final int ZERO_TIME_FRAME = 0;
-
     protected HandlerConfig handlerConfig;
-
     protected Map<String, BehaviorFunction> behaviorFunctions = new HashMap<String, BehaviorFunction>();
 
     public AbstractChannelHandler(final HandlerConfig handlerConfig)
@@ -68,7 +65,7 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         closeOnFlush(ctx.channel());
     }
 
-    protected void closeOnFlush(Channel channel)
+    public void closeOnFlush(Channel channel)
     {
         if (channel != null && channel.isActive())
         {
@@ -85,6 +82,11 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
     protected void timerCallback()
     {
         // EMPTY
+    }
+
+    public HandlerConfig getHandlerConfig()
+    {
+        return handlerConfig;
     }
 
     protected void evaluateBehaviorFunctions()
@@ -117,9 +119,9 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 
         public void start()
         {
-            if(getTimeFrame() > ZERO_TIME_FRAME)
+            if (getTimeFrame() > ZERO_TIME_FRAME)
             {
-                if(timer == null)
+                if (timer == null)
                 {
                     timer = new HashedWheelTimer(1, TimeUnit.SECONDS);
                 }
