@@ -18,16 +18,13 @@ import java.net.InetSocketAddress;
 public class ProxyChannelHandler extends AbstractChannelHandler
 {
     private static final Logger LOG = LoggerFactory.getLogger(ProxyChannelHandler.class);
-
     private String targetHost;
     private int targetPort;
-
     private Channel targetChannel;
-
     private EventLoopGroup clientWorkerGroup;
 
     public ProxyChannelHandler(final HandlerConfig handlerConfig, final String targetHost, final int targetPort,
-        final EventLoopGroup clientWorkerGroup)
+                               final EventLoopGroup clientWorkerGroup)
     {
         super(handlerConfig);
 
@@ -45,31 +42,20 @@ public class ProxyChannelHandler extends AbstractChannelHandler
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
     {
-        if (targetChannel.isActive())
+        if (getTargetChannel().isActive())
         {
-            targetChannel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) throws Exception {
-                    if (future.isSuccess())
-                    {
-                        ctx.channel().read();
-                    }
-                    else
-                    {
-                        future.channel().close();
-                    }
-                }
-            });
+            final ChannelFutureListener channelFutureListener = getChannelFutureListener(ctx.channel());
+            getTargetChannel().writeAndFlush(msg).addListener(channelFutureListener);
         }
     }
 
     @Override
-    public void channelInactive(ChannelHandlerContext ctx) throws Exception
+    public void channelInactive(final ChannelHandlerContext ctx) throws Exception
     {
-        closeOnFlush(targetChannel);
+        closeOnFlush(getTargetChannel());
     }
 
-    private Channel connectTarget(final Channel sourceChannel)
+    protected Channel connectTarget(final Channel sourceChannel)
     {
         final Bootstrap clientBootstrap = new Bootstrap();
         clientBootstrap.group(clientWorkerGroup).channel(sourceChannel.getClass());
@@ -78,23 +64,29 @@ public class ProxyChannelHandler extends AbstractChannelHandler
 
         final ChannelFuture remoteChannelFuture = clientBootstrap.connect(new InetSocketAddress(targetHost, targetPort));
 
-        remoteChannelFuture.addListener(new ChannelFutureListener()
+        final ChannelFutureListener channelFutureListener = getChannelFutureListener(sourceChannel);
+        remoteChannelFuture.addListener(channelFutureListener);
+
+        return remoteChannelFuture.channel();
+    }
+
+    protected ChannelFutureListener getChannelFutureListener(final Channel channel)
+    {
+        return new ChannelFutureListener()
         {
             @Override
-            public void operationComplete(final ChannelFuture future) throws Exception
+            public void operationComplete(ChannelFuture future) throws Exception
             {
                 if (future.isSuccess())
                 {
-                    sourceChannel.read();
+                    channel.read();
                 }
                 else
                 {
-                    sourceChannel.close();
+                    channel.close();
                 }
             }
-        });
-
-        return remoteChannelFuture.channel();
+        };
     }
 
     public String getTargetHost()
@@ -110,5 +102,10 @@ public class ProxyChannelHandler extends AbstractChannelHandler
     public EventLoopGroup getClientWorkerGroup()
     {
         return clientWorkerGroup;
+    }
+
+    public Channel getTargetChannel()
+    {
+        return targetChannel;
     }
 }
