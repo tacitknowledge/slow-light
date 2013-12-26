@@ -52,8 +52,8 @@
     </developers>
 
     <properties>
-        <coverage.totalBranchRate>6</coverage.totalBranchRate>
-        <coverage.totalLineRate>19</coverage.totalLineRate>
+        <coverage.totalBranchRate>20</coverage.totalBranchRate>
+        <coverage.totalLineRate>37</coverage.totalLineRate>
         <coverage.packageLineRate>0</coverage.packageLineRate>
         <coverage.packageBranchRate>0</coverage.packageBranchRate>
         <!-- per class requirements -->
