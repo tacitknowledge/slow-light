@@ -43,7 +43,7 @@ public class DynamicChannelInitializer extends ChannelInitializer
         }
     }
 
-    public Map<String, AbstractChannelHandler> getChannelHandlers()
+    private Map<String, AbstractChannelHandler> getChannelHandlers()
     {
         final Map<String, AbstractChannelHandler> channelHandler = Maps.newLinkedHashMap();
 
@@ -92,7 +92,7 @@ public class DynamicChannelInitializer extends ChannelInitializer
         return handler;
     }
 
-    private AbstractChannelHandler createChannelHandler(final HandlerConfig handlerConfig)
+    protected AbstractChannelHandler createChannelHandler(final HandlerConfig handlerConfig)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException,
             NoSuchMethodException
     {

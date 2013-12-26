@@ -1,15 +1,14 @@
 package com.tacitknowledge.slowlight.proxyserver.server.simple;
 
 import com.tacitknowledge.slowlight.proxyserver.config.ServerConfig;
-import com.tacitknowledge.slowlight.proxyserver.server.DynamicChannelInitializer;
-import io.netty.channel.nio.NioEventLoopGroup;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
@@ -28,17 +27,17 @@ public class SimpleServerTest
     @Test
     public void shouldCreateBossGroup()
     {
-         assertThat((NioEventLoopGroup) server.createBossGroup(), notNullValue());
+         assertThat(server.createBossGroup(), is(notNullValue()));
     }
 
     @Test
     public void shouldCreateWorkerGroup()
     {
-         assertThat((NioEventLoopGroup) server.createWorkerGroup(), notNullValue());
+         assertThat(server.createWorkerGroup(), is(notNullValue()));
     }
 
     public void shouldCreateInitializer()
     {
-        assertThat((DynamicChannelInitializer) server.createChannelInitializer(), notNullValue());
+        assertThat(server.createChannelInitializer(), is(notNullValue()));
     }
 }
