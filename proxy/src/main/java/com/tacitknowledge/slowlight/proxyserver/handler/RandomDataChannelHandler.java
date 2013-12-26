@@ -6,6 +6,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.commons.lang.RandomStringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,15 +18,9 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
     protected static final String PARAM_DATA_FRAGMENTS = "dataFragments";
     protected static final String PARAM_DATA_FRAGMENT_SIZE = "dataFragmentSize";
 
-    private int dataFragments;
-    private int dataFragmentSize;
-
     public RandomDataChannelHandler(final HandlerConfig handlerConfig)
     {
         super(handlerConfig);
-
-        dataFragments = Integer.parseInt(handlerConfig.getParam(PARAM_DATA_FRAGMENTS));
-        dataFragmentSize = Integer.parseInt(handlerConfig.getParam(PARAM_DATA_FRAGMENT_SIZE));
     }
 
     @Override
@@ -37,21 +32,17 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
     {
+        final int dataFragments = handlerParams.getInt(PARAM_DATA_FRAGMENTS);
+        final int dataFragmentSize = handlerParams.getInt(PARAM_DATA_FRAGMENT_SIZE);
+
         ctx.executor().schedule(new GenerateDataTask(ctx, dataFragments, dataFragmentSize), 0L, TimeUnit.MILLISECONDS);
     }
 
-    private byte[] generateData(final int dataSize, final int i)
+    @Override
+    protected void populateHandlerParams()
     {
-        byte[] data = new byte[dataSize];
-
-        byte dataByte = (byte) ('a' + (Math.random() * 26));
-
-        for (int j = 0; j < dataSize; j++)
-        {
-            data[j] = dataByte;
-        }
-
-        return data; //RandomStringUtils.randomAlphanumeric(dataFragmentSize).getBytes();
+        handlerParams.setProperty(PARAM_DATA_FRAGMENTS, handlerConfig.getParam(PARAM_DATA_FRAGMENTS));
+        handlerParams.setProperty(PARAM_DATA_FRAGMENT_SIZE, handlerConfig.getParam(PARAM_DATA_FRAGMENT_SIZE));
     }
 
     private class GenerateDataTask implements Runnable
@@ -76,7 +67,7 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
         @Override
         public void run()
         {
-            final ByteBuf channelBuffer = Unpooled.wrappedBuffer(generateData(dataFragmentSize, dataFragmentIndex++));
+            final ByteBuf channelBuffer = Unpooled.wrappedBuffer(generateData());
             ctx.channel().writeAndFlush(channelBuffer).addListener(new ChannelFutureListener()
             {
                 @Override
@@ -84,7 +75,7 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
                 {
                     if (future.isSuccess())
                     {
-                        if (dataFragmentIndex < dataFragments)
+                        if (dataFragmentIndex++ < dataFragments)
                         {
                             ctx.executor().schedule(generateDataTask, 0, TimeUnit.MILLISECONDS);
                         }
@@ -99,6 +90,11 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
                     }
                 }
             });
+        }
+
+        private byte[] generateData()
+        {
+            return RandomStringUtils.randomAlphanumeric(dataFragmentSize).getBytes();
         }
     }
 }

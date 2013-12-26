@@ -12,26 +12,24 @@ public class CloseConnectionChannelHandler extends AbstractChannelHandler
 {
     private static final String PARAM_CLOSE_CONNECTION_AFTER = "closeConnectionAfter";
 
-    private long closeConnectionAfter;
-
     public CloseConnectionChannelHandler(final HandlerConfig handlerConfig)
     {
         super(handlerConfig);
-
-        closeConnectionAfter = Long.parseLong(handlerConfig.getParam(PARAM_CLOSE_CONNECTION_AFTER));
     }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) throws Exception
     {
-        ctx.executor().schedule(new Runnable()
+        final long closeConnectionAfter = handlerParams.getLong(PARAM_CLOSE_CONNECTION_AFTER);
+
+        if (closeConnectionAfter == 0)
         {
-            @Override
-            public void run()
-            {
-                ctx.channel().close();
-            }
-        }, closeConnectionAfter, TimeUnit.MILLISECONDS);
+            closeConnection(ctx);
+        }
+        else
+        {
+            scheduleCloseConnection(ctx, closeConnectionAfter);
+        }
 
         ctx.fireChannelActive();
     }
@@ -40,5 +38,28 @@ public class CloseConnectionChannelHandler extends AbstractChannelHandler
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
     {
         ctx.fireChannelRead(msg);
+    }
+
+    @Override
+    protected void populateHandlerParams()
+    {
+        handlerParams.setProperty(PARAM_CLOSE_CONNECTION_AFTER, handlerConfig.getParam(PARAM_CLOSE_CONNECTION_AFTER));
+    }
+
+    private void scheduleCloseConnection(final ChannelHandlerContext ctx, final long closeConnectionAfter)
+    {
+        ctx.executor().schedule(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                closeConnection(ctx);
+            }
+        }, closeConnectionAfter, TimeUnit.MILLISECONDS);
+    }
+
+    private void closeConnection(final ChannelHandlerContext ctx)
+    {
+        ctx.channel().close();
     }
 }

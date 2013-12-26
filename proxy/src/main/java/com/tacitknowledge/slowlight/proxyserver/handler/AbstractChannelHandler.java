@@ -13,6 +13,8 @@ import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
 import io.netty.util.TimerTask;
+import org.apache.commons.configuration.AbstractConfiguration;
+import org.apache.commons.configuration.MapConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +29,11 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
     public static final String TIME_FRAME = "timeFrame";
     private static final Logger LOG = LoggerFactory.getLogger(AbstractChannelHandler.class);
     private static final int ZERO_TIME_FRAME = 0;
+
+    protected AbstractConfiguration handlerParams = new MapConfiguration(new HashMap<String, Object>());
+
     protected HandlerConfig handlerConfig;
+
     protected Map<String, BehaviorFunction> behaviorFunctions = new HashMap<String, BehaviorFunction>();
 
     public AbstractChannelHandler(final HandlerConfig handlerConfig)
@@ -36,6 +42,18 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 
         initBehaviorFunctions();
         initTimeFrameTask();
+
+        registerHandlerConfig();
+    }
+
+    private void registerHandlerConfig()
+    {
+        populateHandlerParams();
+
+        if (!handlerParams.isEmpty())
+        {
+            HandlerConfigManager.registerConfigMBean(handlerConfig, handlerParams);
+        }
     }
 
     private void initTimeFrameTask()
@@ -55,6 +73,11 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 
             behaviorFunctions.put(behaviorFunctionConfig.getType(), createBehaviorFunction(behaviorFunctionConfig.getType()));
         }
+    }
+
+    protected void populateHandlerParams()
+    {
+        // EMPTY
     }
 
     @Override
@@ -95,8 +118,7 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         {
             final BehaviorFunction behaviorFunction = behaviorFunctions.get(behaviorFunctionConfig.getType());
 
-            handlerConfig.getParams().put(behaviorFunctionConfig.getParamName(),
-                    (String) behaviorFunction.evaluate(behaviorFunctionConfig.getParams()));
+            handlerParams.setProperty(behaviorFunctionConfig.getParamName(), behaviorFunction.evaluate(behaviorFunctionConfig.getParams()));
         }
     }
 

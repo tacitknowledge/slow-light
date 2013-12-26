@@ -7,8 +7,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,26 +15,28 @@ import java.util.concurrent.TimeUnit;
  */
 public class DelayChannelHandler extends AbstractChannelHandler
 {
-    private static final Logger LOG = LoggerFactory.getLogger(DelayChannelHandler.class);
-
     protected static final String PARAM_MAX_DATA_SIZE = "maxDataSize";
     protected static final String PARAM_DELAY = "delay";
-
-    private int maxDataSize;
-    private long delay;
 
     public DelayChannelHandler(final HandlerConfig handlerConfig)
     {
         super(handlerConfig);
-
-        maxDataSize = Integer.parseInt(handlerConfig.getParam(PARAM_MAX_DATA_SIZE));
-        delay = Long.parseLong(handlerConfig.getParam(PARAM_DELAY));
     }
 
     @Override
     public void write(final ChannelHandlerContext ctx, final Object msg, final ChannelPromise promise) throws Exception
     {
+        final int maxDataSize = handlerParams.getInt(PARAM_MAX_DATA_SIZE);
+        final long delay = handlerParams.getLong(PARAM_DELAY);
+
         ctx.executor().schedule(new WriteDataFragmentsTask(ctx, (ByteBuf) msg, promise, maxDataSize, delay), delay, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    protected void populateHandlerParams()
+    {
+        handlerParams.setProperty(PARAM_MAX_DATA_SIZE, handlerConfig.getParam(PARAM_MAX_DATA_SIZE));
+        handlerParams.setProperty(PARAM_DELAY, handlerConfig.getParam(PARAM_DELAY));
     }
 
     private class WriteDataFragmentsTask implements Runnable

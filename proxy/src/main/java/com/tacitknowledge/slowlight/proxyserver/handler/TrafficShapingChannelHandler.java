@@ -23,8 +23,8 @@ public class TrafficShapingChannelHandler extends AbstractChannelHandler
         super(handlerConfig);
 
         this.channelTrafficShapingHandler = new ChannelTrafficShapingHandler(
-                Long.parseLong(handlerConfig.getParam(PARAM_WRITE_LIMIT)),
-                Long.parseLong(handlerConfig.getParam(PARAM_READ_LIMIT))
+                handlerParams.getLong(PARAM_WRITE_LIMIT),
+                handlerParams.getLong(PARAM_READ_LIMIT)
         );
     }
 
@@ -65,10 +65,17 @@ public class TrafficShapingChannelHandler extends AbstractChannelHandler
     }
 
     @Override
+    protected void populateHandlerParams()
+    {
+        handlerParams.setProperty(PARAM_WRITE_LIMIT, handlerConfig.getParam(PARAM_WRITE_LIMIT));
+        handlerParams.setProperty(PARAM_WRITE_LIMIT, handlerConfig.getParam(PARAM_READ_LIMIT));
+    }
+
+    @Override
     protected void timerCallback()
     {
-        final long writeLimit = Long.parseLong(handlerConfig.getParam(PARAM_WRITE_LIMIT));
-        final long readLimit = Long.parseLong(handlerConfig.getParam(PARAM_READ_LIMIT));
+        final long writeLimit = handlerParams.getLong(PARAM_WRITE_LIMIT);
+        final long readLimit = handlerParams.getLong(PARAM_READ_LIMIT);
 
         channelTrafficShapingHandler.configure(writeLimit, readLimit);
 
