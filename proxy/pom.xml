@@ -124,11 +124,11 @@
         </dependency>
 
         <!-- Dynamic Configuration Management -->
-        <!--<dependency>-->
-            <!--<groupId>com.netflix.archaius</groupId>-->
-            <!--<artifactId>archaius-core</artifactId>-->
-            <!--<version>0.5.11</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.netflix.archaius</groupId>
+            <artifactId>archaius-core</artifactId>
+            <version>0.5.11</version>
+        </dependency>
 
         <!-- XML Serialization/deserialization -->
         <dependency>
@@ -167,16 +167,18 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.tacitknowledge.slowlight.proxyserver.ProxyDegradationApp</mainClass>
+                            <mainClass>com.tacitknowledge.slowlight.proxyserver.server.SlowlightServer</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -195,6 +197,20 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>
