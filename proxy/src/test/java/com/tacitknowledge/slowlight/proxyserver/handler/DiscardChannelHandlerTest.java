@@ -22,7 +22,7 @@ public class DiscardChannelHandlerTest extends AbstractChannelHandlerTest
     }
 
     @Test
-    public void handlerEnableReadOnChannelActivation() throws Exception
+    public void handlerShouldEnableReadOnChannelActivation() throws Exception
     {
         discardChannelHandler.channelActive(channelHandlerContext);
 
@@ -30,7 +30,7 @@ public class DiscardChannelHandlerTest extends AbstractChannelHandlerTest
     }
 
     @Test
-    public void handlerDiscardDataAndEnableNextRead() throws Exception
+    public void handlerShouldDiscardDataAndEnableNextRead() throws Exception
     {
         discardChannelHandler.channelRead(channelHandlerContext, msg);
 
