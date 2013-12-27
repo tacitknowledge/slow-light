@@ -8,7 +8,7 @@ package com.tacitknowledge.slowlight.proxyserver.config;
 public interface ConfigBuilder
 {
     /**
-     * Returns the slow-light configuration.
+     * Creates and returns the slow-light configuration based on the specified config file.
      *
      * @param configFileName  name of the file containing config information
      * @return  configuration object

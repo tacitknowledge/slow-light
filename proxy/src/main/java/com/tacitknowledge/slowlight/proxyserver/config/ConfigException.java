@@ -1,7 +1,7 @@
 package com.tacitknowledge.slowlight.proxyserver.config;
 
 /**
- * Slow-light configuration exception.
+ * Slow-light configuration exception. This exception must be thrown whenever a configuration issue occurs.
  *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
