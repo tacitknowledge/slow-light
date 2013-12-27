@@ -5,6 +5,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,9 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractServer implements Server
 {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractServer.class);
+
+    protected static final String PARAM_CONNECTION_THREADS = "connectionThreads";
+    protected static final String PARAM_WORKER_THREADS = "workerThreads";
 
     protected final ServerConfig serverConfig;
 
@@ -25,7 +29,7 @@ public abstract class AbstractServer implements Server
     public void start()
     {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
-        serverBootstrap.group(createBossGroup(), createWorkerGroup());
+        serverBootstrap.group(createEventLoopGroup(PARAM_CONNECTION_THREADS), createEventLoopGroup(PARAM_WORKER_THREADS));
         serverBootstrap.channel(NioServerSocketChannel.class);
 
         serverBootstrap.childHandler(createChannelInitializer());
@@ -43,9 +47,17 @@ public abstract class AbstractServer implements Server
         // TODO: to be implemented
     }
 
-    protected abstract EventLoopGroup createBossGroup();
+    protected EventLoopGroup createEventLoopGroup(final String numberOfThreadsParam)
+    {
+        final String numberOfThreads = serverConfig.getParam(numberOfThreadsParam, false);
+        Integer numberOfThreadsValue = (numberOfThreads != null ? Integer.valueOf(numberOfThreads) : null);
+        if (numberOfThreadsValue == null || numberOfThreadsValue <= 0)
+        {
+            numberOfThreadsValue = 0;
+        }
 
-    protected abstract EventLoopGroup createWorkerGroup();
+        return new NioEventLoopGroup(numberOfThreadsValue);
+    }
 
     protected abstract ChannelInitializer createChannelInitializer();
 }
