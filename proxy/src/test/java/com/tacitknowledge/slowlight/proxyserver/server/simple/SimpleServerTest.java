@@ -25,17 +25,6 @@ public class SimpleServerTest
     }
 
     @Test
-    public void shouldCreateBossGroup()
-    {
-         assertThat(server.createBossGroup(), is(notNullValue()));
-    }
-
-    @Test
-    public void shouldCreateWorkerGroup()
-    {
-         assertThat(server.createWorkerGroup(), is(notNullValue()));
-    }
-
     public void shouldCreateInitializer()
     {
         assertThat(server.createChannelInitializer(), is(notNullValue()));
