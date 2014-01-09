@@ -90,7 +90,7 @@ public class NamedThreadFactory implements ThreadFactory {
      */
     private String getGroupName() {
         return PARENTGROUP + parentGroup.getName() +
-                GROUPNAME + this.factoryName + factoryGroupNumber;
+                GROUPNAME + this.factoryName + getFactoryGroupNumber();
     }
 
     // ThreadFactory -------------------------------------------------------------
@@ -117,6 +117,11 @@ public class NamedThreadFactory implements ThreadFactory {
      */
     String getThreadName() {
         return THREADFACTORY + this.factoryName + GROUPNUMBER +
-                          factoryGroupNumber + THREAD + this.threadNumber.getAndIncrement() + "]";
+                          getFactoryGroupNumber() + THREAD + this.threadNumber.getAndIncrement() + "]";
+    }
+
+    int getFactoryGroupNumber()
+    {
+        return factoryGroupNumber;
     }
 }

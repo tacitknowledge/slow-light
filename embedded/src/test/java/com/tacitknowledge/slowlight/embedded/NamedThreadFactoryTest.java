@@ -1,9 +1,13 @@
 package com.tacitknowledge.slowlight.embedded;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.concurrent.ThreadFactory;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,13 +15,24 @@ import static org.junit.Assert.*;
  * Date: 6/21/13
  * Time: 9:54 AM
  */
+@RunWith(MockitoJUnitRunner.class)
 public class NamedThreadFactoryTest {
 
+    private static final String FACTORY_NAME = "<factoryname>";
+    private static final int FACTORY_GROUP_NUMBER = 1;
+
+    private NamedThreadFactory threadFactory;
+
+    @Before
+    public void setup()
+    {
+        threadFactory = spy(new NamedThreadFactory(FACTORY_NAME));
+
+        doReturn(FACTORY_GROUP_NUMBER).when(threadFactory).getFactoryGroupNumber();
+    }
 
     @Test
     public void testThreadNameAndThreadGroupName() {
-        final String factoryName = "<factoryname>";
-        ThreadFactory threadFactory = new NamedThreadFactory(factoryName);
 
         final Runnable runnable = new Runnable() {
             public void run() {
@@ -30,20 +45,21 @@ public class NamedThreadFactoryTest {
         ThreadGroup group = (s != null) ? s.getThreadGroup() :
                      Thread.currentThread().getThreadGroup();
         final int priority = 5;
+
         //should contain parent group name and group # for factory
         String expectedThreadGroupName = NamedThreadFactory.PARENTGROUP
                 + group.getName()
                 + NamedThreadFactory.GROUPNAME
-                + factoryName
+                + FACTORY_NAME
                 + 1;
 
         assertEquals("thread name problem",
                 "Thread"
                         + "["
                         + NamedThreadFactory.THREADFACTORY
-                        + factoryName
+                        + FACTORY_NAME
                         + NamedThreadFactory.GROUPNUMBER
-                        + 1 //should be the first factory pool for first factory instance
+                        + FACTORY_GROUP_NUMBER //should be the first factory pool for first factory instance
                         + NamedThreadFactory.THREAD
                         + 1 //first thread, so 1
                         + "],"
@@ -52,8 +68,5 @@ public class NamedThreadFactoryTest {
                         + expectedThreadGroupName
                         + "]",
                 thread.toString());
-
-
     }
-
 }
