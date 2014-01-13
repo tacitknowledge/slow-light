@@ -63,10 +63,6 @@
         <downloadSources>true</downloadSources>
         <downloadJavadocs>true</downloadJavadocs>
 
-        <!-- dependency versions -->
-        <gson.version>2.2.4</gson.version>
-        <slf4j.version>1.7.5</slf4j.version>
-        <guava.version>r09</guava.version>
     </properties>
 
     <dependencies>
@@ -144,30 +140,6 @@
             <version>4.0.13.Final</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -195,9 +167,7 @@
                 <executions>
                     <execution>
                         <id>make-assembly</id>
-                        <!-- this is used for inheritance merges -->
                         <phase>package</phase>
-                        <!-- bind to the packaging phase -->
                         <goals>
                             <goal>single</goal>
                         </goals>
