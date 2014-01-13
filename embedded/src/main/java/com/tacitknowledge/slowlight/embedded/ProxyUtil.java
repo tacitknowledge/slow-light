@@ -11,7 +11,6 @@ import java.lang.reflect.Method;
  * Some utility methods to avoid code duplication
  */
 public class ProxyUtil {
-
     /**
      * Convenience method for directly invoking the target method without going through a Callable
      *
@@ -24,13 +23,9 @@ public class ProxyUtil {
     public Object invokeTarget(Object target, Method method, Object[] args) throws Exception {
         try {
             return method.invoke(target, args);
-        } catch (IllegalAccessException e) {
-            throw e;
-        } catch (IllegalArgumentException e) {
-            throw e;
-        } catch (InvocationTargetException e) {
+        }
+        catch (InvocationTargetException e) {
             throw (Exception) e.getCause();
         }
     }
-
 }
