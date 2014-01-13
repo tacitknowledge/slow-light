@@ -53,7 +53,7 @@ public class NamedThreadFactory implements ThreadFactory {
     /**
      * The factory thread group
      */
-    private final ThreadGroup group;
+    private ThreadGroup group;
     /**
      * Thread number counter
      */
@@ -75,11 +75,11 @@ public class NamedThreadFactory implements ThreadFactory {
 
     public NamedThreadFactory(String factoryName) {
         SecurityManager s = System.getSecurityManager();
+
         this.parentGroup = (s != null) ? s.getThreadGroup() :
                      Thread.currentThread().getThreadGroup();
         this.factoryGroupNumber = POOL_NUMBER.getAndIncrement();
         this.factoryName = factoryName;
-        this.group = new ThreadGroup(this.parentGroup, getGroupName());
 
     }
 
@@ -98,6 +98,11 @@ public class NamedThreadFactory implements ThreadFactory {
      * {@inheritDoc}
      */
     public Thread newThread(Runnable r) {
+
+        if(group == null)
+        {
+            group = new ThreadGroup(this.parentGroup, getGroupName());
+        }
 
         String threadName = getThreadName();
 

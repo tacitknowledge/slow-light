@@ -3,6 +3,7 @@ package com.tacitknowledge.slowlight.embedded;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.spy;
 public class NamedThreadFactoryTest {
 
     private static final String FACTORY_NAME = "<factoryname>";
+
     private static final int FACTORY_GROUP_NUMBER = 1;
 
     private NamedThreadFactory threadFactory;
@@ -27,7 +29,6 @@ public class NamedThreadFactoryTest {
     public void setup()
     {
         threadFactory = spy(new NamedThreadFactory(FACTORY_NAME));
-
         doReturn(FACTORY_GROUP_NUMBER).when(threadFactory).getFactoryGroupNumber();
     }
 
@@ -53,20 +54,22 @@ public class NamedThreadFactoryTest {
                 + FACTORY_NAME
                 + 1;
 
-        assertEquals("thread name problem",
-                "Thread"
-                        + "["
-                        + NamedThreadFactory.THREADFACTORY
-                        + FACTORY_NAME
-                        + NamedThreadFactory.GROUPNUMBER
-                        + FACTORY_GROUP_NUMBER //should be the first factory pool for first factory instance
-                        + NamedThreadFactory.THREAD
-                        + 1 //first thread, so 1
-                        + "],"
-                        + priority
-                        + ","
-                        + expectedThreadGroupName
-                        + "]",
-                thread.toString());
+        final String expected = "Thread"
+                + "["
+                + NamedThreadFactory.THREADFACTORY
+                + FACTORY_NAME
+                + NamedThreadFactory.GROUPNUMBER
+                + FACTORY_GROUP_NUMBER //should be the first factory pool for first factory instance
+                + NamedThreadFactory.THREAD
+                + 1 //first thread, so 1
+                + "],"
+                + priority
+                + ","
+                + expectedThreadGroupName
+                + "]";
+
+        final String actual = thread.toString();
+
+        assertEquals("thread name problem", expected, actual);
     }
 }
