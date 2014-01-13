@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
  * User: witherspore
  * Date: 6/19/13
  * Time: 9:04 AM
- * Core configuration interface for degradation behavior. DegradationHandler and the DegradationPlan query
+ * Core configuration interface for degradation behavior. DegradationProxyHandler and the DegradationPlan query
  * this interface to determine behavior
  *
  * @see DegradationHandler
@@ -67,13 +67,11 @@ public interface DegradationStrategy {
 
     /**
      * What to return when a successful call is made
-     * @param method
-     * @param target
-     * @param args
+     * @param targetCallback to be called
      * @return object for a successful call.  Typically, this just calls the object embedded
      * @throws Exception
      */
-    Object overrideResult( Object target, Method method, Object[] args) throws Exception;
+    Object overrideResult(final TargetCallback targetCallback) throws Exception;
 
     /**
      *

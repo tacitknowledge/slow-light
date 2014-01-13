@@ -334,16 +334,18 @@ public class DefaultDegradationStrategy implements DegradationStrategy {
 
     /**
      * The default strategy just passes through calls to targets via method invocation.  Sub-classes may override
-     * @param method
-     * @param target
-     * @param args
+     * @param  targetCallback to be called
      * @return result of call override
      * @throws Exception
      */
+    public Object overrideResult(final TargetCallback targetCallback) throws Exception
+    {
+        if (targetCallback == null)
+        {
+            throw new NullPointerException("Target callback cannot be null");
+        }
 
-    public Object overrideResult( Object target, Method method, Object[] args) throws Exception {
-        ProxyUtil proxyUtil = new ProxyUtil();
-        return proxyUtil.invokeTarget(target, method, args);
+        return targetCallback.execute();
     }
 
     /**

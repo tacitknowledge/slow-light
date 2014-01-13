@@ -1,19 +1,23 @@
 package com.tacitknowledge.slowlight.embedded;
 
-import static org.junit.Assert.*;
-
 import com.tacitknowledge.slowlight.embedded.stubs.StubbedService;
 import com.tacitknowledge.slowlight.embedded.stubs.StubbedServiceErrorImpl;
 import com.tacitknowledge.slowlight.embedded.stubs.StubbedServiceImpl;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.lang.reflect.*;
 import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: witherspore
@@ -21,9 +25,9 @@ import java.util.concurrent.*;
  * Time: 8:53 AM
  *
  * Integration tests using a multi-threaded client driver to apply load on stubbed services wrapped in the
- * DegradationHandler and DefaultDegradationStrategy
+ * DegradationProxyHandler and DefaultDegradationStrategy
  *
- * This covers testing for the DegradationHandler
+ * This covers testing for the DegradationProxyHandler
  *
  * @see DefaultDegradationStrategy
  * @see DegradationHandler
@@ -39,31 +43,10 @@ public class DegradationHandlerIntegrationTest {
         final long serviceTimeout = 500L;
         final double passRate = 1.0;
         DefaultDegradationStrategy degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime, serviceTimeout, passRate);
+
         final long totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
+
         assertTrue("Should have been less than 750 ms, but was " + totalTime, totalTime < serviceDemandTime * 1.5);
-
-    }
-    @Test
-    public void testDegradeOnlyNamedMethods() throws Exception {
-        long timestamp = System.currentTimeMillis();
-        final int concurrentLoad = 2;
-        final int capacity = 1;
-        final long serviceDemandTime = 500L;
-        final long serviceTimeout = 500L;
-        final double passRate = 1.0;
-        DefaultDegradationStrategy degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate,
-                new Method[] {StubbedService.class.getMethod("callOtherService")});
-        long totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
-        assertTrue("Should have been less than 1000 ms, but was " + totalTime, totalTime < 1000);
-        degradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate,
-                new Method[] {StubbedService.class.getMethod("callService")});
-        totalTime = runServiceUnderLoad(timestamp, concurrentLoad, capacity, degradationStrategy);
-        assertTrue("Should have been more than 500 ms, but was " + totalTime, totalTime > 500);
-
     }
 
     @Test
@@ -113,64 +96,85 @@ public class DegradationHandlerIntegrationTest {
 
     @Test(expected = RuntimeException.class)
     public void testBubbleRuntimeExceptionThroughThreadPoolAndProxy()
-            throws Exception {
-        StubbedService stub = new StubbedServiceImpl() {
+            throws Throwable
+    {
+        final StubbedService stub = new StubbedServiceImpl() {
             @Override
             public Integer callService() {
                 throw new RuntimeException("trial exception");
             }
         };
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
-        //Wrap service with degradation handler
-        final double passRate = 0.9;
-        StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, new DegradationHandler(stub,
-                executorService, new DefaultDegradationStrategy(1L, 1L, passRate)));
-        proxy.callService();
+
+        //Execute service with degradation handler
+        DegradationHandler handler = new DegradationHandler(executorService, new DefaultDegradationStrategy(1L, 1L, 1.0));
+        handler.invoke(new TargetCallback()
+        {
+            @Override
+            public Object execute() throws Exception
+            {
+                return stub.callService();
+            }
+        });
     }
 
     @Test(expected = ConnectException.class )
     public void testBubbleConnectExceptionThroughThreadPoolAndProxy()
-            throws Exception {
-        StubbedService stub = new StubbedServiceErrorImpl();
+            throws Throwable
+    {
+        final StubbedService stub = new StubbedServiceErrorImpl();
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
-        final double passRate = 1.0;
-        StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, new DegradationHandler(stub,
-                executorService, new DefaultDegradationStrategy(1L, 1L, passRate)));
-        proxy.callService();
+
+        DegradationHandler handler = new DegradationHandler(executorService, new DefaultDegradationStrategy(1L, 1L, 1.0));
+        handler.invoke(new TargetCallback()
+        {
+            @Override
+            public Object execute() throws Exception
+            {
+                return stub.callService();
+            }
+        });
     }
     @Test(expected = FileNotFoundException.class )
     public void testForceFileNotFoundExceptionFromClassArray()
-            throws Exception {
-        StubbedService stub = new StubbedServiceImpl();
+            throws Throwable
+    {
+        final StubbedService stub = new StubbedServiceImpl();
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
-        final double passRate = 0.0;
-        StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, new DegradationHandler(stub,
-                executorService, new DefaultDegradationStrategy(1L, 1L, passRate,new Class[]{FileNotFoundException.class})));
-        proxy.callService();
-    }
 
-    @Test(expected = UndeclaredThrowableException.class )
-    public void testUndeclaredCheckedExceptionInExceptionClassArray()
-            throws Exception {
-        StubbedService stub = new StubbedServiceImpl();
-        ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
-        final double passRate = 0.0;
-        StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, new DegradationHandler(stub,
-                executorService, new DefaultDegradationStrategy(1L, 1L, passRate,new Class[]{IOException.class})));
-        proxy.callService();
+        DegradationHandler handler = new DegradationHandler(executorService,
+                new DefaultDegradationStrategy(1L, 1L, 0.0, new Class[]{ FileNotFoundException.class }));
+        handler.invoke(new TargetCallback()
+        {
+            @Override
+            public Object execute() throws Exception
+            {
+                return stub.callService();
+            }
+        });
     }
 
     @Test
     public void testReturnErrorObject()
-            throws Exception {
-        StubbedService stub = new StubbedServiceImpl();
+            throws Throwable
+    {
+        final StubbedService stub = new StubbedServiceImpl();
         ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(1);
         final double passRate = 0.0;
-        final Integer errorObject = new Integer(25);
-        StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, new DegradationHandler(stub,
-                executorService, new DefaultDegradationStrategy(1L, 1L, passRate,new Class[]{FileNotFoundException.class},
-                errorObject, FailurePriority.ERROR_OBJECT, FastFail.TRUE,false)));
-        assertEquals(errorObject, proxy.callService());
+        final Integer errorObject = 25;
+
+        DegradationHandler handler = new DegradationHandler(executorService,
+                new DefaultDegradationStrategy(1L, 1L, passRate,new Class[]{FileNotFoundException.class}, errorObject,
+                        FailurePriority.ERROR_OBJECT, FastFail.TRUE,false));
+
+        assertEquals(errorObject, handler.invoke(new TargetCallback()
+        {
+            @Override
+            public Object execute() throws Exception
+            {
+                return stub.callService();
+            }
+        }));
     }
 
     private long runServiceUnderLoad(long timestamp,
@@ -178,29 +182,32 @@ public class DegradationHandlerIntegrationTest {
                                      int capacity,
                                      DefaultDegradationStrategy degradationStrategy)
             throws Exception {
-        StubbedService stub = new StubbedServiceImpl();
         //set up execution pool
-        ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(capacity);
+        final ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(capacity);
         //set up degradation handler with execution pool and config
-        final DegradationHandler handler = new DegradationHandler(stub,
-                executorService, degradationStrategy);
-
-        //set up embedded with handler
-        final StubbedService proxy = (StubbedService) ProxyFactory.proxy(stub, handler);
+        final DegradationHandler handler = new DegradationHandler(executorService, degradationStrategy);
 
         //set up concurrent load provider
         ExecutorService loadProvider = Executors.newFixedThreadPool(concurrentLoad);
         //Queue concurrent calls in a list for addition to load provider
-        List<StubbedService> serviceCalls = new ArrayList<StubbedService>();
+        List<DegradationHandler> handlerCalls = new ArrayList<DegradationHandler>();
         for (int i = 0; i < concurrentLoad; i++) {
-            serviceCalls.add(proxy);
+            handlerCalls.add(handler);
         }
         //add list of embedded calls to provider and get futures.   basically service.callService() wrapped in callable
         //  only for unit testing purposes
-        List<Future<Integer>> futures = setUpLoadingThreads(loadProvider, serviceCalls);
+        final StubbedService stub = new StubbedServiceImpl();
+        final List<Future<Integer>> futures = setUpLoadingThreads(loadProvider, handlerCalls, new TargetCallback()
+        {
+            @Override
+            public Object execute() throws Exception
+            {
+                return stub.callService();
+            }
+        });
         for (Future future : futures) {
             try {
-                assertEquals(new Integer(0), future.get());
+                assertEquals(0, future.get());
             } catch (ExecutionException e) {
                 //degradation handler may throw a RuntimeException
                 throw (Exception) e.getCause();
@@ -213,19 +220,27 @@ public class DegradationHandlerIntegrationTest {
         return System.currentTimeMillis() - timestamp;
     }
 
-    private List<Future<Integer>> setUpLoadingThreads(ExecutorService loadProvider, List<StubbedService> serviceCalls) {
+    private List<Future<Integer>> setUpLoadingThreads(final ExecutorService loadProvider,
+                                                      final List<DegradationHandler> handlerCalls,
+                                                      final TargetCallback targetCallback) {
 
         //submit callables and assign futures
         List<Future<Integer>> futures = new ArrayList<Future<Integer>>();
-        for (final StubbedService proxiedService : serviceCalls) {
+
+        for (final DegradationHandler handler : handlerCalls) {
             futures.add(loadProvider.submit(new Callable<Integer>() {
                 public Integer call() throws Exception {
                     try {
-                        return proxiedService.callService();
-                    } catch (UndeclaredThrowableException e) {
-                        if (e.getUndeclaredThrowable().getCause() != null)
-                            throw (Exception) e.getUndeclaredThrowable().getCause();
-                        throw (Exception) e.getUndeclaredThrowable();
+                        return (Integer) handler.invoke(targetCallback);
+                    } catch (Throwable e) {
+                        if (e instanceof Exception)
+                        {
+                            throw (Exception) e;
+                        }
+                        else
+                        {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             })
@@ -233,6 +248,4 @@ public class DegradationHandlerIntegrationTest {
         }
         return futures;
     }
-
-
 }

@@ -1,36 +1,34 @@
 package com.tacitknowledge.slowlight.embedded;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
- * User: witherspore
- * Date: 6/19/13
- * Time: 7:58 AM
- * InvocationHandler for proxied target which manages calls via a ThreadPoolExecutor and DegradationStrategy
+ * DegradationHandler for target callback which manages calls via a ThreadPoolExecutor and DegradationStrategy.
  * <p/>
- * Key class that delays and fails calls to the proxied target depending on ThreadPoolExecution active thread
- * utilization rates and strategy rules
+ * Key class that delays and fails calls to the target callback depending on ThreadPoolExecution active thread
+ * utilization rates and strategy rules.
+ *
+ * @author witherspore, Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class DegradationHandler implements InvocationHandler {
-    /**
-     * This is the target instance for passing service calls
-     */
-    final private Object target;
+public class DegradationHandler
+{
     /**
      * ThreadPoolExecutor which runs the threads with sleep timers
      */
-    final private ThreadPoolExecutor executorService;
+    private final ThreadPoolExecutor executorService;
     /**
      * Strategy defining rules for setting up DegradationPlans.
      */
-    final private DegradationStrategy degradationStrategy;
+    private final DegradationStrategy degradationStrategy;
 
-    public DegradationHandler(Object target,
-                              ThreadPoolExecutor executorService,
-                              DegradationStrategy degradationStrategy) {
-        this.target = target;
+    public DegradationHandler(ThreadPoolExecutor executorService,
+                              DegradationStrategy degradationStrategy)
+    {
         this.executorService = executorService;
         this.degradationStrategy = degradationStrategy;
     }
@@ -40,88 +38,90 @@ public class DegradationHandler implements InvocationHandler {
      *
      * @return percentage between 0.0 and 1.0
      */
-    public double getPercentUtilized() {
+    public double getPercentUtilized()
+    {
         final int activeCount = Math.max(executorService.getActiveCount(), 0);
         final int maxSize = executorService.getMaximumPoolSize();
-        final double percentUsed = (double) activeCount / (double) maxSize;
-        return percentUsed;
+
+        return (double) activeCount / (double) maxSize;
     }
 
     /**
-     * Standard entry point for InvocationHandlers.
-     * <p/>
-     * 1. Handler checks the strategy to see if it should perform degradation. If not, simply passes through the call
-     * to the target
+     * 1. Handler checks the strategy to see if it should perform degradation. If not, simply passes through the call to the target
      * 2. Creates a Callable, DegradationCallable.java, and submits it to the ThreadPoolExecutor
      * 3. Handles the future.get appropriately with or without timeouts as specified in the DegradationStrategy
      *
-     * @param proxy  The embedded instance.  Note this is not the target instance
-     * @param method method to be invoked
-     * @param args   arguments to use during invocation
+     * @param targetCallback to be called by the handler
      * @return target result or error object
-     * @throws Throwable - generally this will be a the configured random exception, but may be an InvocationTarget, Execution, or Interrupted
-     * @see java.lang.reflect.InvocationHandler
+     * @throws Throwable - generally this will be a the configured random exception, but may be an InvocationTarget, Execution,
+     * or Interrupted
      */
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args) throws Throwable {
+    public Object invoke(final TargetCallback targetCallback) throws Throwable
+    {
 
-        if (degradationStrategy.shouldSkipDegradation() || degradationStrategy.isMethodExcluded(method)) {
-            return callDirectly(target, method, args);
+        if (degradationStrategy.shouldSkipDegradation())
+        {
+            return callDirectly(targetCallback);
         }
 
-        try {
-            Callable callable = new DegradationCallable(method, target, degradationStrategy, this, args);
+        try
+        {
+            final Callable callable = new DegradationCallable(targetCallback, degradationStrategy, this);
 
             //this may throw an exception, timeout the future, or wait forever for the result
             //  can modify the result as well.
-            Future future = executorService.submit(callable);
+            final Future future = executorService.submit(callable);
 
             //handle ThreadPoolExecutor timeouts if configured.  Usually this is a Callable in the queue,
             // but could possibly be active. default is false.
-            if (degradationStrategy.isTimeoutQueues()) {
-                try {
+            if (degradationStrategy.isTimeoutQueues())
+            {
+                try
+                {
                     return future.get(degradationStrategy.getServiceTimeout(), TimeUnit.MILLISECONDS);
-                } catch (TimeoutException e) {
-                    throw new QueueTimeoutException("Request in queue timed out for degradation mock on " + target.getClass(), e);
                 }
-            } else {
+                catch (TimeoutException e)
+                {
+                    throw new QueueTimeoutException("Request in queue timed out", e);
+                }
+            }
+            else
+            {
                 return future.get();
             }
 
-        } catch (InterruptedException e) {
-            throw e;
-        } catch (ExecutionException e) {
+        }
+        catch (ExecutionException e)
+        {
             throw e.getCause();
         }
     }
 
     /**
-     * Convenience method for directly invoking the target method without going through a Callable
+     * Convenience method for directly invoking the target callback without going through a Callable
      *
-     * @param target
-     * @param method
-     * @param args
+     * @param targetCallback to be directly invoked
      * @return Object from target
      * @throws Exception
      */
-    public Object callDirectly(Object target, Method method, Object[] args) throws Exception {
-        ProxyUtil proxyUtil = new ProxyUtil();
-        return proxyUtil.invokeTarget(target, method, args);
+    public Object callDirectly(final TargetCallback targetCallback) throws Exception
+    {
+        return targetCallback.execute();
     }
 
     /**
      * @return DegradationStrategy configured for this handler at construction
      */
-    public DegradationStrategy getDegradationStrategy() {
+    public DegradationStrategy getDegradationStrategy()
+    {
         return degradationStrategy;
     }
 
     /**
      * @return ThreadPoolExecutor configured for this handler at construction
      */
-    public ThreadPoolExecutor getExecutorService() {
+    public ThreadPoolExecutor getExecutorService()
+    {
         return executorService;
     }
-
-
 }

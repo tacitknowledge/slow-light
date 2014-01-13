@@ -36,15 +36,10 @@ public class DefaultDegradationStrategyTest {
     @Test
     public void testGenerateRandomException() {
         DefaultDegradationStrategy defaultDegradationStrategy = new DefaultDegradationStrategy(0L,0L,1.0,
-                new Class[]{
-                    RuntimeException.class
-        });
+                new Class[]{ RuntimeException.class });
         assertNotNull(defaultDegradationStrategy.generateRandomException());
 
-        defaultDegradationStrategy = new DefaultDegradationStrategy(0L,0L,1.0,
-                new Class[]{
-
-        });
+        defaultDegradationStrategy = new DefaultDegradationStrategy(0L,0L,1.0, new Class[]{});
         assertNull(defaultDegradationStrategy.generateRandomException());
     }
     @Test
@@ -71,24 +66,19 @@ public class DefaultDegradationStrategyTest {
         assertEquals(new Double(Math.log(0.5 * (Math.exp(1) - 1) + 1)),threshold);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testOverrideResultNoMethodException() throws Exception {
-        DefaultDegradationStrategy defaultDegradationStrategy = new DefaultDegradationStrategy(0L,0L,1.0);
-        defaultDegradationStrategy.overrideResult(new Object(), StubbedService.class.getMethod("callService"), new Object[]{});
-    }
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testOverrideResultBadArgumentException() throws Exception {
         DefaultDegradationStrategy defaultDegradationStrategy = new DefaultDegradationStrategy(0L,0L,1.0);
-        defaultDegradationStrategy.overrideResult(new Object(), Object.class.getMethod("toString"), new Object[]{
-                new Long(1L)
-        });
+        defaultDegradationStrategy.overrideResult(null);
     }
     @Test
     public void testGeneratePlanWithShouldSkip() throws Exception {
         DefaultDegradationStrategy defaultDegradationStrategy = new DefaultDegradationStrategy(0L,0L,1.0);
         DegradationHandler degradationHandler = mock(DegradationHandler.class);
         when(degradationHandler.getPercentUtilized()).thenReturn(1.0);
+
         DegradationPlan plan = defaultDegradationStrategy.generateDegradationPlan(degradationHandler);
+
         assertFalse(plan.hasPlannedFailure());
         assertEquals(new Long(0L), plan.getDelay());
     }
@@ -98,9 +88,10 @@ public class DefaultDegradationStrategyTest {
                 new Class[]{},new Object(),FailurePriority.ERROR_OBJECT,FastFail.FALSE,false);
         DegradationHandler degradationHandler = mock(DegradationHandler.class);
         when(degradationHandler.getPercentUtilized()).thenReturn(1.0);
+
         DegradationPlan plan = defaultDegradationStrategy.generateDegradationPlan(degradationHandler);
+
         assertTrue(plan.hasPlannedFailure());
-        //should return an object
         assertNotNull(plan.fail());
     }
 
