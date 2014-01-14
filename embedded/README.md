@@ -18,6 +18,10 @@ You can include Slow Light Embedded in your Maven project via:
 
 # Use it!
 
+Slow Light Embedded supports two different usage approaches - programatic and declarative.
+
+## 1. Programmatic Mode
+
 The DegradationHandlerIntegrationTest shows a number of different modes, but in general you just need to do these things:
 ```java
  //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
@@ -144,6 +148,79 @@ DegradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
     );
 
 ```
+
+## 2. Declarative Mode
+
+The benefit of declarative mode is that it doesn't requrie code changes on the target (under test) system. For declarative configuration and usage Slow Light Embedded uses AspectJ and JSON, and here is what needs to be done
+to start using it in this mode:
+
+### a. classpath configuration
+Add slowlight-embedded.jar to the target (under test) system classpath.
+
+### b. config folder
+In the same folder where the slowlight-embedded.jar is located create a folder called config with the following structure:
+       
+    slowlight-embedded.jar
+    config
+      |--slowlight-embedded.config
+      |--META-INF
+         |--aop.xml
+             
+**aop.xml** tells AspectJ where to apply aspects and should be configured similar to this example:
+```xml
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+    <weaver>
+        <include within="com.project.target.package.TargetClass" />
+        <include within="com.tacitknowledge.slowlight.embedded.aspect.DegradationAspect" />
+    </weaver>
+    <aspects>
+        <aspect name="com.tacitknowledge.slowlight.embedded.aspect.DegradationAdvice" />
+    </aspects>
+</aspectj>
+```
+       
+Where for example com.project.target.package.TargetClass is the fully qualified name of the class
+you want "degradation behaviour" to be applied, instead of specifing a concrete class you can specify
+a whole package example com.project.target.package.*. Anyway since this is a pure AspectJ config
+you can find detailed information in AspectJ documentation.
+
+**slowlight-embedded.config** stands for degradation rules configuration and could be seen
+as a mapping between degradation rule and class/methods, or in other words to what classes 
+and methods a degradation rule should be applied.
+   
+slowlight-embedded.config example:
+    
+```json
+{
+    "rules" : [
+        {
+            "serviceDemandTime" : "100",
+            "serviceTimeout" : "2000",
+            "passRate" : "80",
+            "threads" : 16,
+
+            "applyTo" : {
+                "com.project.target.package.SomeClass1" : ["method1", "method2"],
+                "com.project.target.package.SomeClass2" :["method3"]
+            }
+        },
+        {
+            "serviceDemandTime" : "500",
+            "serviceTimeout" : "10000",
+            "passRate" : "50",
+            "threads" : 16,
+
+            "applyTo" : {
+                "com.project.target.package.SomeClass3" : ["method"]
+            }
+        }
+    ]
+}
+```
+    
+The meaning of degradation rules parameters (e.g. serviceDemandTime, passRate, etc.) are similar
+to what is described in programatic mode (see above).
 
 # Notes
 The default implementations are thread safe.  You can re-use a single proxy across threads, assuming the target object
