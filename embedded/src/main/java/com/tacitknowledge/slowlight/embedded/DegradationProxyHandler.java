@@ -1,6 +1,7 @@
 package com.tacitknowledge.slowlight.embedded;
 
-import java.lang.reflect.InvocationHandler;
+import javassist.util.proxy.MethodHandler;
+
 import java.lang.reflect.Method;
 
 /**
@@ -14,22 +15,16 @@ import java.lang.reflect.Method;
  * Key class that delays and fails calls to the proxied target depending on ThreadPoolExecution active thread
  * utilization rates and strategy rules
  */
-public class DegradationProxyHandler implements InvocationHandler
+public class DegradationProxyHandler implements MethodHandler
 {
     /**
      * This is the target instance for passing service calls
      */
     private final Object target;
-
     /**
      * Handler to provide degradation logic.
      */
     private final DegradationHandler degradationHandler;
-
-    /**
-     * Proxy utility.
-     */
-    private final ProxyUtil proxyUtil = new ProxyUtil();
 
     public DegradationProxyHandler(final Object target, final DegradationHandler degradationHandler)
     {
@@ -52,8 +47,8 @@ public class DegradationProxyHandler implements InvocationHandler
      * @throws Throwable - generally this will be a the configured random exception, but may be an InvocationTarget, Execution, or Interrupted
      * @see java.lang.reflect.InvocationHandler
      */
-    public Object invoke(final Object proxy, final Method method,
-                         final Object[] args) throws Throwable
+    @Override
+    public Object invoke(final Object o, final Method overridden, final Method forwarder, final Object[] args) throws Throwable
     {
         // TODO: refactor this proxy handler to filter degradation excluded methods, see DegradationStrategy.isMethodExcluded(method)
 
@@ -62,7 +57,7 @@ public class DegradationProxyHandler implements InvocationHandler
             @Override
             public Object execute() throws Exception
             {
-                return proxyUtil.invokeTarget(target, method, args);
+                return forwarder.invoke(target, args);
             }
         });
     }
