@@ -14,7 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * This handler class provides the implementation of proxy channel handler - server side.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 public class ProxyChannelHandler extends AbstractChannelHandler
 {
     private static final Logger LOG = LoggerFactory.getLogger(ProxyChannelHandler.class);

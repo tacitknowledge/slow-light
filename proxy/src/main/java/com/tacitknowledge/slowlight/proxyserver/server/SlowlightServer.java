@@ -9,7 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * Slowlight server main class. Use this class to start an instance of slow-light server.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 public class SlowlightServer
 {
     private static final Logger LOG = LoggerFactory.getLogger(SlowlightServer.class);

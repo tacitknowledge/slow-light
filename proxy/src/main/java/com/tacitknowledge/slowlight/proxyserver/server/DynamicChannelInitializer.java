@@ -16,7 +16,14 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * DynamicChannelInitializer stays at the heart of the slow-light server
+ * and allows dynamic (configuration based) channel pipeline construction.
+ * Base on the given configuration it will instantiate and initialize channel handlers
+ * and then will add them to the pipeline in the order handlers are defined.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ * */
 public class DynamicChannelInitializer extends ChannelInitializer
 {
     private static final Logger LOG = LoggerFactory.getLogger(DynamicChannelInitializer.class);

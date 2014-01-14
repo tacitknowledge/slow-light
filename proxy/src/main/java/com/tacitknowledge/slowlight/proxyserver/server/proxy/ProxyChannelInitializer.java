@@ -6,7 +6,12 @@ import com.tacitknowledge.slowlight.proxyserver.server.DynamicChannelInitializer
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * Proxy pipeline initializer used for proxy server construction.
+ * Initializer adds all required proxy handlers to the channel pipeline.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 public class ProxyChannelInitializer extends DynamicChannelInitializer
 {
     public static final String PROXY_HANDLER_NAME = "proxyHandler";

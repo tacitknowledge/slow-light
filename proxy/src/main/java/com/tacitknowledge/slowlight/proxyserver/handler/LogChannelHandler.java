@@ -7,7 +7,11 @@ import io.netty.channel.ChannelPromise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * This LogChannelHandler allows various message (in and out) parameters to be logged. Mainly used for debugging purposes.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ * */
 public class LogChannelHandler extends AbstractChannelHandler
 {
     private static final Logger LOG = LoggerFactory.getLogger(LogChannelHandler.class);

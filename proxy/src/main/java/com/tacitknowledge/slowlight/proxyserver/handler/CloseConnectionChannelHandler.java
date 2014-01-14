@@ -6,6 +6,12 @@ import io.netty.channel.ChannelHandlerContext;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * CloseConnectionChannelHandler class allows to control when the channel connection should be dropped (closed).<br />
+ * <br />
+ * Handler parameters:<br />
+ * 1. <b>closeConnectionAfter</b> - defines the time in milliseconds after which the connection will be closed.
+ * Setting this parameter to 0 will cause the connection to be closed immediately<br />
+ *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
 public class CloseConnectionChannelHandler extends AbstractChannelHandler

@@ -11,6 +11,13 @@ import org.apache.commons.lang.RandomStringUtils;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * RandomDataChannelHandler class allows to generate random data as a response back to the client.
+ * For example this handler could be used if you want to simulate that server respond with some junk data of an arbitrary size.<br />
+ * <br />
+ * Handler parameters:<br />
+ * 1. <b>dataFragmentSize</b> - defines the size of data fragment that must be generated<br />
+ * 2. <b>dataFragments</b> - defines the number data fragments to be generated<br />
+ *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
 public class RandomDataChannelHandler extends AbstractChannelHandler

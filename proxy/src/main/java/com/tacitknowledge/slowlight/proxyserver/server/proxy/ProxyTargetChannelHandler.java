@@ -7,7 +7,11 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * * This handler class provides the implementation of proxy channel handler - client side.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 class ProxyTargetChannelHandler extends AbstractChannelHandler
 {
     private Channel sourceChannel;

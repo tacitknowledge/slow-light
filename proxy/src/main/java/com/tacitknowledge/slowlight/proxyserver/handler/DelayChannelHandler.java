@@ -11,6 +11,15 @@ import io.netty.channel.ChannelPromise;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * DelayChannelHandler class allows to control the size and delay between messages sent over the channel.<br />
+ * <br />
+ * Handler could be configured from two perspectives:<br />
+ * 1. <b>maxDataSize</b> - defines the maximum size of data fragment that must be written by this handler<br />
+ * 2. <b>delay</b> - defines the delay which must be applied between data fragments<br />
+ * <br />
+ * Note: both handler parameters described above are independent and could be set to 0
+ * what will cause that particular parameter to be disabled.
+ *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
 public class DelayChannelHandler extends AbstractChannelHandler

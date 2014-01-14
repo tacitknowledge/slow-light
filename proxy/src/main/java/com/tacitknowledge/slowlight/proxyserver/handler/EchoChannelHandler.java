@@ -5,7 +5,11 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * Use this EchoChannelHandler whenever you what request data to be echoed back to the client.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 public class EchoChannelHandler extends AbstractChannelHandler
 {
     public EchoChannelHandler(final HandlerConfig handlerConfig)

@@ -10,7 +10,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * This class defines an abstract server representation providing the implementation for server method like start, stop, etc.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 public abstract class AbstractServer implements Server
 {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractServer.class);
