@@ -1,12 +1,12 @@
 package com.tacitknowledge.slowlight.embedded.aspect;
 
-import com.tacitknowledge.slowlight.embedded.DefaultDegradationStrategy;
-import com.tacitknowledge.slowlight.embedded.DegradationHandler;
-import com.tacitknowledge.slowlight.embedded.DegradationStrategy;
-import com.tacitknowledge.slowlight.embedded.NamedThreadFactory;
-import com.tacitknowledge.slowlight.embedded.TargetCallback;
-import com.tacitknowledge.slowlight.embedded.config.RuleConfig;
-import com.tacitknowledge.slowlight.embedded.config.json.JSONConfigBuilder;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,12 +14,14 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import com.tacitknowledge.slowlight.embedded.DefaultDegradationStrategy;
+import com.tacitknowledge.slowlight.embedded.DegradationHandler;
+import com.tacitknowledge.slowlight.embedded.DegradationStrategy;
+import com.tacitknowledge.slowlight.embedded.NamedThreadFactory;
+import com.tacitknowledge.slowlight.embedded.TargetCallback;
+import com.tacitknowledge.slowlight.embedded.config.RuleConfig;
+import com.tacitknowledge.slowlight.embedded.config.json.JSONConfigBuilder;
+
 
 /**
  * Degradation aspect class. This aspect is used to advice any given service/method with degradation logic.
@@ -58,7 +60,11 @@ public class DegradationAdvice
             {
                 LOG.info("Apply {} aspect to {}.{} method", DegradationAdvice.class.getSimpleName(), jpClassName, jpMethodName);
 
-                createDegradationHandler(ruleConfig, pjp);
+				try {
+					createDegradationHandler(ruleConfig, pjp);
+				} catch (ClassNotFoundException e) {
+					LOG.error("Could not create DegradationHandler", e);
+				}
                 break;
             }
         }
@@ -110,7 +116,8 @@ public class DegradationAdvice
         return jpClassName + "." + jpMethodName;
     }
 
-    private static void createDegradationHandler(final RuleConfig ruleConfig, final ProceedingJoinPoint pjp)
+	private static void createDegradationHandler(final RuleConfig ruleConfig,
+	        final ProceedingJoinPoint pjp) throws ClassNotFoundException
     {
         handlerCacheLock.lock();
         try
@@ -127,11 +134,14 @@ public class DegradationAdvice
         }
     }
 
-    private static DegradationHandler initDegradationHandler(final RuleConfig ruleConfig)
+    @SuppressWarnings("unchecked")
+	private static DegradationHandler initDegradationHandler(
+	        final RuleConfig ruleConfig) throws ClassNotFoundException
     {
-        //TODO: refactor this method so random exceptions could be configured via rule config
         final DegradationStrategy degradationStrategy = new DefaultDegradationStrategy(ruleConfig.getServiceDemandTime(),
-                ruleConfig.getServiceTimeout(), ruleConfig.getPassRate(), new Class[] { RuntimeException.class });
+		        ruleConfig.getServiceTimeout(), ruleConfig.getPassRate(),
+		        ruleConfig.getRandomExceptionsAsClasses()
+		                .toArray(new Class[] {}));
 
         final ThreadFactory threadFactory = new NamedThreadFactory(DEGRADATION_ADVICE_THREAD_FACTORY_NAME);
         final ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(ruleConfig.getThreads(),

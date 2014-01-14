@@ -1,13 +1,14 @@
 package com.tacitknowledge.slowlight.embedded.config.json;
 
-import com.tacitknowledge.slowlight.embedded.config.MainConfig;
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.tacitknowledge.slowlight.embedded.config.MainConfig;
 
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
@@ -39,6 +40,9 @@ public class JSONConfigBuilderTest
         assertThat(mainConfig.getRules().get(0).getPassRate(), is(notNullValue()));
         assertThat(mainConfig.getRules().get(0).getThreads(), is(notNullValue()));
         assertThat(mainConfig.getRules().get(0).getApplyTo().size(), is(equalTo(2)));
+
+		assertThat(mainConfig.getRules().get(0).getRandomExceptions().size(),
+		        is(equalTo(2)));
     }
 
     @Test(expected = IllegalArgumentException.class)

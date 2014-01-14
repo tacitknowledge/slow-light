@@ -1,5 +1,6 @@
 package com.tacitknowledge.slowlight.embedded.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class RuleConfig
     private long serviceTimeout;
     private double passRate;
     private int threads;
+	List<String> randomExceptions;
 
     private Map<String, List<String>> applyTo = new HashMap<String, List<String>>();
 
@@ -65,4 +67,24 @@ public class RuleConfig
     {
         this.applyTo = applyTo;
     }
+
+	public List<String> getRandomExceptions() {
+		return randomExceptions;
+	}
+
+	public void setRandomExceptions(List<String> randomExceptions) {
+		this.randomExceptions = randomExceptions;
+	}
+
+	public List<Class> getRandomExceptionsAsClasses()
+	        throws ClassNotFoundException {
+		List<Class> exceptionClasses = new ArrayList<Class>();
+		if (randomExceptions != null && randomExceptions.size() > 0) {
+			for (String exception : randomExceptions) {
+				exceptionClasses.add(this.getClass().getClassLoader()
+				        .loadClass(exception));
+			}
+		}
+		return exceptionClasses;
+	}
 }

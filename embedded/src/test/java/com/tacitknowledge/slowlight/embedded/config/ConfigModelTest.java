@@ -1,16 +1,18 @@
 package com.tacitknowledge.slowlight.embedded.config;
 
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import org.junit.Test;
 
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
@@ -30,7 +32,7 @@ public class ConfigModelTest
     }
 
     @Test
-    public void testRuleConfigModel()
+	public void testRuleConfigModel() throws ClassNotFoundException
     {
         final long serviceDemandTime = 10L;
         final long serviceTimeout = 1000L;
@@ -47,10 +49,36 @@ public class ConfigModelTest
         ruleConfig.setThreads(threads);
         ruleConfig.setApplyTo(applyTo);
 
+		List<String> randomExceptions = new ArrayList<String>();
+		randomExceptions.add("java.lang.Exception");
+		randomExceptions.add("java.rmi.AccessException");
+		ruleConfig.setRandomExceptions(randomExceptions);
+
+
         assertThat(ruleConfig.getServiceDemandTime(), is(equalTo(serviceDemandTime)));
         assertThat(ruleConfig.getServiceTimeout(), is(equalTo(serviceTimeout)));
         assertThat(ruleConfig.getPassRate(), is(equalTo(passRate)));
         assertThat(ruleConfig.getThreads(), is(equalTo(threads)));
         assertThat(ruleConfig.getApplyTo(), is(equalTo(applyTo)));
+		assertThat(ruleConfig.getRandomExceptions(),
+		        is(equalTo(randomExceptions)));
+		assertEquals(2, ruleConfig.getRandomExceptionsAsClasses().size());
     }
+
+	@Test
+	public void testRuleConfigModelForNoExceptions()
+	        throws ClassNotFoundException {
+		RuleConfig ruleConfig = new RuleConfig();
+		List<Class> exceptions = ruleConfig.getRandomExceptionsAsClasses();
+		assertEquals(0, exceptions.size());
+	}
+
+	@Test
+	public void testRuleConfigModelForEmptyExceptions()
+	        throws ClassNotFoundException {
+		RuleConfig ruleConfig = new RuleConfig();
+		ruleConfig.setRandomExceptions(new ArrayList<String>());
+		List<Class> exceptions = ruleConfig.getRandomExceptionsAsClasses();
+		assertEquals(0, exceptions.size());
+	}
 }
