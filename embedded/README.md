@@ -24,8 +24,6 @@ Slow Light Embedded supports two different usage approaches - programatic and de
 
 The DegradationHandlerIntegrationTest shows a number of different modes, but in general you just need to do these things:
 ```java
- //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
- //  supporting concrete classes without interfaces is a future TODO
  Object targetToWrapInProxy;
  .
  .
@@ -45,11 +43,10 @@ The DegradationHandlerIntegrationTest shows a number of different modes, but in 
  //set up a fixed thread pool
  ThreadPoolExecutor executorService = (ThreadPoolExecutor) Executors.newFixedThreadPool(capacity,threadFactory);
  //set up InvocationHandler with execution pool and strategy
- final DegradationHandler handler = new DegradationHandler(conversation,
+ final DegradationHandler degradationHandler = new DegradationHandler(conversation,
                 executorService, degradationStrategy);
- Object wrappedProxy = Proxy.newProxyInstance(targetToWrapInProxy.getClass().getClassLoader(),
-                targetToWrapInProxy.getClass().getInterfaces(),
-                handler);
+ final DegradationProxyHandler proxyHandler = new DegradationProxyHandler(targetToWrapInProxy, degradationHandler);
+ Object wrappedProxy = new ProxyBuilder().aClass(Object.class).handler(proxyHandler).build();
  //now replace calls to target with the wrapped proxy.  In general, pretty simple to integrate with IoC frameworks,
  //                  AOP stuff, or JNDI
 ```
