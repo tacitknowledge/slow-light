@@ -41,7 +41,7 @@ public class DegradationProxyHandler implements MethodHandler
      * 3. Handles the future.get appropriately with or without timeouts as specified in the DegradationStrategy
      *
      * @param proxy  The embedded instance.  Note this is not the target instance
-     * @param method method to be invoked
+     * @param overridden method to be invoked
      * @param args   arguments to use during invocation
      * @return target result or error object
      * @throws Throwable - generally this will be a the configured random exception, but may be an InvocationTarget, Execution, or Interrupted
@@ -57,7 +57,7 @@ public class DegradationProxyHandler implements MethodHandler
             @Override
             public Object execute() throws Exception
             {
-                return forwarder.invoke(target, args);
+                return overridden.invoke(target, args);
             }
         });
     }
