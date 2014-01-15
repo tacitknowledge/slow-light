@@ -196,6 +196,7 @@ slowlight-embedded.config example:
             "serviceTimeout" : "2000",
             "passRate" : "80",
             "threads" : 16,
+            "randomExceptions" : ["java.lang.Exception","java.rmi.AccessException"],
 
             "applyTo" : {
                 "com.project.target.package.SomeClass1" : ["method1", "method2"],
@@ -207,6 +208,7 @@ slowlight-embedded.config example:
             "serviceTimeout" : "10000",
             "passRate" : "50",
             "threads" : 16,
+            "randomExceptions" : [java.lang.Exception, "java.rmi.RemoteException"],
 
             "applyTo" : {
                 "com.project.target.package.SomeClass3" : ["method"]
