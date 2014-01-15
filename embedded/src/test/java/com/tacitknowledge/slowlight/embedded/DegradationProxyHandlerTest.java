@@ -54,7 +54,6 @@ public class DegradationProxyHandlerTest {
 		        degradationHandler);
 
 		Method method = A.class.getMethod("test", Integer.class);
-		System.out.println("method name = " + method.getName());
 
 		doReturn(false).when(degradationHandler).isMethodExcluded(method);
 
