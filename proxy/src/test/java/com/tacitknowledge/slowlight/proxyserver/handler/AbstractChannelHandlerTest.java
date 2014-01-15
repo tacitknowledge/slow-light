@@ -1,48 +1,71 @@
 package com.tacitknowledge.slowlight.proxyserver.handler;
 
 import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
-import io.netty.util.concurrent.EventExecutor;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFutureListener;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.doReturn;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 /**
- * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 @RunWith(MockitoJUnitRunner.class)
-public abstract class AbstractChannelHandlerTest
+public class AbstractChannelHandlerTest extends BaseChannelHandlerTest
 {
-    @Mock
-    protected HandlerConfig handlerConfig;
-    @Mock
-    protected ChannelHandlerContext channelHandlerContext;
-    @Mock
-    protected Channel channel;
-    @Mock
-    protected ChannelFuture channelFuture;
-    @Mock
-    protected ByteBuf msg;
-    @Mock
-    protected ChannelPromise promise;
-    @Mock
-    protected EventExecutor eventExecutor;
+    private class AbstractChannelHandlerTestable extends AbstractChannelHandler
+    {
+        public AbstractChannelHandlerTestable(HandlerConfig handlerConfig)
+        {
+            super(handlerConfig);
+        }
+    }
+
+    private AbstractChannelHandlerTestable handler;
 
     @Before
     public void setup()
     {
-        doReturn(channel).when(channelHandlerContext).channel();
-        doReturn(eventExecutor).when(channelHandlerContext).executor();
+        super.setup();
+        handler = spy(new AbstractChannelHandlerTestable(handlerConfig));
+    }
 
-        doReturn(channelFuture).when(channel).write(anyObject());
-        doReturn(channelFuture).when(channel).writeAndFlush(anyObject());
+    @Test
+    public void shouldCatchException() throws Exception
+    {
+        handler.exceptionCaught(channelHandlerContext, mock(Exception.class));
+        verify(handler, times(1)).closeOnFlush(channel);
+    }
+
+    @Test
+    public void shouldCloseOnFlush()
+    {
+        when(channel.isActive()).thenReturn(Boolean.TRUE);
+
+        handler.closeOnFlush(channel);
+
+        verify(channel, times(1)).writeAndFlush(Unpooled.EMPTY_BUFFER);
+        verify(channelFuture, times(1)).addListener(ChannelFutureListener.CLOSE);
+    }
+
+    @Test
+    public void shouldReturnTimeFrame()
+    {
+        final String timeFrameProp = "100";
+        when(handlerConfig.getParam(AbstractChannelHandler.TIME_FRAME, false)).thenReturn(timeFrameProp);
+
+        assertEquals(handler.getTimeFrame(), Long.parseLong(timeFrameProp));
+    }
+
+    @Test
+    public void shouldReturnDefaultTimeFrame()
+    {
+        when(handlerConfig.getParam(AbstractChannelHandler.TIME_FRAME, false)).thenReturn(null);
+
+        assertEquals(handler.getTimeFrame(), AbstractChannelHandler.ZERO_TIME_FRAME);
     }
 }

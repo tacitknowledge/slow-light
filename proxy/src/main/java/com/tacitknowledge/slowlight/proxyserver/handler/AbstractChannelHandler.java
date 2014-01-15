@@ -32,8 +32,9 @@ import java.util.concurrent.TimeUnit;
 public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 {
     public static final String TIME_FRAME = "timeFrame";
+    public static final int ZERO_TIME_FRAME = 0;
+
     private static final Logger LOG = LoggerFactory.getLogger(AbstractChannelHandler.class);
-    private static final int ZERO_TIME_FRAME = 0;
 
     protected AbstractConfiguration handlerParams = new MapConfiguration(new HashMap<String, Object>());
 

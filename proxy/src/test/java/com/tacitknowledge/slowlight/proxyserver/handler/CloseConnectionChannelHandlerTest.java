@@ -13,7 +13,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class CloseConnectionChannelHandlerTest extends AbstractChannelHandlerTest
+public class CloseConnectionChannelHandlerTest extends BaseChannelHandlerTest
 {
     @Before
     public void setup()

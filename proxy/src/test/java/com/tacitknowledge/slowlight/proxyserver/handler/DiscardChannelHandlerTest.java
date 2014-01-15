@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class DiscardChannelHandlerTest extends AbstractChannelHandlerTest
+public class DiscardChannelHandlerTest extends BaseChannelHandlerTest
 {
     private DiscardChannelHandler discardChannelHandler;
 

@@ -12,7 +12,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class RandomDataChannelHandlerTest extends AbstractChannelHandlerTest
+public class RandomDataChannelHandlerTest extends BaseChannelHandlerTest
 {
     @Test
     public void handlerShouldRespondWithRandomData() throws Exception

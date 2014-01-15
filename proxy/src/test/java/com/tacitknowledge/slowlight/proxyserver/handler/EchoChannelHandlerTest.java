@@ -8,7 +8,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class EchoChannelHandlerTest extends AbstractChannelHandlerTest
+public class EchoChannelHandlerTest extends BaseChannelHandlerTest
 {
     private EchoChannelHandler echoChannelHandler;
 

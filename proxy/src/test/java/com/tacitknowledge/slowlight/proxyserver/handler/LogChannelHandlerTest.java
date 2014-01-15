@@ -10,7 +10,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
-public class LogChannelHandlerTest extends AbstractChannelHandlerTest
+public class LogChannelHandlerTest extends BaseChannelHandlerTest
 {
     private LogChannelHandler handler;
 

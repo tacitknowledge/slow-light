@@ -1,6 +1,6 @@
 package com.tacitknowledge.slowlight.proxyserver.server.proxy;
 
-import com.tacitknowledge.slowlight.proxyserver.handler.AbstractChannelHandlerTest;
+import com.tacitknowledge.slowlight.proxyserver.handler.BaseChannelHandlerTest;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import org.junit.Before;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
-public class ProxyTargetChannelHandlerTest extends AbstractChannelHandlerTest
+public class ProxyTargetChannelHandlerTest extends BaseChannelHandlerTest
 {
     @Mock
     private Channel sourceChannel;

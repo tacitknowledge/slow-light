@@ -1,6 +1,6 @@
 package com.tacitknowledge.slowlight.proxyserver.metrics;
 
-import com.tacitknowledge.slowlight.proxyserver.handler.AbstractChannelHandlerTest;
+import com.tacitknowledge.slowlight.proxyserver.handler.BaseChannelHandlerTest;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
-public class ConnectionCountHandlerTest extends AbstractChannelHandlerTest
+public class ConnectionCountHandlerTest extends BaseChannelHandlerTest
 {
     private ConnectionCountHandler handler;
 

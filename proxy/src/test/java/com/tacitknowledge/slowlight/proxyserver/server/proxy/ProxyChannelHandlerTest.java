@@ -1,6 +1,6 @@
 package com.tacitknowledge.slowlight.proxyserver.server.proxy;
 
-import com.tacitknowledge.slowlight.proxyserver.handler.AbstractChannelHandlerTest;
+import com.tacitknowledge.slowlight.proxyserver.handler.BaseChannelHandlerTest;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
-public class ProxyChannelHandlerTest extends AbstractChannelHandlerTest
+public class ProxyChannelHandlerTest extends BaseChannelHandlerTest
 {
     private final String host = "host";
     private final int port = 8000;
