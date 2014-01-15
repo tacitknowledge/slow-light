@@ -16,7 +16,6 @@ public class DegradationProxyHandlerTest {
 
 	class A {
 		public void test(Integer argument) {
-			System.out.println("test method got " + argument + " argument.");
 		}
 	}
 
