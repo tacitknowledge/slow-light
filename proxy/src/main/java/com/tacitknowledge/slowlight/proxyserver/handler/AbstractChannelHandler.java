@@ -22,7 +22,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/** @author Alexandr Donciu (adonciu@tacitknowledge.com) */
+/**
+ * Implementation of slow-light abstract handler.
+ * Use this abstract handler as extension point for all existing and future handlers.
+ *
+ * @author Alexandr Donciu (adonciu@tacitknowledge.com)
+ */
 @ChannelHandler.Sharable
 public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 {
@@ -46,6 +51,74 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         registerHandlerConfig();
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
+    {
+        LOG.error("Error occurred while executing channel handler", cause);
+
+        closeOnFlush(ctx.channel());
+    }
+
+    /**
+     * Flush all pending messages and then close the channel.
+     *
+     * @param channel the channel to be actioned
+     */
+    public void closeOnFlush(Channel channel)
+    {
+        if (channel != null && channel.isActive())
+        {
+            channel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
+        }
+    }
+
+    /**
+     * Gets the current handler time frame configuration.
+     *
+     * @return time frame configuration (in seconds)
+     */
+    protected long getTimeFrame()
+    {
+        final String timeFrameProp = handlerConfig.getParam(TIME_FRAME, false);
+        return timeFrameProp == null ? ZERO_TIME_FRAME : Long.parseLong(timeFrameProp);
+    }
+
+    /**
+     * This callback method gets invoked per each time frame.
+     * Use it to do any handler time dependent changes (e.g. update handler parameters, expose metrics, etc.)
+     */
+    protected void timerCallback()
+    {
+        // EMPTY
+    }
+
+    /**
+     * Override this method in a concrete handler to lookup, transform and populate all required parameters.
+     */
+    protected void populateHandlerParams()
+    {
+        // EMPTY
+    }
+
+    /**
+     * Cycles through all defined behaviour function {@link com.tacitknowledge.slowlight.proxyserver.handler.behavior.BehaviorFunction}
+     * and evaluates handler parameters based on function result.
+     */
+    protected void evaluateBehaviorFunctions()
+    {
+        for (final BehaviorFunctionConfig behaviorFunctionConfig : handlerConfig.getBehaviorFunctions())
+        {
+            final BehaviorFunction behaviorFunction = behaviorFunctions.get(behaviorFunctionConfig.getType());
+
+            handlerParams.setProperty(behaviorFunctionConfig.getParamName(), behaviorFunction.evaluate(behaviorFunctionConfig.getParams()));
+        }
+    }
+
+    private void initTimeFrameTask()
+    {
+        new TimeFrameTask().start();
+    }
+
     private void registerHandlerConfig()
     {
         populateHandlerParams();
@@ -54,11 +127,6 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         {
             HandlerConfigManager.registerConfigMBean(handlerConfig, handlerParams);
         }
-    }
-
-    private void initTimeFrameTask()
-    {
-        new TimeFrameTask().start();
     }
 
     private void initBehaviorFunctions()
@@ -75,53 +143,6 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         }
     }
 
-    protected void populateHandlerParams()
-    {
-        // EMPTY
-    }
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
-    {
-        LOG.error("Error occurred while executing channel handler", cause);
-
-        closeOnFlush(ctx.channel());
-    }
-
-    public void closeOnFlush(Channel channel)
-    {
-        if (channel != null && channel.isActive())
-        {
-            channel.writeAndFlush(Unpooled.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
-        }
-    }
-
-    protected long getTimeFrame()
-    {
-        final String timeFrameProp = handlerConfig.getParam(TIME_FRAME, false);
-        return timeFrameProp == null ? ZERO_TIME_FRAME : Long.parseLong(timeFrameProp);
-    }
-
-    protected void timerCallback()
-    {
-        // EMPTY
-    }
-
-    public HandlerConfig getHandlerConfig()
-    {
-        return handlerConfig;
-    }
-
-    protected void evaluateBehaviorFunctions()
-    {
-        for (final BehaviorFunctionConfig behaviorFunctionConfig : handlerConfig.getBehaviorFunctions())
-        {
-            final BehaviorFunction behaviorFunction = behaviorFunctions.get(behaviorFunctionConfig.getType());
-
-            handlerParams.setProperty(behaviorFunctionConfig.getParamName(), behaviorFunction.evaluate(behaviorFunctionConfig.getParams()));
-        }
-    }
-
     private BehaviorFunction createBehaviorFunction(final String type)
     {
         try
@@ -135,6 +156,14 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         }
     }
 
+    public HandlerConfig getHandlerConfig()
+    {
+        return handlerConfig;
+    }
+
+    /**
+     * This class drives the handler time frame functionality.
+     */
     private class TimeFrameTask implements TimerTask
     {
         private Timer timer;
