@@ -10,10 +10,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.tacitknowledge.slowlight.embedded.DegradationHandler;
-import com.tacitknowledge.slowlight.embedded.DegradationProxyHandler;
-import com.tacitknowledge.slowlight.embedded.TargetCallback;
-
 public class DegradationProxyHandlerTest {
 
 
@@ -43,7 +39,7 @@ public class DegradationProxyHandlerTest {
 
 		Assert.assertEquals(
 		        1,
-		        proxy.invoke(target, method,
+		        proxy.invoke(target, method, method,
 		                new Object[] { Integer.parseInt("1") }));
 		;
 	}
@@ -68,7 +64,7 @@ public class DegradationProxyHandlerTest {
 
 		Assert.assertEquals(
 		        2,
-		        proxy.invoke(target, method,
+		        proxy.invoke(target, method, method,
 		                new Object[] { Integer.parseInt("1") }));
 		;
 	}
