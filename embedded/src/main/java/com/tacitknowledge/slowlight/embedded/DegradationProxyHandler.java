@@ -2,6 +2,8 @@ package com.tacitknowledge.slowlight.embedded;
 
 import java.lang.reflect.Method;
 
+import javassist.util.proxy.MethodHandler;
+
 /**
  * TODO: review java docs to reflect actual implementation
  *
