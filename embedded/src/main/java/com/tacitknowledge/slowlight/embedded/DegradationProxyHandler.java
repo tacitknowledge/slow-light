@@ -1,7 +1,5 @@
 package com.tacitknowledge.slowlight.embedded;
 
-import javassist.util.proxy.MethodHandler;
-
 import java.lang.reflect.Method;
 
 /**
@@ -50,15 +48,19 @@ public class DegradationProxyHandler implements MethodHandler
     @Override
     public Object invoke(final Object o, final Method overridden, final Method forwarder, final Object[] args) throws Throwable
     {
-        // TODO: refactor this proxy handler to filter degradation excluded methods, see DegradationStrategy.isMethodExcluded(method)
+		TargetCallback targetCallback = new TargetCallback() {
+				@Override
+				public Object execute() throws Exception {
+					return overridden.invoke(target, args);
+				}
+		};
 
-        return degradationHandler.invoke(new TargetCallback()
-        {
-            @Override
-            public Object execute() throws Exception
-            {
-                return overridden.invoke(target, args);
-            }
-        });
+		if (degradationHandler.isMethodExcluded(overridden)) {
+			return degradationHandler.callDirectly(targetCallback);
+		} else {
+			return degradationHandler.invoke(targetCallback);
+		}
     }
+
+
 }

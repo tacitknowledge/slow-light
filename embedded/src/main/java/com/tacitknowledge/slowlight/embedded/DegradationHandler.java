@@ -1,5 +1,6 @@
 package com.tacitknowledge.slowlight.embedded;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -124,4 +125,8 @@ public class DegradationHandler
     {
         return executorService;
     }
+
+	public boolean isMethodExcluded(Method method) {
+		return degradationStrategy.isMethodExcluded(method);
+	}
 }
