@@ -13,7 +13,7 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class DelayChannelHanderTest extends BaseChannelHandlerTest
+public class DelayChannelHandlerTest extends BaseChannelHandlerTest
 {
     @Test
     public void handlerShouldSplitDataIntoFragmentsAndDelayResponse() throws Exception
