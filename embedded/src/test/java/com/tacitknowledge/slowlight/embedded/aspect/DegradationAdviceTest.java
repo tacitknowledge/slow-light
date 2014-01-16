@@ -18,10 +18,8 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
@@ -106,5 +104,56 @@ public class DegradationAdviceTest
         handlers.add(degradationAdvice.getDegradationHandler(pjp));
 
         assertThat(handlers.size(), is(equalTo(2)));
+    }
+
+    @Test
+    public void shouldExecuteDegradationCallback() throws Throwable
+    {
+        final DegradationAdvice advice = new DegradationAdvice();
+        final ProceedingJoinPoint pjp = mock(ProceedingJoinPoint.class);
+
+        final DegradationAdvice.DegradationTargetCallback callback = advice.new DegradationTargetCallback(pjp);
+
+        callback.execute();
+
+        verify(pjp, times(1)).proceed();
+    }
+
+    @Test
+    public void shouldThrowExceptionOnCallback() throws Throwable
+    {
+        final DegradationAdvice advice = new DegradationAdvice();
+        final ProceedingJoinPoint pjp = mock(ProceedingJoinPoint.class);
+
+        final DegradationAdvice.DegradationTargetCallback callback = advice.new DegradationTargetCallback(pjp);
+
+        when(pjp.proceed()).thenThrow(new Exception());
+
+        try
+        {
+            callback.execute();
+
+            fail("should throw exception");
+        }
+        catch (Exception ex) {}
+    }
+
+    @Test
+    public void shouldThrowRuntimeExceptionOnCallback() throws Throwable
+    {
+        final DegradationAdvice advice = new DegradationAdvice();
+        final ProceedingJoinPoint pjp = mock(ProceedingJoinPoint.class);
+
+        final DegradationAdvice.DegradationTargetCallback callback = advice.new DegradationTargetCallback(pjp);
+
+        when(pjp.proceed()).thenThrow(new Throwable());
+
+        try
+        {
+            callback.execute();
+
+            fail("should throw runtime exception");
+        }
+        catch (RuntimeException ex) {}
     }
 }
