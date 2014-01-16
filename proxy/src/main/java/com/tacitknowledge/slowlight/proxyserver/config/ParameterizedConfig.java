@@ -29,7 +29,7 @@ import java.util.Map;
  * </pre>
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class ParametrizedConfig
+public class ParameterizedConfig
 {
     private Map<String, String> params = new HashMap<String, String>();
 

@@ -27,7 +27,7 @@ import java.util.Map;
  * </pre>
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  * */
-public class SlowlightConfig extends ParametrizedConfig
+public class SlowlightConfig extends ParameterizedConfig
 {
     private Map<String, String> serverTypes;
 

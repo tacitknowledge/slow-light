@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  * */
-public class HandlerConfig extends ParametrizedConfig
+public class HandlerConfig extends ParameterizedConfig
 {
     public static final HandlerConfig EMPTY = new HandlerConfig();
 

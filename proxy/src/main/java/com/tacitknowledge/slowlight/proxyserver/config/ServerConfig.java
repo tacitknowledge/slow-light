@@ -40,7 +40,7 @@ import java.util.List;
  *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  * */
-public class ServerConfig extends ParametrizedConfig
+public class ServerConfig extends ParameterizedConfig
 {
     private String id;
     private String type;
