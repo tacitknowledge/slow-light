@@ -165,9 +165,9 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
     /**
      * This class drives the handler time frame functionality.
      */
-    private class TimeFrameTask implements TimerTask
+    protected class TimeFrameTask implements TimerTask
     {
-        private Timer timer;
+        protected Timer timer;
 
         public void start()
         {
@@ -191,7 +191,7 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
             schedule();
         }
 
-        private void schedule()
+        protected void schedule()
         {
             timer.newTimeout(this, getTimeFrame(), TimeUnit.SECONDS);
         }
