@@ -54,18 +54,30 @@ public class CloseConnectionChannelHandler extends AbstractChannelHandler
 
     private void scheduleCloseConnection(final ChannelHandlerContext ctx, final long closeConnectionAfter)
     {
-        ctx.executor().schedule(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                closeConnection(ctx);
-            }
-        }, closeConnectionAfter, TimeUnit.MILLISECONDS);
+        ctx.executor().schedule(new CloseConnectionRunnable(ctx), closeConnectionAfter, TimeUnit.MILLISECONDS);
     }
 
     private void closeConnection(final ChannelHandlerContext ctx)
     {
         ctx.channel().close();
+    }
+
+    /**
+     * Runnable to close channel connection.
+     */
+    protected class CloseConnectionRunnable implements Runnable
+    {
+        private final ChannelHandlerContext ctx;
+
+        protected CloseConnectionRunnable(final ChannelHandlerContext ctx)
+        {
+            this.ctx = ctx;
+        }
+
+        @Override
+        public void run()
+        {
+            closeConnection(ctx);
+        }
     }
 }

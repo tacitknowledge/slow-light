@@ -26,20 +26,32 @@ public class EchoChannelHandler extends AbstractChannelHandler
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
     {
-        ctx.channel().writeAndFlush(msg).addListener(new ChannelFutureListener()
+        ctx.channel().writeAndFlush(msg).addListener(new EchoMessageListener(ctx));
+    }
+
+    /**
+     * Listener class to request next channel read.
+     */
+    protected class EchoMessageListener implements ChannelFutureListener
+    {
+        private final ChannelHandlerContext ctx;
+
+        protected EchoMessageListener(final ChannelHandlerContext ctx)
         {
-            @Override
-            public void operationComplete(final ChannelFuture future) throws Exception
+            this.ctx = ctx;
+        }
+
+        @Override
+        public void operationComplete(final ChannelFuture future) throws Exception
+        {
+            if (future.isSuccess())
             {
-                if (future.isSuccess())
-                {
-                    ctx.channel().read();
-                }
-                else
-                {
-                    future.channel().close();
-                }
+                ctx.channel().read();
             }
-        });
+            else
+            {
+                future.channel().close();
+            }
+        }
     }
 }

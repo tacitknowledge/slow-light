@@ -8,7 +8,9 @@ import java.util.concurrent.TimeUnit;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
@@ -38,6 +40,19 @@ public class CloseConnectionChannelHandlerTest extends BaseChannelHandlerTest
     }
 
     @Test
+    public void handlerShouldCloseChannelConnectionImmediatelyWhenCloseConnectionAfterSetToZero() throws Exception
+    {
+        doReturn("0").when(handlerConfig).getParam("closeConnectionAfter");
+
+        final CloseConnectionChannelHandler closeConnectionChannelHandler = new CloseConnectionChannelHandler(handlerConfig);
+
+        closeConnectionChannelHandler.channelActive(channelHandlerContext);
+
+        verify(channel).close();
+        verifyNoMoreInteractions(eventExecutor);
+    }
+
+    @Test
     public void handlerShouldFireChannelReadForNextHandler() throws Exception
     {
         final CloseConnectionChannelHandler closeConnectionChannelHandler = new CloseConnectionChannelHandler(handlerConfig);
@@ -45,5 +60,17 @@ public class CloseConnectionChannelHandlerTest extends BaseChannelHandlerTest
         closeConnectionChannelHandler.channelRead(channelHandlerContext, msg);
 
         verify(channelHandlerContext).fireChannelRead(msg);
+    }
+
+    @Test
+    public void runnableShouldCloseChannelConnection()
+    {
+        final CloseConnectionChannelHandler closeConnectionChannelHandler = new CloseConnectionChannelHandler(handlerConfig);
+        final CloseConnectionChannelHandler.CloseConnectionRunnable closeConnectionRunnable = closeConnectionChannelHandler
+            .new CloseConnectionRunnable(channelHandlerContext);
+
+        closeConnectionRunnable.run();
+
+        verify(channel).close();
     }
 }

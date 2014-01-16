@@ -42,7 +42,7 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
         final int dataFragments = handlerParams.getInt(PARAM_DATA_FRAGMENTS);
         final int dataFragmentSize = handlerParams.getInt(PARAM_DATA_FRAGMENT_SIZE);
 
-        ctx.executor().schedule(new GenerateDataTask(ctx, dataFragments, dataFragmentSize), 0L, TimeUnit.MILLISECONDS);
+        ctx.executor().schedule(new GenerateRandomDataTask(ctx, dataFragments, dataFragmentSize), 0L, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
         handlerParams.setProperty(PARAM_DATA_FRAGMENT_SIZE, handlerConfig.getParam(PARAM_DATA_FRAGMENT_SIZE));
     }
 
-    private class GenerateDataTask implements Runnable
+    protected class GenerateRandomDataTask implements Runnable
     {
         private final int dataFragments;
         private final int dataFragmentSize;
@@ -60,48 +60,53 @@ public class RandomDataChannelHandler extends AbstractChannelHandler
 
         private ChannelHandlerContext ctx;
 
-        private final GenerateDataTask generateDataTask;
+        private final GenerateRandomDataTask generateRandomDataTask;
 
-        private GenerateDataTask(final ChannelHandlerContext ctx, final int dataFragments, final int dataFragmentSize)
+        protected GenerateRandomDataTask(final ChannelHandlerContext ctx, final int dataFragments, final int dataFragmentSize)
         {
             this.dataFragments = dataFragments;
             this.dataFragmentSize = dataFragmentSize;
 
             this.ctx = ctx;
-            this.generateDataTask = this;
+            this.generateRandomDataTask = this;
         }
 
         @Override
         public void run()
         {
             final ByteBuf channelBuffer = Unpooled.wrappedBuffer(generateData());
-            ctx.channel().writeAndFlush(channelBuffer).addListener(new ChannelFutureListener()
-            {
-                @Override
-                public void operationComplete(final ChannelFuture future) throws Exception
-                {
-                    if (future.isSuccess())
-                    {
-                        if (dataFragmentIndex++ < dataFragments)
-                        {
-                            ctx.executor().schedule(generateDataTask, 0, TimeUnit.MILLISECONDS);
-                        }
-                        else
-                        {
-                            ctx.channel().read();
-                        }
-                    }
-                    else
-                    {
-                        future.channel().close();
-                    }
-                }
-            });
+            ctx.channel().writeAndFlush(channelBuffer).addListener(new GenerateDataListener());
         }
 
         private byte[] generateData()
         {
             return RandomStringUtils.randomAlphanumeric(dataFragmentSize).getBytes();
+        }
+
+        /**
+         * Listener class to schedule next generate random data fragment task.
+         */
+        protected class GenerateDataListener implements ChannelFutureListener
+        {
+            @Override
+            public void operationComplete(final ChannelFuture future) throws Exception
+            {
+                if (future.isSuccess())
+                {
+                    if (dataFragmentIndex++ < dataFragments)
+                    {
+                        ctx.executor().schedule(generateRandomDataTask, 0, TimeUnit.MILLISECONDS);
+                    }
+                    else
+                    {
+                        ctx.channel().read();
+                    }
+                }
+                else
+                {
+                    future.channel().close();
+                }
+            }
         }
     }
 }
