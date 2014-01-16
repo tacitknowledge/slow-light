@@ -77,30 +77,7 @@ public class DegradationAdvice
     {
         final DegradationHandler handler = getDegradationHandler(pjp);
 
-        return handler.invoke(new TargetCallback()
-        {
-            @Override
-            public Object execute() throws Exception
-            {
-                LOG.info("Execute callback ... ");
-
-                try
-                {
-                    return pjp.proceed();
-                }
-                catch (Throwable t)
-                {
-                    if (t instanceof Exception)
-                    {
-                        throw (Exception) t;
-                    }
-                    else
-                    {
-                        throw new RuntimeException(t);
-                    }
-                }
-            }
-        });
+        return handler.invoke(new DegradationTargetCallback(pjp));
     }
 
     protected DegradationHandler getDegradationHandler(final ProceedingJoinPoint pjp)
@@ -148,5 +125,37 @@ public class DegradationAdvice
                 threadFactory);
 
         return new DegradationHandler(executorService, degradationStrategy);
+    }
+
+    protected class DegradationTargetCallback implements TargetCallback
+    {
+        private ProceedingJoinPoint pjp;
+
+        public DegradationTargetCallback(final ProceedingJoinPoint pjp)
+        {
+            this.pjp = pjp;
+        }
+
+        @Override
+        public Object execute() throws Exception
+        {
+            LOG.info("Execute callback ... ");
+
+            try
+            {
+                return pjp.proceed();
+            }
+            catch (Throwable t)
+            {
+                if (t instanceof Exception)
+                {
+                    throw (Exception) t;
+                }
+                else
+                {
+                    throw new RuntimeException(t);
+                }
+            }
+        }
     }
 }
