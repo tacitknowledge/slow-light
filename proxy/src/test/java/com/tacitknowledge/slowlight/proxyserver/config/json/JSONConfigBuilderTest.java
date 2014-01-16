@@ -8,6 +8,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,10 +28,30 @@ public class JSONConfigBuilderTest
     private final JSONConfigBuilder jsonConfigBuilder = new JSONConfigBuilder();
 
     @Test
-    public void configBuilderShouldCreateConfigurationFromJSON() throws FileNotFoundException
+    public void configBuilderShouldLoadConfigFromConfigPath()
     {
-        final SlowlightConfig config = jsonConfigBuilder.getConfig(CONFIG_FILE_NAME);
+        final URL url = Thread.currentThread().getContextClassLoader().getResource("test-slowlight.config");
+        final SlowlightConfig config = jsonConfigBuilder.getConfig(url.getPath());
 
+        assertValidConfig(config);
+    }
+
+    @Test
+    public void configBuilderShouldLoadConfigFromClasspath()
+    {
+        final SlowlightConfig config = jsonConfigBuilder.getConfig("test-slowlight.config");
+
+        assertValidConfig(config);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void configBuilderShouldThrowExceptionIfConfigCannotBeFound()
+    {
+        jsonConfigBuilder.getConfig("unexistent-slowlight.config");
+    }
+
+    private void assertValidConfig(final SlowlightConfig config)
+    {
         assertThat(config, is(notNullValue()));
 
         final List<ServerConfig> serverConfigs = config.getServers();
