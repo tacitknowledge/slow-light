@@ -17,7 +17,7 @@ public class OutThroughputHandler extends ThroughputHandler
     @Override
     public void write(final ChannelHandlerContext ctx, final Object msg, final ChannelPromise promise) throws Exception
     {
-        super.updateThroughputMetric(msg);
+        updateThroughputMetric(msg);
         ctx.write(msg, promise);
     }
 }
