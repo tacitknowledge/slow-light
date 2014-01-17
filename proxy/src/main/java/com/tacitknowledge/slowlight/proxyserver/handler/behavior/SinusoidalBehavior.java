@@ -7,7 +7,7 @@ import java.util.Map;
  *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class SinusoidalBehavior implements BehaviorFunction
+public class SinusoidalBehavior extends BehaviorFunction
 {
 
     private static final String ARG_PERIOD = "period";
