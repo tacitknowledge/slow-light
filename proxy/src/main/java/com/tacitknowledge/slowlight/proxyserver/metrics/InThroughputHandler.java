@@ -16,7 +16,7 @@ public class InThroughputHandler extends ThroughputHandler
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final  Object msg) throws Exception
     {
-        super.updateThroughputMetric(msg);
+        updateThroughputMetric(msg);
         ctx.fireChannelRead(msg);
     }
 }
