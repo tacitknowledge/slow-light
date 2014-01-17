@@ -6,7 +6,6 @@ import com.netflix.servo.monitor.Monitors;
 import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
 import com.tacitknowledge.slowlight.proxyserver.handler.AbstractChannelHandler;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -19,6 +18,14 @@ import java.util.concurrent.atomic.AtomicLong;
  *  <b>Frame</b>  - inside a specified time frame
  *  <b>Channel</b> - throughput determined per test session
  *
+ *  See also :
+ *
+ *      {@link com.tacitknowledge.slowlight.proxyserver.metrics.InThroughputHandler}
+ *
+ *      and
+ *
+ *      {@link com.tacitknowledge.slowlight.proxyserver.metrics.OutThroughputHandler}
+ *
  * @author Pavel Sorocun (psorocun@tacitknowledge.com)
  */
 public class ThroughputHandler extends AbstractChannelHandler
@@ -28,7 +35,7 @@ public class ThroughputHandler extends AbstractChannelHandler
 
     private Date startDate = new Date();
     private AtomicLong frameReadBytes = new AtomicLong(0);
-    private AtomicLong channelReadBytes = new AtomicLong(0);
+    private AtomicLong channelBytes = new AtomicLong(0);
 
     public ThroughputHandler(final HandlerConfig handlerConfig)
     {
@@ -37,20 +44,17 @@ public class ThroughputHandler extends AbstractChannelHandler
         Monitors.registerObject(handlerConfig.getName(), this);
     }
 
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception
+    protected void updateThroughputMetric(final Object msg)
     {
         final long readableBytes = ((ByteBuf) msg).readableBytes();
 
-        if(readableBytes > Long.MAX_VALUE - channelReadBytes.longValue())
+        if(readableBytes > Long.MAX_VALUE - channelBytes.longValue())
         {
-            channelReadBytes.getAndSet(0);
+            channelBytes.getAndSet(0);
         }
 
         frameReadBytes.getAndAdd(readableBytes);
-        channelReadBytes.getAndAdd(readableBytes);
-
-        super.channelRead(ctx, msg);
+        channelBytes.getAndAdd(readableBytes);
     }
 
     @Monitor(name = "FrameThroughput(bytes_per_second)", type = DataSourceType.GAUGE)
@@ -62,7 +66,7 @@ public class ThroughputHandler extends AbstractChannelHandler
     @Monitor(name = "ChannelThroughput(bytes_per_second)", type = DataSourceType.GAUGE)
     public long getChannelThroughput()
     {
-        return getChannelReadBytes() / SECONDS.convert(getSessionTimeElapsed(), MILLISECONDS);
+        return getChannelBytes() / SECONDS.convert(getSessionTimeElapsed(), MILLISECONDS);
     }
 
     protected void timerCallback()
@@ -85,8 +89,8 @@ public class ThroughputHandler extends AbstractChannelHandler
         return frameReadBytes.longValue();
     }
 
-    public long getChannelReadBytes()
+    public long getChannelBytes()
     {
-        return channelReadBytes.longValue();
+        return channelBytes.longValue();
     }
 }

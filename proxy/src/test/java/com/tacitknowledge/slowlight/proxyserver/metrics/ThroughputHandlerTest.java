@@ -31,12 +31,12 @@ public class ThroughputHandlerTest extends BaseChannelHandlerTest
         when(msg.readableBytes()).thenReturn(cycleReadBytes);
         for(int i = 1; i <= messagesCount; i++)
         {
-            handler.channelRead(channelHandlerContext, msg);
+            handler.updateThroughputMetric(msg);
 
             final long expectedBytes = i * cycleReadBytes;
 
             assertThat(expectedBytes, equalTo(handler.getFrameReadBytes()));
-            assertThat(expectedBytes, equalTo(handler.getChannelReadBytes()));
+            assertThat(expectedBytes, equalTo(handler.getChannelBytes()));
         }
     }
 
@@ -58,7 +58,7 @@ public class ThroughputHandlerTest extends BaseChannelHandlerTest
         final long bytesRead = 2048;
         final long sessionTimeElapsed = 5000;
 
-        doReturn(bytesRead).when(handler).getChannelReadBytes();
+        doReturn(bytesRead).when(handler).getChannelBytes();
         doReturn(sessionTimeElapsed).when(handler).getSessionTimeElapsed();
 
         assertThat(bytesRead * 1000 / sessionTimeElapsed, equalTo(handler.getChannelThroughput()));
