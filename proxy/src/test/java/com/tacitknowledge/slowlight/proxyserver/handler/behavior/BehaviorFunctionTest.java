@@ -13,6 +13,10 @@ import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
 
 public class BehaviorFunctionTest {
 
+	private static final String PARAM_NAME = "paramName";
+
+	private static final String TYPE = "com.tacitknowledge.slowlight.proxyserver.handler.behavior.SinusoidalBehavior";
+
 	BehaviorFunction function;
 
 	BehaviorFunctionConfig config;
@@ -117,5 +121,15 @@ public class BehaviorFunctionTest {
 		config.setParams(new HashMap<String, String>());
 		function.preEvaluateInit(config);
 		Assert.assertTrue(function.shouldEvaluate());
+	}
+
+	@Test
+	public void getIdTest() {
+		config.setParamName(PARAM_NAME);
+		config.setType(TYPE);
+		config.setStart("12345");
+		config.setStop("12345678");
+		Assert.assertEquals(PARAM_NAME + "_" + TYPE + "[12345" + " - "
+		        + "12345678]", config.getId());
 	}
 }

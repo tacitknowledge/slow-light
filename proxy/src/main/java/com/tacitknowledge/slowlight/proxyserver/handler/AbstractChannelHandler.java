@@ -1,8 +1,5 @@
 package com.tacitknowledge.slowlight.proxyserver.handler;
 
-import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
-import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
-import com.tacitknowledge.slowlight.proxyserver.handler.behavior.BehaviorFunction;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelDuplexHandler;
@@ -13,14 +10,19 @@ import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
 import io.netty.util.TimerTask;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.MapConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
+import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
+import com.tacitknowledge.slowlight.proxyserver.handler.behavior.BehaviorFunction;
 
 /**
  * Implementation of slow-light abstract handler.
@@ -109,9 +111,17 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
     {
         for (final BehaviorFunctionConfig behaviorFunctionConfig : handlerConfig.getBehaviorFunctions())
         {
-            final BehaviorFunction behaviorFunction = behaviorFunctions.get(behaviorFunctionConfig.getType());
+			final BehaviorFunction behaviorFunction = behaviorFunctions
+			        .get(behaviorFunctionConfig.getId());
 
-            handlerParams.setProperty(behaviorFunctionConfig.getParamName(), behaviorFunction.evaluate(behaviorFunctionConfig.getParams()));
+			behaviorFunction.preEvaluateInit(behaviorFunctionConfig);
+
+			if (behaviorFunction.shouldEvaluate()) {
+				handlerParams.setProperty(
+				        behaviorFunctionConfig.getParamName(),
+ behaviorFunction
+				                .evaluate(behaviorFunctionConfig.getParams()));
+			}
         }
     }
 
@@ -140,7 +150,9 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
                         + behaviorFunctionConfig.getParamName() + "] because it doesn't exists ");
             }
 
-            behaviorFunctions.put(behaviorFunctionConfig.getType(), createBehaviorFunction(behaviorFunctionConfig.getType()));
+			behaviorFunctions.put(
+behaviorFunctionConfig.getId(),
+			        createBehaviorFunction(behaviorFunctionConfig.getType()));
         }
     }
 
