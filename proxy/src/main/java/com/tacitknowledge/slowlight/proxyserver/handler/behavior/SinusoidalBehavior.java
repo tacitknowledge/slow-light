@@ -1,5 +1,7 @@
 package com.tacitknowledge.slowlight.proxyserver.handler.behavior;
 
+import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
+
 import java.util.Map;
 
 /**
@@ -7,11 +9,16 @@ import java.util.Map;
  *
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
  */
-public class SinusoidalBehavior extends BehaviorFunction
+public class SinusoidalBehavior extends IntervalBehaviorFunction
 {
 
     private static final String ARG_PERIOD = "period";
     private static final String ARG_AMPLITUDE = "amplitude";
+
+    public SinusoidalBehavior(final BehaviorFunctionConfig config)
+    {
+        super(config);
+    }
 
     @Override
     public Object evaluate(final Map<String, ?> params)
