@@ -3,8 +3,6 @@ package com.tacitknowledge.slowlight.proxyserver.handler;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Objects;
-
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
