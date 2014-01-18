@@ -107,7 +107,7 @@ __A Sample from Slow Light Proxy Server__
 
 This configuration proxies calls between port *10011* and *google.com:80*:
 * Simple Proxy (first 2 min)
-* Proxy with timed delays for 10 sec (after 2 min)
+* Proxy with specified (1KB/s) timed delays (after 2 min)
 * Discard incoming packets and keep connection open (after 5 min)
 
 ```json
@@ -129,8 +129,18 @@ This configuration proxies calls between port *10011* and *google.com:80*:
                     "paramName" : "delay",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
                     "start" : "120000",
+                    "stop" : "130000",
                     "params" : {
-                        "value" : "500"
+                        "value" : "1000"
+                    }
+                },
+                {
+                    "paramName" : "maxDataSize",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "start" : "120000",
+                    "stop" : "130000",
+                    "params" : {
+                        "value" : "1024"
                     }
                 }
             ]
