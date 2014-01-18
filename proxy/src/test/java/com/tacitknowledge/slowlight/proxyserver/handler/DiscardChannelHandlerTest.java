@@ -3,6 +3,8 @@ package com.tacitknowledge.slowlight.proxyserver.handler;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Objects;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -26,7 +28,7 @@ public class DiscardChannelHandlerTest extends BaseChannelHandlerTest
     {
         discardChannelHandler.channelActive(channelHandlerContext);
 
-        verify(channelHandlerContext).read();
+        verify(channelHandlerContext).fireChannelActive();
     }
 
     @Test

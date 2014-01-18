@@ -2,6 +2,7 @@ package com.tacitknowledge.slowlight.proxyserver.handler;
 
 import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * Use this DiscardChannelHandler whenever you what request data to be discarded.
@@ -28,30 +29,21 @@ public class DiscardChannelHandler extends AbstractChannelHandler
     @Override
     public void channelActive(final ChannelHandlerContext ctx) throws Exception
     {
-        if (!discard(ctx))
-        {
-            ctx.fireChannelActive();
-        }
+        ctx.fireChannelActive();
     }
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
     {
-        if (!discard(ctx))
+        final boolean discard = handlerParams.getBoolean(PARAM_ENABLED, true);
+        if (discard)
+        {
+            ReferenceCountUtil.release(msg);
+            ctx.read();
+        }
+        else
         {
             ctx.fireChannelRead(msg);
         }
-    }
-
-    private boolean discard(final ChannelHandlerContext ctx)
-    {
-        final boolean discard = handlerParams.getBoolean(PARAM_ENABLED, true);
-
-        if (discard)
-        {
-            ctx.read();
-        }
-
-        return discard;
     }
 }
