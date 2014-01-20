@@ -114,9 +114,7 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
 			final BehaviorFunction behaviorFunction = behaviorFunctions
 			        .get(behaviorFunctionConfig.getId());
 
-			behaviorFunction.preEvaluateInit(behaviorFunctionConfig);
-
-			if (behaviorFunction.shouldEvaluate()) {
+			if (behaviorFunction.shouldEvaluate(behaviorFunctionConfig)) {
 				handlerParams.setProperty(
 				        behaviorFunctionConfig.getParamName(),
  behaviorFunction

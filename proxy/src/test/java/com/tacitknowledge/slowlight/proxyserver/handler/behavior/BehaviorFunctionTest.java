@@ -124,6 +124,28 @@ public class BehaviorFunctionTest {
 	}
 
 	@Test
+	public void shouldEvaluateWithRangesTest() {
+		config.setParams(new HashMap<String, String>());
+
+		Map<String, String> ranges = new HashMap<String, String>();
+		ranges.put("0", "50000");
+		config.setRanges(ranges);
+		Assert.assertTrue(function.shouldEvaluate(config));
+	}
+
+	@Test
+	public void shouldEvaluateWithWrongRangesTest() {
+		config.setParams(new HashMap<String, String>());
+
+		Map<String, String> ranges = new HashMap<String, String>();
+		ranges.put("50000", "150000");
+
+		config.setRanges(ranges);
+
+		Assert.assertFalse(function.shouldEvaluate(config));
+	}
+
+	@Test
 	public void getIdTest() {
 		config.setParamName(PARAM_NAME);
 		config.setType(TYPE);

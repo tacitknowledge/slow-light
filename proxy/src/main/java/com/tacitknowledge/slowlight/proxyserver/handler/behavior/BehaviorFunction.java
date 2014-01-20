@@ -1,5 +1,6 @@
 package com.tacitknowledge.slowlight.proxyserver.handler.behavior;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -29,8 +30,12 @@ public abstract class BehaviorFunction
 	public abstract Object evaluate(final Map<String, ?> params);
 
 	public void preEvaluateInit(BehaviorFunctionConfig config) {
-		setStart(config.getStart());
-		setStop(config.getStop());
+		preEvaluateInit(config.getStart(), config.getStop());
+	}
+
+	protected void preEvaluateInit(String start, String stop) {
+		setStart(start);
+		setStop(stop);
 	}
 
 	public BehaviorFunction setStart(String start) {
@@ -74,5 +79,18 @@ public abstract class BehaviorFunction
 
 		return false;
 
+	}
+
+	public boolean shouldEvaluate(BehaviorFunctionConfig functionConfig) {
+		Iterator<String> keys = functionConfig.getRanges().keySet().iterator();
+		while (keys.hasNext()) {
+			String start = keys.next();
+			String stop = functionConfig.getRanges().get(start);
+			preEvaluateInit(start, stop);
+			if (shouldEvaluate()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
