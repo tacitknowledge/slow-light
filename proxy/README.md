@@ -189,11 +189,14 @@ paramName, type, ranges, params. ParamName is the name of the parameter to be ch
 function class. Ranges represents a set of time intervals indicated in milliseconds. Params a is a set of additional specific paramters
  required for every behavior function.
  
-Ranges are indicates as a collection of time interval like in the following example:
+Ranges are indicates as a collection of time intervals like in the following example:
 
 ````json
 "ranges" : {"10000" : "20000", "30000" : "40000"},
 ```
+Limits of each interval are delimited by a colomn and different time intervals are separated by a comma. In the above example 
+the first time interval starts at 10000 milliseconds from the begining of program and ends at 20000 milliseconds from the 
+begining of program.
 
 
 ## Running several servers on different ports
