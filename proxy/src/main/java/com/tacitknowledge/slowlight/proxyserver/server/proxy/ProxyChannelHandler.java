@@ -46,10 +46,10 @@ public class ProxyChannelHandler extends AbstractChannelHandler
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) throws Exception
     {
-        if (getTargetChannel().isActive())
+        if (targetChannel != null && targetChannel.isActive())
         {
             final ChannelFutureListener channelFutureListener = getChannelFutureListener(ctx.channel());
-            getTargetChannel().writeAndFlush(msg).addListener(channelFutureListener);
+            targetChannel.writeAndFlush(msg).addListener(channelFutureListener);
         }
     }
 

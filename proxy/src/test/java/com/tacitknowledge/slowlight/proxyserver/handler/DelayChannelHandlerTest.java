@@ -19,7 +19,7 @@ import org.mockito.Matchers;
 
 import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
 import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
-import com.tacitknowledge.slowlight.proxyserver.handler.behavior.BehaviorFunction;
+import com.tacitknowledge.slowlight.proxyserver.handler.behavior.IntervalBehaviorFunction;
 
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
@@ -118,20 +118,34 @@ public class DelayChannelHandlerTest extends BaseChannelHandlerTest
 	}
 }
 
-class TestFunction1 extends BehaviorFunction {
+class TestFunction1 extends IntervalBehaviorFunction
+{
 
-	@Override
-	public Object evaluate(Map<String, ?> params) {
+    public TestFunction1(final BehaviorFunctionConfig config)
+    {
+        super(config);
+    }
 
-		return 12;
-	}
+    @Override
+    public Object evaluate(Map<String, ?> params)
+    {
+
+        return 12;
+    }
 }
 
-class TestFunction2 extends BehaviorFunction {
+class TestFunction2 extends IntervalBehaviorFunction
+{
 
-	@Override
-	public Object evaluate(Map<String, ?> params) {
+    public TestFunction2(final BehaviorFunctionConfig config)
+    {
+        super(config);
+    }
 
-		return 24;
-	}
+    @Override
+    public Object evaluate(Map<String, ?> params)
+    {
+
+        return 24;
+    }
 }

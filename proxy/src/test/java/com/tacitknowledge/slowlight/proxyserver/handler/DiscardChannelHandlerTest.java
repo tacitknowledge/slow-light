@@ -26,7 +26,7 @@ public class DiscardChannelHandlerTest extends BaseChannelHandlerTest
     {
         discardChannelHandler.channelActive(channelHandlerContext);
 
-        verify(channelHandlerContext).read();
+        verify(channelHandlerContext).fireChannelActive();
     }
 
     @Test

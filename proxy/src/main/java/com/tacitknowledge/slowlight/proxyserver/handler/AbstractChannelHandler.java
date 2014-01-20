@@ -104,20 +104,18 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
     }
 
     /**
-     * Cycles through all defined behaviour function {@link com.tacitknowledge.slowlight.proxyserver.handler.behavior.BehaviorFunction}
+     * Cycles through all defined behaviour function {@link com.tacitknowledge.slowlight.proxyserver.handler.behavior.IntervalBehaviorFunction}
      * and evaluates handler parameters based on function result.
      */
     protected void evaluateBehaviorFunctions()
     {
         for (final BehaviorFunctionConfig behaviorFunctionConfig : handlerConfig.getBehaviorFunctions())
         {
-			final BehaviorFunction behaviorFunction = behaviorFunctions
-			        .get(behaviorFunctionConfig.getId());
+			final BehaviorFunction behaviorFunction = behaviorFunctions.get(behaviorFunctionConfig.getId());
 
 			if (behaviorFunction.shouldEvaluate(behaviorFunctionConfig)) {
 				handlerParams.setProperty(
-				        behaviorFunctionConfig.getParamName(),
- behaviorFunction
+				        behaviorFunctionConfig.getParamName(), behaviorFunction
 				                .evaluate(behaviorFunctionConfig.getParams()));
 			}
         }
@@ -148,22 +146,20 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
                         + behaviorFunctionConfig.getParamName() + "] because it doesn't exists ");
             }
 
-			behaviorFunctions.put(
-behaviorFunctionConfig.getId(),
-			        createBehaviorFunction(behaviorFunctionConfig.getType()));
+			behaviorFunctions.put(behaviorFunctionConfig.getId(), createBehaviorFunction(behaviorFunctionConfig));
         }
     }
 
-    private BehaviorFunction createBehaviorFunction(final String type)
+    private BehaviorFunction createBehaviorFunction(final BehaviorFunctionConfig config)
     {
         try
         {
-            final Class<?> behaviorFunctionClass = Class.forName(type);
-            return (BehaviorFunction) behaviorFunctionClass.newInstance();
+            final Class<?> behaviorFunctionClass = Class.forName(config.getType());
+            return (BehaviorFunction) behaviorFunctionClass.getConstructor(BehaviorFunctionConfig.class).newInstance(config);
         }
         catch (Exception e)
         {
-            throw new IllegalArgumentException("Cannot create behavior function by specified name [" + type + "]", e);
+            throw new IllegalArgumentException("Cannot create behavior function by specified name [" + config.getType() + "]", e);
         }
     }
 

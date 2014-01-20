@@ -58,8 +58,9 @@ public class ProxyChannelHandlerTest extends BaseChannelHandlerTest
 
         when(channel.isActive()).thenReturn(true);
         doReturn(channelFutureListener).when(handler).getChannelFutureListener(channel);
-        doReturn(channel).when(handler).getTargetChannel();
+        doReturn(channel).when(handler).connectTarget(channel);
 
+        handler.channelActive(channelHandlerContext);
         handler.channelRead(channelHandlerContext, msg);
 
         verify(channel, times(1)).writeAndFlush(msg);

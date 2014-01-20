@@ -105,48 +105,63 @@ In general you just need to do these things:
 
 __A Sample from Slow Light Proxy Server__
 
-This configuration proxies calls between port *10011* and *google.com:80*. It contains three scenarios:
-* Simple Proxy (60% of requests)
-* Proxy with timed delays for 10 sec (40% of requests)
+This configuration proxies calls between port *10011* and *google.com:80*:
+* Simple Proxy (first 2 min)
+* Proxy with specified (1KB/s) timed delays (after 2 min)
+* Discard incoming packets and keep connection open (after 5 min)
 
-Scenario is selected proportionally to the request count in each of the scenario.
-
-```xml
-<com.tacitknowledge.slowlight.proxyserver.ServersConfiguration>
-    <servers>
-        <com.tacitknowledge.slowlight.proxyserver.Server>
-            <port>10011</port>
-            <scenarios>
-                <!-- Normal scenario -->
-                <com.tacitknowledge.slowlight.proxyserver.Scenario>
-                    <components>
-                        <com.tacitknowledge.slowlight.proxyserver.data.Proxy>
-                            <remoteHost>google.com</remoteHost>
-                            <remotePort>80</remotePort>
-                        </com.tacitknowledge.slowlight.proxyserver.data.Proxy>
-                    </components>
-                    <weight>6</weight>
-                </com.tacitknowledge.slowlight.proxyserver.Scenario>
-
-                <!-- Timed delay: 10 sec before passing request to proxy delegate -->
-                <com.tacitknowledge.slowlight.proxyserver.Scenario>
-                    <components>
-                        <com.tacitknowledge.slowlight.proxyserver.degrade.Delay>
-                            <delay>10000</delay>
-                            <delayOnRead>true</delayOnRead>
-                        </com.tacitknowledge.slowlight.proxyserver.degrade.Delay>
-                        <com.tacitknowledge.slowlight.proxyserver.data.Proxy>
-                            <remoteHost>google.com</remoteHost>
-                            <remotePort>80</remotePort>
-                        </com.tacitknowledge.slowlight.proxyserver.data.Proxy>
-                    </components>
-                    <weight>4</weight>
-                </com.tacitknowledge.slowlight.proxyserver.Scenario>
-            </scenarios>
-            <scenarioSelector class="com.tacitknowledge.slowlight.proxyserver.scenario.ProprotionalCountSelector"/>
-        </com.tacitknowledge.slowlight.proxyserver.Server>
-    </servers>
-<com.tacitknowledge.slowlight.proxyserver.ServersConfiguration>
+```json
+{
+    "id" : "solrServer",
+    "type" : "proxy",
+    "localPort" : "9012",
+    "params" : {
+        "host" : "localhost",
+        "port" : "8983"
+    },
+    "handlers" : [
+        {
+            "name" : "delayHandler",
+            "type" : "com.tacitknowledge.slowlight.proxyserver.handler.DelayChannelHandler",
+            "params" : {"maxDataSize" : "0", "delay" : "0", "timeFrame" : "5"},
+            "behaviorFunctions" : [
+                {
+                    "paramName" : "delay",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "start" : "120000",
+                    "stop" : "130000",
+                    "params" : {
+                        "value" : "1000"
+                    }
+                },
+                {
+                    "paramName" : "maxDataSize",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "start" : "120000",
+                    "stop" : "130000",
+                    "params" : {
+                        "value" : "1024"
+                    }
+                }
+            ]
+        },
+        {
+            "name" : "discardHandler",
+            "type" : "com.tacitknowledge.slowlight.proxyserver.handler.DiscardChannelHandler",
+            "params" : {"enabled" : "false", "timeFrame" : "5"},
+            "behaviorFunctions" : [
+                {
+                    "paramName" : "enabled",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "start" : "300000",
+                    "params" : {
+                        "value" : "true"
+                    }
+                }
+            ]
+        }
+    ]
+}
 ```
 
 # Where do I get Slow Light?

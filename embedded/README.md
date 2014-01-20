@@ -154,11 +154,11 @@ to start using it in this mode:
 ### a. classpath configuration
 Add slowlight-embedded.jar to the target (under test) system classpath.
 
-### b. config folder
+### b. conf folder
 In the same folder where the slowlight-embedded.jar is located create a folder called config with the following structure:
        
     slowlight-embedded.jar
-    config
+    conf
       |--slowlight-embedded.config
       |--META-INF
          |--aop.xml
@@ -169,7 +169,7 @@ In the same folder where the slowlight-embedded.jar is located create a folder c
 <aspectj>
     <weaver>
         <include within="com.project.target.package.TargetClass" />
-        <include within="com.tacitknowledge.slowlight.embedded.aspect.DegradationAspect" />
+        <include within="com.tacitknowledge.slowlight.embedded.aspect.*" />
     </weaver>
     <aspects>
         <aspect name="com.tacitknowledge.slowlight.embedded.aspect.DegradationAdvice" />

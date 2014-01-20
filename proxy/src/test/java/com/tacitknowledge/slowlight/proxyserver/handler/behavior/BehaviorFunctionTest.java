@@ -17,19 +17,19 @@ public class BehaviorFunctionTest {
 
 	private static final String TYPE = "com.tacitknowledge.slowlight.proxyserver.handler.behavior.SinusoidalBehavior";
 
-	BehaviorFunction function;
+	IntervalBehaviorFunction function;
 
 	BehaviorFunctionConfig config;
 
 	@Before
 	public void before() {
-		function = spy(new BehaviorFunction() {
+		config = new BehaviorFunctionConfig();
+		function = spy(new IntervalBehaviorFunction(config) {
 			@Override
 			public Object evaluate(Map<String, ?> params) {
 				return null;
 			}
 		});
-		config = new BehaviorFunctionConfig();
 	}
 
 	public void wait(int milliseconds) {
@@ -50,13 +50,13 @@ public class BehaviorFunctionTest {
 
 		wait(5);
 
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertTrue(function.shouldEvaluate());
 	}
 
 	@Test
 	public void shouldEvaluateWithWrongStartTest() {
-		BehaviorFunction function = spy(new BehaviorFunction() {
+		IntervalBehaviorFunction function = spy(new IntervalBehaviorFunction(config) {
 			@Override
 			public Object evaluate(Map<String, ?> params) {
 				return null;
@@ -67,7 +67,7 @@ public class BehaviorFunctionTest {
 		config.setParams(new HashMap<String, String>());
 		config.setStart("10000");
 
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertFalse(function.shouldEvaluate());
 	}
 
@@ -79,7 +79,7 @@ public class BehaviorFunctionTest {
 
 		wait(5);
 
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertFalse(function.shouldEvaluate());
 	}
 
@@ -88,7 +88,7 @@ public class BehaviorFunctionTest {
 		config.setParams(new HashMap<String, String>());
 		config.setStop("20000");
 
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertTrue(function.shouldEvaluate());
 	}
 
@@ -100,7 +100,7 @@ public class BehaviorFunctionTest {
 
 		wait(2000);
 
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertTrue(function.shouldEvaluate());
 	}
 
@@ -112,14 +112,14 @@ public class BehaviorFunctionTest {
 
 		wait(5000);
 
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertFalse(function.shouldEvaluate());
 	}
 
 	@Test
 	public void shouldEvaluateWithNoIntervalTest() {
 		config.setParams(new HashMap<String, String>());
-		function.preEvaluateInit(config);
+		function.init(config);
 		Assert.assertTrue(function.shouldEvaluate());
 	}
 
@@ -151,7 +151,6 @@ public class BehaviorFunctionTest {
 		config.setType(TYPE);
 		config.setStart("12345");
 		config.setStop("12345678");
-		Assert.assertEquals(PARAM_NAME + "_" + TYPE + "[12345" + " - "
-		        + "12345678]", config.getId());
+		Assert.assertEquals(PARAM_NAME + "_" + TYPE + "[12345" + " - " + "12345678]", config.getId());
 	}
 }
