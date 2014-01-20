@@ -44,11 +44,19 @@ import java.util.Map;
  */
 public class BehaviorFunctionConfig extends ParameterizedConfig
 {
+	/**
+	 * name of the parameter to be set by the behavior function
+	 */
     private String paramName;
+	/**
+	 * type of the behavior funtion
+	 */
     private String type;
-	private String start;
-	private String stop;
 
+	/**
+	 * Time intervals in milliseconds for behavior functions to be used for
+	 * parameter setting.
+	 */
 	private Map<String, String> ranges = new HashMap<String, String>();
 
     public String getParamName()
