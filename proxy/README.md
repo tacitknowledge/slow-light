@@ -185,10 +185,16 @@ Slow Light Proxy Server uses Gson to load the ServersConfiguration object graph 
 
 ## behavior functions 
 Behavior functions may be used to change the value of a certain parameter. Every behavior function has configuration parameters like 
-
 paramName, type, ranges, params. ParamName is the name of the parameter to be changed by behavior function. Type is the behavior 
 function class. Ranges represents a set of time intervals indicated in milliseconds. Params a is a set of additional specific paramters
- required for every ehavior function.
+ required for every behavior function.
+ 
+Ranges are indicates as a collection of time interval like in the following example:
+
+````json
+"ranges" : {"10000" : "20000", "30000" : "40000"},
+```
+
 
 ## Running several servers on different ports
 One can run as many servers as needed on different ports. Each server may contain different set of handlers and
