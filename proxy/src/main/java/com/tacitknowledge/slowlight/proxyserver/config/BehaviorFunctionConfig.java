@@ -1,5 +1,8 @@
 package com.tacitknowledge.slowlight.proxyserver.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * This class represents a behavior function configuration model. In order to
  * configure a behavior function specify the name of the handler parameter (ex.
@@ -25,9 +28,8 @@ package com.tacitknowledge.slowlight.proxyserver.config;
  *          "behaviorFunctions" : [
  *              {
  *                  "paramName" : "delay",
- *                  "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.SinusoidalBehavior"
- *                  "start" : "5",
- *                  "stop" : "10"
+ *                  "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.SinusoidalBehavior",
+ *                  "ranges" : {"5" : "10", "10" : "15"}
  *              }
  *          ]
  *      },
@@ -45,6 +47,8 @@ public class BehaviorFunctionConfig extends ParameterizedConfig
     private String type;
 	private String start;
 	private String stop;
+
+	private Map<String, String> ranges = new HashMap<String, String>();
 
     public String getParamName()
     {
@@ -80,6 +84,14 @@ public class BehaviorFunctionConfig extends ParameterizedConfig
 
 	public void setStop(String stop) {
 		this.stop = stop;
+	}
+
+	public Map<String, String> getRanges() {
+		return ranges;
+	}
+
+	public void setRanges(Map<String, String> ranges) {
+		this.ranges = ranges;
 	}
 
 	public String getId() {
