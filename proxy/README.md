@@ -115,6 +115,27 @@ All Slow Light channel handlers will expose their parameters to JMX, as for exam
 those parameters will be 'delay' and 'maxDataSize'. Using a any JMX Client someone could connect to the running Slow Light application
 and adjust the values of those parameters on demand, what will have an immediate effect on the handler behavior.
 
+Following configuration defines an output throughput handler with a time frame of 5 minutes
+
+```json
+"handlers" : [
+    ...
+    {
+        "name" : "outThroughputHandler",
+        "type" : "com.tacitknowledge.slowlight.proxyserver.metrics.OutThroughputHandler",
+        "params" : {"timeFrame" : "300"}
+    },
+    ...
+]
+```
+
+## Available metrics handlers
+
+* com.tacitknowledge.slowlight.proxyserver.metrics.ConnectionCountHandler - counts open connections
+* com.tacitknowledge.slowlight.proxyserver.metrics.ExceptionCountHandler - counts thrown exceptions
+* com.tacitknowledge.slowlight.proxyserver.metrics.InThroughputHandler - computes input throughput
+* com.tacitknowledge.slowlight.proxyserver.metrics.OutThroughputHandler - computes output throughput
+
 An example on how to adjust a handler parameter using jvisualvm:
 
 - go to MBean tab and select slowlight-config folder, where you will see the name of all registered handlers:
