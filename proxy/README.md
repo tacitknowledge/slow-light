@@ -183,7 +183,7 @@ An example on how to adjust a handler parameter using jvisualvm:
 ## configuration notes
 Slow Light Proxy Server uses Gson to load the ServersConfiguration object graph from the specified configuration file.
 
-## behavior functions 
+## Behavior Functions 
 Behavior functions may be used to change the value of a certain parameter. Every behavior function has configuration parameters like 
 paramName, type, ranges, params. ParamName is the name of the parameter to be changed by behavior function. Type is the behavior 
 function class. Ranges represents a set of time intervals indicated in milliseconds. Params a is a set of additional specific paramters
@@ -196,7 +196,9 @@ Ranges are indicates as a collection of time intervals like in the following exa
 ```
 Limits of each interval are delimited by a colomn and different time intervals are separated by a comma. In the above example 
 the first time interval starts at 10000 milliseconds from the begining of program and ends at 20000 milliseconds from the 
-begining of program.
+begining of program. The second time interval starts at 30000 milliseconds and ends at  40000 milliseconds.
+
+
 
 
 ## Running several servers on different ports
