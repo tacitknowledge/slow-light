@@ -111,11 +111,14 @@ This configuration contains 3 scenarios:
 
 ## JMX
 
-All Slow Light channel handlers will expose their parameters to JMX, as for example in case of DelayChannelHandler
-those parameters will be 'delay' and 'maxDataSize'. Using a any JMX Client someone could connect to the running Slow Light application
-and adjust the values of those parameters on demand, what will have an immediate effect on the handler behavior.
+Following metrics handlers are available
 
-Following configuration defines an output throughput handler with a time frame of 5 minutes
+* com.tacitknowledge.slowlight.proxyserver.metrics.ConnectionCountHandler - counts open connections
+* com.tacitknowledge.slowlight.proxyserver.metrics.ExceptionCountHandler - counts thrown exceptions
+* com.tacitknowledge.slowlight.proxyserver.metrics.InThroughputHandler - computes input throughput
+* com.tacitknowledge.slowlight.proxyserver.metrics.OutThroughputHandler - computes output throughput
+
+This configuration defines an output throughput handler with a time frame of 5 minutes
 
 ```json
 "handlers" : [
@@ -129,12 +132,17 @@ Following configuration defines an output throughput handler with a time frame o
 ]
 ```
 
-## Available metrics handlers
+Throughput metric is computed at two levels :
 
-* com.tacitknowledge.slowlight.proxyserver.metrics.ConnectionCountHandler - counts open connections
-* com.tacitknowledge.slowlight.proxyserver.metrics.ExceptionCountHandler - counts thrown exceptions
-* com.tacitknowledge.slowlight.proxyserver.metrics.InThroughputHandler - computes input throughput
-* com.tacitknowledge.slowlight.proxyserver.metrics.OutThroughputHandler - computes output throughput
+ * Channel - computes an average throughput (bytes/second) for a given channel
+ * Time frame - defines a fixed period of time for throughput metric. Handler resets the metric when given time
+   frame expires
+
+![alt text](images/Throughput.png "Throughput metric")
+
+All Slow Light channel handlers will expose their parameters to JMX, as for example in case of DelayChannelHandler
+those parameters will be 'delay' and 'maxDataSize'. Using a any JMX Client someone could connect to the running Slow Light application
+and adjust the values of those parameters on demand, what will have an immediate effect on the handler behavior.
 
 An example on how to adjust a handler parameter using jvisualvm:
 
