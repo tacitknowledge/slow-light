@@ -24,7 +24,7 @@ public class BehaviorFunctionTest {
 	@Before
 	public void before() {
 		config = new BehaviorFunctionConfig();
-		function = spy(new IntervalBehaviorFunction(config) {
+		function = spy(new IntervalBehaviorFunction() {
 			@Override
 			public Object evaluate(Map<String, ?> params) {
 				return null;
@@ -45,18 +45,18 @@ public class BehaviorFunctionTest {
 	public void shouldEvaluateWithCorrectStartTest() {
 
 		BehaviorFunctionConfig config = new BehaviorFunctionConfig();
-		config.setStart("1");
-		config.setParams(new HashMap<String, String>());
+		Map<String, String> ranges = new HashMap<String, String>();
+		config.setRanges(new HashMap<String, String>());
+		config.getRanges().put("1", null);
 
 		wait(5);
 
-		function.init(config);
-		Assert.assertTrue(function.shouldEvaluate());
+		Assert.assertTrue(function.shouldEvaluate(config));
 	}
 
 	@Test
 	public void shouldEvaluateWithWrongStartTest() {
-		IntervalBehaviorFunction function = spy(new IntervalBehaviorFunction(config) {
+		IntervalBehaviorFunction function = spy(new IntervalBehaviorFunction() {
 			@Override
 			public Object evaluate(Map<String, ?> params) {
 				return null;
@@ -64,63 +64,53 @@ public class BehaviorFunctionTest {
 		});
 
 		BehaviorFunctionConfig config = new BehaviorFunctionConfig();
-		config.setParams(new HashMap<String, String>());
-		config.setStart("10000");
+		config.getRanges().put("10000", "");
 
-		function.init(config);
-		Assert.assertFalse(function.shouldEvaluate());
+		Assert.assertFalse(function.shouldEvaluate(config));
 	}
 
 	@Test
 	public void shouldEvaluateWithWrongEndTest() {
 		BehaviorFunctionConfig config = new BehaviorFunctionConfig();
 		config.setParams(new HashMap<String, String>());
-		config.setStop("2");
+		config.getRanges().put("", "2");
 
 		wait(5);
 
-		function.init(config);
-		Assert.assertFalse(function.shouldEvaluate());
+		Assert.assertFalse(function.shouldEvaluate(config));
 	}
 
 	@Test
 	public void shouldEvaluateWithCorrectEndTest() {
 		config.setParams(new HashMap<String, String>());
-		config.setStop("20000");
+		config.getRanges().put("", "20000");
 
-		function.init(config);
-		Assert.assertTrue(function.shouldEvaluate());
+		Assert.assertTrue(function.shouldEvaluate(config));
 	}
 
 	@Test
 	public void shouldEvaluateWithCorrectIntervalTest() {
 		config.setParams(new HashMap<String, String>());
-		config.setStop("5000");
-		config.setStart("1000");
+		config.getRanges().put("1000", "5000");
 
 		wait(2000);
 
-		function.init(config);
-		Assert.assertTrue(function.shouldEvaluate());
+		Assert.assertTrue(function.shouldEvaluate(config));
 	}
 
 	@Test
 	public void shouldEvaluateWithWrongIntervalTest() {
 		config.setParams(new HashMap<String, String>());
-		config.setStop("5000");
-		config.setStart("1000");
+		config.getRanges().put("1000", "5000");
 
 		wait(5000);
 
-		function.init(config);
-		Assert.assertFalse(function.shouldEvaluate());
+		Assert.assertFalse(function.shouldEvaluate(config));
 	}
 
 	@Test
 	public void shouldEvaluateWithNoIntervalTest() {
-		config.setParams(new HashMap<String, String>());
-		function.init(config);
-		Assert.assertTrue(function.shouldEvaluate());
+		Assert.assertTrue(function.shouldEvaluate(config));
 	}
 
 	@Test
@@ -149,8 +139,7 @@ public class BehaviorFunctionTest {
 	public void getIdTest() {
 		config.setParamName(PARAM_NAME);
 		config.setType(TYPE);
-		config.setStart("12345");
-		config.setStop("12345678");
+		config.getRanges().put("12345", "12345678");
 		Assert.assertEquals(PARAM_NAME + "_" + TYPE + "[12345" + " - " + "12345678]", config.getId());
 	}
 }

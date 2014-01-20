@@ -13,56 +13,38 @@ import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
  */
 public abstract class IntervalBehaviorFunction implements BehaviorFunction
 {
+	/**
+	 * Time at which was initiated this function.
+	 */
 	private final long initTime = System.currentTimeMillis();
 
-	private Long start;
-	private Long stop;
-
-    public IntervalBehaviorFunction(final BehaviorFunctionConfig config)
+	/**
+	 * Convert a string value into a long value. This is an utility function
+	 * that should be moved into an other class
+	 *
+	 * @param value
+	 *            that should be parsed into a long value
+	 * @return
+	 */
+	public Long getMilliseconds(String value)
     {
-        init(config);
-    }
-
-    /**
-     * Initialize behavior function.
-     *
-     * @param config behavior function configuration
-     */
-	public void init(BehaviorFunctionConfig config)
-    {
-		setStart(config.getStart());
-		setStop(config.getStop());
-	}
-
-    public IntervalBehaviorFunction setStart(String start)
-    {
-		if (!StringUtils.isEmpty(start))
+		if (!StringUtils.isEmpty(value))
         {
-			this.start = Long.parseLong(start);
+			return Long.parseLong(value);
 		}
         else
         {
-			this.start = null;
+			return null;
 		}
-
-		return this;
 	}
 
-    public IntervalBehaviorFunction setStop(String stop)
-    {
-		if (!StringUtils.isEmpty(stop))
-        {
-			this.stop = Long.parseLong(stop);
-		}
-        else
-        {
-			this.stop = null;
-		}
-
-		return this;
-	}
-
-	protected boolean shouldEvaluate()
+	/**
+	 * Test if this behavior function should be evaluated for a given time
+	 * range.
+	 *
+	 * @return verification result.
+	 */
+	protected boolean shouldEvaluate(Long start, Long stop)
     {
 
 		if (start == null && stop == null)
@@ -90,27 +72,28 @@ public abstract class IntervalBehaviorFunction implements BehaviorFunction
 		return false;
 	}
 
+	/**
+	 * Check if this behavior function should be evaluated at a certain time.
+	 * Consider all time ranges.
+	 *
+	 * @return verification result
+	 */
 	@Override
 	public boolean shouldEvaluate(BehaviorFunctionConfig functionConfig)
 	{
+		if (functionConfig.getRanges() == null
+		        || functionConfig.getRanges().isEmpty()) {
+			return true;
+		}
+
 		Iterator<String> keys = functionConfig.getRanges().keySet().iterator();
 		while (keys.hasNext()) {
 			String start = keys.next();
 			String stop = functionConfig.getRanges().get(start);
-			preEvaluateInit(start, stop);
-			if (shouldEvaluate()) {
+			if (shouldEvaluate(getMilliseconds(start), getMilliseconds(stop))) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	public void preEvaluateInit(BehaviorFunctionConfig config) {
-		preEvaluateInit(config.getStart(), config.getStop());
-	}
-
-	protected void preEvaluateInit(String start, String stop) {
-		setStart(start);
-		setStop(stop);
 	}
 }

@@ -155,7 +155,8 @@ public abstract class AbstractChannelHandler extends ChannelDuplexHandler
         try
         {
             final Class<?> behaviorFunctionClass = Class.forName(config.getType());
-            return (BehaviorFunction) behaviorFunctionClass.getConstructor(BehaviorFunctionConfig.class).newInstance(config);
+			return (BehaviorFunction) behaviorFunctionClass.getConstructor()
+			        .newInstance();
         }
         catch (Exception e)
         {

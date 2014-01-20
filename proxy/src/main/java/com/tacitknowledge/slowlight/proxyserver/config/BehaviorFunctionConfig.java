@@ -1,6 +1,7 @@
 package com.tacitknowledge.slowlight.proxyserver.config;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -70,22 +71,6 @@ public class BehaviorFunctionConfig extends ParameterizedConfig
         this.type = type;
     }
 
-	public String getStart() {
-		return start;
-	}
-
-	public void setStart(String start) {
-		this.start = start;
-	}
-
-	public String getStop() {
-		return stop;
-	}
-
-	public void setStop(String stop) {
-		this.stop = stop;
-	}
-
 	public Map<String, String> getRanges() {
 		return ranges;
 	}
@@ -95,7 +80,20 @@ public class BehaviorFunctionConfig extends ParameterizedConfig
 	}
 
 	public String getId() {
-		return paramName + "_" + type + "["
- + start + " - " + stop + "]";
+		StringBuilder id = new StringBuilder(paramName);
+		id.append("_").append(type);
+
+		if (ranges == null) {
+			return id.toString();
+		}
+
+		Iterator<String> keys = ranges.keySet().iterator();
+		while (keys.hasNext()) {
+			String key = keys.next();
+			id.append("[").append(key).append(" - ").append(ranges.get(key))
+			        .append("]");
+		}
+
+		return id.toString();
 	}
 }

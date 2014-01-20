@@ -19,7 +19,6 @@ import org.mockito.Matchers;
 
 import com.tacitknowledge.slowlight.proxyserver.config.BehaviorFunctionConfig;
 import com.tacitknowledge.slowlight.proxyserver.config.HandlerConfig;
-import com.tacitknowledge.slowlight.proxyserver.handler.behavior.IntervalBehaviorFunction;
 
 /**
  * @author Alexandr Donciu (adonciu@tacitknowledge.com)
@@ -60,23 +59,21 @@ public class DelayChannelHandlerTest extends BaseChannelHandlerTest
 
 		BehaviorFunctionConfig firstFunctionConfig = new BehaviorFunctionConfig();
 		firstFunctionConfig.setParamName("name1");
+		firstFunctionConfig.getParams().put("value", "12");
 		firstFunctionConfig
-		        .setType("com.tacitknowledge.slowlight.proxyserver.handler.TestFunction1");
+		        .setType("com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior");
 
-		Map ranges1 = new HashMap<String, String>();
-		ranges1.put("0", "10000");
-		firstFunctionConfig.setRanges(ranges1);
+		firstFunctionConfig.getRanges().put("0", "10000");
 
 		behaviorFunctions.add(firstFunctionConfig);
 
 		BehaviorFunctionConfig secondFunctionConfig = new BehaviorFunctionConfig();
 		secondFunctionConfig.setParamName("name1");
+		secondFunctionConfig.getParams().put("value", "24");
 		secondFunctionConfig
-		        .setType("com.tacitknowledge.slowlight.proxyserver.handler.TestFunction2");
+		        .setType("com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior");
 
-		Map ranges2 = new HashMap<String, String>();
-		ranges2.put("10000", "");
-		secondFunctionConfig.setRanges(ranges2);
+		secondFunctionConfig.getRanges().put("10000", "");
 
 		behaviorFunctions.add(secondFunctionConfig);
 
@@ -116,36 +113,4 @@ public class DelayChannelHandlerTest extends BaseChannelHandlerTest
 		        .get(delayChannelHandler);
 		Assert.assertEquals(24, handlerParamsMap.getInt("name1"));
 	}
-}
-
-class TestFunction1 extends IntervalBehaviorFunction
-{
-
-    public TestFunction1(final BehaviorFunctionConfig config)
-    {
-        super(config);
-    }
-
-    @Override
-    public Object evaluate(Map<String, ?> params)
-    {
-
-        return 12;
-    }
-}
-
-class TestFunction2 extends IntervalBehaviorFunction
-{
-
-    public TestFunction2(final BehaviorFunctionConfig config)
-    {
-        super(config);
-    }
-
-    @Override
-    public Object evaluate(Map<String, ?> params)
-    {
-
-        return 24;
-    }
 }
