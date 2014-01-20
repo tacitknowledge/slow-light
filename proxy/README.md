@@ -33,11 +33,48 @@ This configuration will run server on localhost:10011 and will proxy requests to
             "params" : {
                 "host" : "google.com",
                 "port" : "80"
-            }
+            },
+            "handlers" : [
+            ]
         }
     ]
 }
 ```
+
+The following are the key elements of Slow Light configuration:
+
+* __serverTypes__ - this section allows to declared any available server implementations, in our case there are two *simple* and *proxy*.
+Once a server implementation is declared here it can be used as server type in servers section.
+
+* __servers__ - this is the main configuration section where we provide all server definitions that follow to be started by Slow Light.
+Here we can have as many servers as we want. In our example we defined a proxy server which will listen on local port 10011 and will
+pass all requests to the specified host and port from params attribute.
+
+* __id__ - each server must have an unique id
+* __type__ - this is the server type as defined in serverTypes section
+* __localPort__ - the local port this server will listen on
+* __params__ - params allows to define additional server parameters, those parameters depends directly on the server implementation,
+in case of proxy server implementation those parameters are *host* and *port* what corresponds to the proxied remote server host and port.
+
+* __handlers__ - a list of server handlers (or server handlers pipeline), those handlers play the most import role in defining server
+behavior. Despite the fact that in our example this list is empty, normally this will be a list of meaningful handlers which will be
+applied to requests in the order they are defined, and for responses in the reverse order. Also the list could be empty or may be missing
+from the configuration in which case there will be no impact on the request/response, server will act as a simple proxy.
+
+### Server implementations
+
+* __com.tacitknowledge.slowlight.proxyserver.server.simple.SimpleServer__ - a server with no initial logic by default, someone
+could define handlers pipeline as per desired behavior.
+* __com.tacitknowledge.slowlight.proxyserver.server.proxy.ProxyServer__ - a server that will initially act as a proxy to the specified
+target host, similar to the simple server behavior of the proxy server could be altered by defining handlers pipeline.
+
+### Handlers implementations
+
+* __com.tacitknowledge.slowlight.proxyserver.handler.CloseConnectionChannelHandler__ - closes connection after a given time
+* __com.tacitknowledge.slowlight.proxyserver.handler.DelayChannelHandler__ - delays response data by specified time
+* __com.tacitknowledge.slowlight.proxyserver.handler.DiscardChannelHandler__ - discards request data and keeps the connection open
+* __com.tacitknowledge.slowlight.proxyserver.handler.RandomDataChannelHandler__ - generates random data by specified parameters
+* __com.tacitknowledge.slowlight.proxyserver.handler.LogChannelHandler__ - logs some basic information about request/response messages
 
 ### Timed delays and packet discards
 
@@ -100,14 +137,6 @@ This configuration contains 3 scenarios:
     ]
 }
 ```
-
-## Available handlers
-
-* com.tacitknowledge.slowlight.proxyserver.handler.CloseConnectionChannelHandler - closes connection after a given time
-* com.tacitknowledge.slowlight.proxyserver.handler.DelayChannelHandler - delays response data by specified time
-* com.tacitknowledge.slowlight.proxyserver.handler.DiscardChannelHandler - discards request data and keeps the connection open
-* com.tacitknowledge.slowlight.proxyserver.handler.RandomDataChannelHandler - generates random data by specified parameters
-* com.tacitknowledge.slowlight.proxyserver.handler.LogChannelHandler - logs some basic information about request/response messages
 
 ## JMX
 
