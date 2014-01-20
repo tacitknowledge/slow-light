@@ -62,15 +62,22 @@ public class DelayChannelHandlerTest extends BaseChannelHandlerTest
 		firstFunctionConfig.setParamName("name1");
 		firstFunctionConfig
 		        .setType("com.tacitknowledge.slowlight.proxyserver.handler.TestFunction1");
-		firstFunctionConfig.setStart("1");
-		firstFunctionConfig.setStop("10000");
+
+		Map ranges1 = new HashMap<String, String>();
+		ranges1.put("0", "10000");
+		firstFunctionConfig.setRanges(ranges1);
+
 		behaviorFunctions.add(firstFunctionConfig);
 
 		BehaviorFunctionConfig secondFunctionConfig = new BehaviorFunctionConfig();
 		secondFunctionConfig.setParamName("name1");
 		secondFunctionConfig
 		        .setType("com.tacitknowledge.slowlight.proxyserver.handler.TestFunction2");
-		secondFunctionConfig.setStart("10000");
+
+		Map ranges2 = new HashMap<String, String>();
+		ranges2.put("10000", "");
+		secondFunctionConfig.setRanges(ranges2);
+
 		behaviorFunctions.add(secondFunctionConfig);
 
 		Map params = new HashMap();
