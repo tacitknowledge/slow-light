@@ -183,6 +183,13 @@ An example on how to adjust a handler parameter using jvisualvm:
 ## configuration notes
 Slow Light Proxy Server uses Gson to load the ServersConfiguration object graph from the specified configuration file.
 
+## behavior functions 
+Behavior functions may be used to change the value of a certain parameter. Every behavior function has configuration parameters like 
+
+paramName, type, ranges, params. ParamName is the name of the parameter to be changed by behavior function. Type is the behavior 
+function class. Ranges represents a set of time intervals indicated in milliseconds. Params a is a set of additional specific paramters
+ required for every ehavior function.
+
 ## Running several servers on different ports
 One can run as many servers as needed on different ports. Each server may contain different set of handlers and
 different proxy delegates.
