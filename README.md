@@ -128,8 +128,7 @@ This configuration proxies calls between port *10011* and *google.com:80*:
                 {
                     "paramName" : "delay",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
-                    "start" : "120000",
-                    "stop" : "130000",
+                    "ranges" : {"120000" : "130000"},
                     "params" : {
                         "value" : "1000"
                     }
@@ -137,8 +136,7 @@ This configuration proxies calls between port *10011* and *google.com:80*:
                 {
                     "paramName" : "maxDataSize",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
-                    "start" : "120000",
-                    "stop" : "130000",
+                    "ranges" : {"120000" : "130000"},
                     "params" : {
                         "value" : "1024"
                     }
@@ -153,8 +151,8 @@ This configuration proxies calls between port *10011* and *google.com:80*:
                 {
                     "paramName" : "enabled",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
-                    "start" : "300000",
-                    "params" : {
+                    "ranges" : {"300000" : ""},
+		    "params" : {
                         "value" : "true"
                     }
                 }
