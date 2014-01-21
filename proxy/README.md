@@ -134,6 +134,19 @@ This configuration contains 3 scenarios:
     ]
 }
 ```
+## Behavior Functions 
+Behavior functions may be used to change the value of a certain parameter for the related handler. Every behavior function has configuration
+parameters like paramName, type, ranges and params. ParamName is the name of the parameter to be changed by behavior function. Type parameter 
+is the fully qualified implementation class. Ranges parameter represents a set of time intervals indicated in milliseconds and only during 
+these time intervals a behavior function will be applied. Params a is a set of additional specific parameters specific for every behavior 
+function. Ranges are indicated as a collection of time intervals like in the following example:
+
+````json
+"ranges" : {"10000" : "20000", "30000" : "40000"},
+```
+Limits of each interval are delimited by a column. Different time intervals are separated by a comma. In the above example, 
+the first time interval starts at 10000 milliseconds from the beginning of program and ends at 20000 milliseconds from the 
+beginning of program. The second time interval starts at 30000 milliseconds and ends at 40000 milliseconds.
 
 ## JMX
 
@@ -182,21 +195,6 @@ An example on how to adjust a handler parameter using jvisualvm:
 
 ## configuration notes
 Slow Light Proxy Server uses Gson to load the ServersConfiguration object graph from the specified configuration file.
-
-## Behavior Functions 
-Behavior functions may be used to change the value of a certain parameter. Every behavior function has configuration parameters like 
-paramName, type, ranges and params. ParamName is the name of the parameter to be changed by behavior function. Type is the behavior 
-function class. Ranges represents a set of time intervals indicated in milliseconds and only during these time intervals a behavior 
-function will be applied. Params a is a set of additional specific parameters required for every behavior function.
- 
-Ranges are indicates as a collection of time intervals like in the following example:
-
-````json
-"ranges" : {"10000" : "20000", "30000" : "40000"},
-```
-Limits of each interval are delimited by a column and different time intervals are separated by a comma. In the above example 
-the first time interval starts at 10000 milliseconds from the beginning of program and ends at 20000 milliseconds from the 
-beginning of program. The second time interval starts at 30000 milliseconds and ends at  40000 milliseconds.
 
 ## Running several servers on different ports
 One can run as many servers as needed on different ports. Each server may contain different set of handlers and
