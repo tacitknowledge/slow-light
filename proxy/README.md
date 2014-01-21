@@ -144,7 +144,7 @@ function. Ranges are indicated as a collection of time intervals like in the fol
 ````json
 "ranges" : {"10000" : "20000", "30000" : "40000"},
 ```
-Limits of each interval are delimited by a column. Different time intervals are separated by a comma. In the above example, 
+Limits of each interval are separated by a column. Different time intervals are separated by a comma. In the above example, 
 the first time interval starts at 10000 milliseconds from the beginning of program and ends at 20000 milliseconds from the 
 beginning of program. The second time interval starts at 30000 milliseconds and ends at 40000 milliseconds.
 
