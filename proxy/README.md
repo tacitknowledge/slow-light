@@ -101,7 +101,7 @@ This configuration contains 3 scenarios:
                 {
                     "paramName" : "delay",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
-                    "ranges" : {"10000" : "20000", "40000" : "50000" },
+                    "ranges" : {"120000" : "130000"},
                     "params" : {
                         "value" : "1000"
                     }
@@ -109,7 +109,7 @@ This configuration contains 3 scenarios:
                 {
                     "paramName" : "maxDataSize",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
-                    "ranges" : {"20000" : "30000"},
+                    "ranges" : {"120000" : "130000"},
                     "params" : {
                         "value" : "1024"
                     }
@@ -124,7 +124,7 @@ This configuration contains 3 scenarios:
                 {
                     "paramName" : "enabled",
                     "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
-                    "ranges" : {"30000" : "40000"},
+                    "ranges" : {"300000" : "400000"},
                     "params" : {
                         "value" : "true"
                     }
