@@ -162,6 +162,10 @@ This configuration proxies calls between port *10011* and *google.com:80*:
 }
 ```
 
+For detailed information on how to configure and use Slow Light please use the following links:
+* [Slow Light Embedded](embedded)
+* [Slow Light Proxy Server](proxy)
+
 # Where do I get Slow Light?
 -------------------------
 Slow Light is open source and is hosted at
