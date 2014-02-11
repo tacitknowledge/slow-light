@@ -154,11 +154,11 @@ to start using it in this mode:
 ### a. classpath configuration
 Add slowlight-embedded.jar to the target (under test) system classpath.
 
-### b. conf folder
+### b. config folder
 In the same folder where the slowlight-embedded.jar is located create a folder called config with the following structure:
        
     slowlight-embedded.jar
-    conf
+    config
       |--slowlight-embedded.config
       |--META-INF
          |--aop.xml
@@ -181,6 +181,10 @@ Where for example com.project.target.package.TargetClass is the fully qualified 
 you want "degradation behaviour" to be applied, instead of specifing a concrete class you can specify
 a whole package example com.project.target.package.*. Anyway since this is a pure AspectJ config
 you can find detailed information in AspectJ documentation.
+
+__Note:__ it may seem strange but please make sure that __com.tacitknowledge.slowlight.embedded.aspect.*__ package is declared
+in __weaver__ section as well, otherwise it will throw a NoSuchMethodError at runtime. This is related to an AspectJ defect,
+for more details please refer to https://bugs.eclipse.org/bugs/show_bug.cgi?id=362411.
 
 **slowlight-embedded.config** stands for degradation rules configuration and could be seen
 as a mapping between degradation rule and class/methods, or in other words to what classes 

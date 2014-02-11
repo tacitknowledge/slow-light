@@ -40,7 +40,7 @@ responses according to configuration and concurrency rules.
 Slow Light Embedded requires altering code within your application or IoC configuration.  This is a fairly simple
 process when using Spring, Guice, PicoContainer, or other IoC injectors that support an AOP model.  When not using one
 of these tools, Slow Light Embedded is usually done at service instantiation - often using existing factories.  Many
-people provide toggling that enables or disables Slow Light Embedded.
+people provide toggling that enables or disables Slow Light Embedded (for an example of feature toggle please see https://github.com/tacitknowledge/flip).
 
 _with Hystrix_
 With a Fault Tolerance tool like Hystrix, which also proxies/wraps Service APIs, we insert Hystrix around Slow Light.
