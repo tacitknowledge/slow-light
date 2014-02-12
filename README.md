@@ -4,41 +4,74 @@ Slow Light [![Build Status](https://secure.travis-ci.org/tacitknowledge/slow-lig
 In 1999, Danish physicist Lene Vestergaard Hau led a combined team from Harvard University and the Rowland Institute
 for Science which succeeded in slowing a beam of light to about 17 meters per second.
 
-Slow Light is a Java Proxying tool that degrades response times of object methods as concurrency increases.
+Slow Light degrades response times of object methods and synchronous remote calls as concurrency increases.
 
 We've used it primarily to test monitoring and fault tolerance of integration points under scalability tests.  We love
 using it to test [Hystrix](https://github.com/Netflix/Hystrix) integrations and configurations.
 
 # Introduction and Motivation
 
-Slow Light allows one to proxy an interface with an InvocationHandler, the DegradationHandler, that provides a thread
-pool which constrains and slows throughput through an object or class.  Slow Light can be configured to generate error
-responses and exceptions as pool utilization increases and response time degrades.
+Slow Light consists of two sibling tools, [Slow Light Embedded](embedded) and [Slow Light Proxy Server](proxy). Both tools interpose themselves
+between a caller and an API to degrade responses, either with response times or error creation.
 
-Newly updated, it includes more flexible support for failure modes, checked exception handling, and
-general degradation configuration.
+_Why do this?_ We've found that certain points in system architectures will inevitably experience degradation and
+failure.  For instance, an application may leverage a remote address validation service.  That address validation
+service, at some point in the future, will probably have an outage or scaling issues or just the network will fail.
+Slow Light provides us with the ability to examine the client application's behavior under a variety of scenarios
+where a remote service is having issues.  Typically, this is done during performance testing; it often exposes
+situations where calls results can be cached better or logic can be made fault tolerant.  We've even seen situations
+where degraded responses with a third party caused out-of-memory errors in the JVM because objects could not be released
+to garbage collection frequently enough under load.
 
+When Slow Light is combined with specialized Fault Tolerance tools such as [Hystrix](https://github.com/Netflix/Hystrix),
+Slow Light becomes similar to testing smoke alarms and automatic sprinkler systems.  Slow Light creates the smoke which
+triggers fault tolerance code and sets of alarms.
 
-# Dependencies
-Just Java, no third party libraries outside the unit testing frameworks.
+# Slow Light Architectures
 
-# Where do I get Slow Light?
--------------------------
-Slow Light is open source and is hosted at
-[Github](http://github.com/tacitknowledge/slow-light).
+**Slow Light Embedded**
 
-You can include Slow Light in your Maven project via:
+[Slow Light Embedded](embedded) runs inside a Java Process and wraps service interfaces with a [Java Proxy](http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Proxy.html) that incorporates a
+ThreadPool and specialized InvocationHandler; the handler monitors concurrency on the ThreadPool and degrades Proxy
+responses according to configuration and concurrency rules.
 
-    <dependency>
-      <groupId>com.tacitknowledge</groupId>
-      <artifactId>slowlight</artifactId>
-      <version>1.0.1</version>
-    </dependency>
+![alt text](images/SlowLightEmbedded.png "Embedded Architecture")
 
+Slow Light Embedded requires altering code within your application or IoC configuration.  This is a fairly simple
+process when using Spring, Guice, PicoContainer, or other IoC injectors that support an AOP model.  When not using one
+of these tools, Slow Light Embedded is usually done at service instantiation - often using existing factories.  Many
+people provide toggling that enables or disables Slow Light Embedded (for an example of feature toggle please see https://github.com/tacitknowledge/flip).
+
+_with Hystrix_
+With a Fault Tolerance tool like Hystrix, which also proxies/wraps Service APIs, we insert Hystrix around Slow Light.
+Slow Light itself wraps
+
+![alt text](images/SlowLightEmbeddedWithHystrix.png "Embedded With Hystrix")
+
+**Slow Light Proxy Server**
+
+[Slow Light Proxy Server](proxy) is a standalone JVM application that proxies remote, synchronous TCP/IP calls.  It does not require
+altering code in client applications as it runs external to the process.  Slow Light Proxy Server uses [Netty](http://netty.io/) and some special
+ChannelHandler implementations to slow, delay, discard, forward, and generally play mischevious games with remote
+calls.
+
+![alt text](images/SlowLightProxy.png "Proxy Architecture")
+
+_with Hystrix_
+
+When using Slow Light Proxy Server with a Fault Tolerance tool like Hystrix, you can achieve the same smoke and smoke alarm
+behavior as Slow Light Embedded.
+
+![alt text](images/SlowLightProxyWithHystrix.png "Proxy With Hystrix")
+
+A disadvantage of Slow Light Proxy Server is that it can't create faults and degradation with system resources like file I/O.
+If you need to simulate failures in non-network resources, use Slow Light Embedded.
 
 # Use it!
 
-The DegradationHandlerIntegrationTest shows a number of different modes, but in general you just need to do these things:
+__A Sample from Slow Light Embedded__
+
+In general you just need to do these things:
 ```java
  //This object needs to have an interface to proxy, but can be real app code, a real service, or a stub
  //  supporting concrete classes without interfaces is a future TODO
@@ -70,100 +103,99 @@ The DegradationHandlerIntegrationTest shows a number of different modes, but in 
  //                  AOP stuff, or JNDI
 ```
 
-# Some Sample Configurations
-Most everything is driven through the DefaultDegradationStrategy.
+__A Sample from Slow Light Proxy Server__
 
-Setting up a pass through configuration with no degradation.
+This configuration proxies calls between port *10011* and *google.com:80*:
+* Simple Proxy (first 2 min)
+* Proxy with specified (1KB/s) timed delays (after 2 min)
+* Discard incoming packets and keep connection open (after 5 min)
 
-While pool size is constrained,  service calls immediately
-execute, response times are never delayed, and no errors are created or Exceptions thrown.
-```java
-long serviceDemandTime = 0L;
-long serviceTimeout = 0L;
-double passRate = 1.0;
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate
-          );
-```
-Setting up a roughly constant delay on response times.
-```java
-// set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
-long serviceDemandTime = 500L;
-//When timeout matches demand time, response times do not increase as utilization increases
-long serviceTimeout = 500L;
-double passRate = 1.0; // 100% pass rate so no errors occur
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate
-          );
-```
-
-Setting up a a degradation curve.
-```java
-// set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
-long serviceDemandTime = 500L;
-//When service timeout is greater than response time, responses will be delayed by a general scaling function
-// of Math.exp(pool utilization).  This scaling function maxes at around the serviceTimeout value
-long serviceTimeout = 1500L;
-double passRate = 1.0; // 100% pass rate so no errors occur
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate
-          );
-```
-
-Setting up a a degradation curve and throwing errors
-```java
-// set up a base 500 ms response.  Note: it will be randomized to something between 75% and 125% of the service demand
-long serviceDemandTime = 500L;
-//When service timeout is greater than response time, responses will be delayed by a general scaling function
-// of Math.exp(pool utilization).  This scaling function maxes at around the serviceTimeout value
-long serviceTimeout = 1500L;
-// 90% pass rate.  Roughly, this means that when the adjusted response time is over 93% of the service timeout
-// the system will throw an Exception randomly selected from an array
-double passRate = 0.9;
-//Exceptions to throw.  Will try and use the new Exception(String s) constructor, then fall back on default.
-//    don't add any checked exceptions which aren't part of the API on your target object.
-Class exceptions = new Class[]{MyException.class}
-
-DegradationStrategy degradationStrategy
-        = new DefaultDegradationStrategy(serviceDemandTime,
-                serviceTimeout,
-                passRate,
-                exceptions
-          );
+```json
+{
+    "id" : "solrServer",
+    "type" : "proxy",
+    "localPort" : "9012",
+    "params" : {
+        "host" : "localhost",
+        "port" : "8983"
+    },
+    "handlers" : [
+        {
+            "name" : "delayHandler",
+            "type" : "com.tacitknowledge.slowlight.proxyserver.handler.DelayChannelHandler",
+            "params" : {"maxDataSize" : "0", "delay" : "0", "timeFrame" : "5"},
+            "behaviorFunctions" : [
+                {
+                    "paramName" : "delay",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "ranges" : {"120000" : "130000"},
+                    "params" : {
+                        "value" : "1000"
+                    }
+                },
+                {
+                    "paramName" : "maxDataSize",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "ranges" : {"120000" : "130000"},
+                    "params" : {
+                        "value" : "1024"
+                    }
+                }
+            ]
+        },
+        {
+            "name" : "discardHandler",
+            "type" : "com.tacitknowledge.slowlight.proxyserver.handler.DiscardChannelHandler",
+            "params" : {"enabled" : "false", "timeFrame" : "5"},
+            "behaviorFunctions" : [
+                {
+                    "paramName" : "enabled",
+                    "type" : "com.tacitknowledge.slowlight.proxyserver.handler.behavior.LinearBehavior",
+                    "ranges" : {"300000" : ""},
+		    "params" : {
+                        "value" : "true"
+                    }
+                }
+            ]
+        }
+    ]
+}
 ```
 
-Setting up a a degradation curve and returning an error object
-You may want to do this if the interface short circuits errors and returns a default object, such as something
-representing "Service not available.  Please try later".  Not really an exception, but a valid and not helpful response.
-```java
-long serviceDemandTime = 500L;
-long serviceTimeout = 1500L;
-double passRate = 0.9;
-//can be any Object.  Here, just using a non-zero int
-final Integer errorObject = new Integer(25);
-DegradationStrategy = new DefaultDegradationStrategy(serviceDemandTime,
-        serviceTimeout,
-        //again, 90%.
-        passRate,
-        new Class[]{FileNotFoundException.class},
-        //here's the errorObject we want to return when the 10% failures occur
-        errorObject,
-        //setting this priority causes error objects to be returned rather than Exceptions thrown
-        FailurePriority.ERROR_OBJECT,
-        //FastFail true causes the response to immediately return rather than be delayed
-        FastFail.TRUE,
-        //this boolean will cause pool items to timeout if set to true.
-        //  basically future.get(serviceTimeout,TimeUnit.MILLIS)
-        false
-    );
+For detailed information on how to configure and use Slow Light please use the following links:
+* [Slow Light Embedded](embedded)
+* [Slow Light Proxy Server](proxy)
 
-```
+# Where do I get Slow Light?
+-------------------------
+Slow Light is open source and is hosted at
+[Github](http://github.com/tacitknowledge/slow-light).
+
+You can include Slow Light Embedded in your project via:
+
+    Maven dependency:
+
+        <dependency>
+          <groupId>com.tacitknowledge</groupId>
+          <artifactId>slowlight</artifactId>
+          <version>1.0.1</version>
+        </dependency>
+
+    Ivy dependency:
+
+        <dependency org="com.tacitknowledge" name="slowlight" rev="1.0.1" />
+
+    Grapes dependency:
+
+        @Grapes(
+            @Grab(group='com.tacitknowledge', module='slowlight', version='1.0.1')
+        )
+
+    Gradle dependency:
+
+        'com.tacitknowledge:slowlight:1.0.1'
+
+Slow Light Proxy Server is not yet released as a jar, but you can build it from code in our _development_ branch
 
 # Notes
 The default implementations are thread safe.  You can re-use a single proxy across threads, assuming the target object
@@ -171,5 +203,34 @@ is also safe.
 
 # Extension Points
 Feel free to write your own DegradationStrategy and pop it into the DegradationHandler
+
+# Future Feature Notes
+
+**stable releases**
+
+Currently the _master_ branch and release version slowlight-1.0.1 reflects the embedded framework capabilities only.
+ It is available in the public maven repository as com.tacitknowledge:slowlight:1.0.1
+```
+     <dependency>
+       <groupId>com.tacitknowledge</groupId>
+       <artifactId>slowlight</artifactId>
+       <version>1.0.1</version>
+     </dependency>
+```
+**unproven stuff**
+
+Slowlight-Proxy is available in the _development_ branch.  You may need to modify code for your needs.
+
+Feature development for embedded mode on concrete objects is also in the development branch.
+
+Neither are ready for public release
+
+# Release Notes
+
+Slow Light development progresses against the _development_ branch, with merges into master at releases.
+
+Currently Slow Light only supports embedded mode in its first release. Slow Light Proxy Server is on track for the second
+release. If you are feeling lucky, you can grab the Slow Light Proxy Server code in the development branch.
+
 
 

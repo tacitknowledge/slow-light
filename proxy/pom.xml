@@ -1,0 +1,195 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tacitknowledge</groupId>
+        <artifactId>slowlight</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.tacitknowledge</groupId>
+    <artifactId>slowlight-proxy</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Slow Light Proxy</name>
+    <description>Standalone proxy tool for creating issues with synchronous RPC calls</description>
+    <url>https://github.com/tacitknowledge/slow-light</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/tacitknowledge/slow-light.git</connection>
+        <developerConnection>scm:git:git@github.com:tacitknowledge/slow-light.git</developerConnection>
+        <url>https://github.com/tacitknowledge/slow-light</url>
+    </scm>
+    <developers>
+        <developer>
+            <id>witherspore</id>
+            <name>Matthew Short</name>
+            <email>witherspore@gmail.com</email>
+        </developer>
+        <developer>
+            <id>ivanfrolovmd</id>
+            <name>Ivan Frolov</name>
+            <email>ifrolov@tacitknowledge.com</email>
+        </developer>
+        <developer>
+            <id>adonciu</id>
+            <name>Alexandr Donciu</name>
+            <email>adonciu@tacitknowledge.com</email>
+        </developer>
+        <developer>
+            <id>psorocun</id>
+            <name>Pavel Sorocun</name>
+            <email>psorocun@tacitknowledge.com</email>
+        </developer>
+
+    </developers>
+
+    <properties>
+        <coverage.totalBranchRate>64</coverage.totalBranchRate>
+        <coverage.totalLineRate>65</coverage.totalLineRate>
+        <coverage.packageLineRate>0</coverage.packageLineRate>
+        <coverage.packageBranchRate>25</coverage.packageBranchRate>
+        <coverage.packageBranchRate>25</coverage.packageBranchRate>
+        <!-- per class requirements -->
+        <coverage.branchRate>0</coverage.branchRate>
+        <coverage.lineRate>0</coverage.lineRate>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <downloadSources>true</downloadSources>
+        <downloadJavadocs>true</downloadJavadocs>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Commons -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-pool</groupId>
+            <artifactId>commons-pool</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+
+        <!-- DI -->
+        <!--<dependency>-->
+            <!--<groupId>com.google.inject</groupId>-->
+            <!--<artifactId>guice</artifactId>-->
+            <!--<version>3.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.netflix.governator</groupId>-->
+            <!--<artifactId>governator</artifactId>-->
+            <!--<version>1.2.2</version>-->
+        <!--</dependency>-->
+
+        <!-- Metrics collection -->
+        <dependency>
+            <groupId>com.netflix.servo</groupId>
+            <artifactId>servo-core</artifactId>
+            <version>0.4.41</version>
+        </dependency>
+
+        <!-- Dynamic Configuration Management -->
+        <dependency>
+            <groupId>com.netflix.archaius</groupId>
+            <artifactId>archaius-core</artifactId>
+            <version>0.5.11</version>
+        </dependency>
+
+        <!-- XML Serialization/deserialization -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.4</version>
+        </dependency>
+
+        <!-- Netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.13.Final</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.tacitknowledge.slowlight.proxyserver.server.SlowlightServer</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+</project>
