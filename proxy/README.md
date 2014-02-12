@@ -199,20 +199,20 @@ Throughput metric is computed at two levels :
 ![alt text](images/Throughput.png "Throughput metric")
 
 All Slow Light channel handlers will expose their parameters to JMX, as for example in case of DelayChannelHandler
-those parameters will be 'delay' and 'maxDataSize'. Using a any JMX Client someone could connect to the running Slow Light application
+those parameters will be 'delay' and 'maxDataSize'. Using a JMX Client someone could connect to the running Slow Light application
 and adjust the values of those parameters on demand, what will have an immediate effect on the handler behavior.
 
-An example on how to adjust a handler parameter using jvisualvm:
+An example on how to adjust a handler parameter using JVisualVM:
 
-- go to MBean tab and select slowlight-config folder, where you will see the name of all registered handlers:
+- go to MBean tab and select __slowlight-config__ folder, where you will see the name of all registered handlers:
 
 ![alt text](images/HandlerMBean.png "Handler MBean")
 
-- now using MBean property operations you can view or update parameter with new values:
+- now using MBean property operations you manipulate handler parameters:
 
 ![alt text](images/HandlerMBeanViewProperties.png "Handler MBean View Properties")
 
-## configuration notes
+## Configuration notes
 Slow Light Proxy Server uses Gson to load the ServersConfiguration object graph from the specified configuration file.
 
 ## Running several servers on different ports

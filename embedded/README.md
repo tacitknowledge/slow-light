@@ -7,14 +7,29 @@ Slow Light Embedded is a sister tool to [Slow Light Proxy Server](../proxy).
 Slow Light Embedded is open source and is hosted at
 [Github](http://github.com/tacitknowledge/slow-light).
 
-You can include Slow Light Embedded in your Maven project via:
+You can include Slow Light Embedded in your project via:
 
-    <dependency>
-      <groupId>com.tacitknowledge</groupId>
-      <artifactId>slowlight</artifactId>
-      <version>1.0.1</version>
-    </dependency>
+    Maven dependency:
 
+        <dependency>
+          <groupId>com.tacitknowledge</groupId>
+          <artifactId>slowlight</artifactId>
+          <version>1.0.1</version>
+        </dependency>
+
+    Ivy dependency:
+
+        <dependency org="com.tacitknowledge" name="slowlight" rev="1.0.1" />
+
+    Grapes dependency:
+
+        @Grapes(
+            @Grab(group='com.tacitknowledge', module='slowlight', version='1.0.1')
+        )
+
+    Gradle dependency:
+
+        'com.tacitknowledge:slowlight:1.0.1'
 
 # Use it!
 
