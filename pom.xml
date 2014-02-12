@@ -39,6 +39,16 @@
             <name>Ivan Frolov</name>
             <email>ifrolov@tacitknowledge.com</email>
         </developer>
+        <developer>
+            <id>adonciu</id>
+            <name>Alexandr Donciu</name>
+            <email>adonciu@tacitknowledge.com</email>
+        </developer>
+        <developer>
+            <id>psorocun</id>
+            <name>Pavel Sorocun</name>
+            <email>psorocun@tacitknowledge.com</email>
+        </developer>
 
     </developers>
 
