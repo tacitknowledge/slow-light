@@ -1,17 +1,50 @@
 # Slow Light Proxy Server
 
+## Where do I get Slow Light Proxy?
+-------------------------
+Slow Light Proxy is open source and is hosted at
+[Github](http://github.com/tacitknowledge/slow-light).
+
+You can include Slow Light Proxy in your project via:
+
+    Maven dependency:
+
+        <dependency>
+          <groupId>com.tacitknowledge</groupId>
+          <artifactId>slowlight-proxy</artifactId>
+          <version>2.0.0</version>
+        </dependency>
+
+    Ivy dependency:
+
+        <dependency org="com.tacitknowledge" name="slowlight-proxy" rev="2.0.0" />
+
+    Grapes dependency:
+
+        @Grapes(
+            @Grab(group='com.tacitknowledge', module='slowlight-proxy', version='2.0.0')
+        )
+
+    Gradle dependency:
+
+        'com.tacitknowledge:slowlight-proxy:2.0.0'
+
+
 ## How to run
-First, build the project with maven:
+If you use Slow Light Proxy from sources then first, build the project with maven:
 
 ```
 mvn clean install
 ```
 
-Run *Slow Light Proxy Server* with
+Run *Slow Light Proxy Server* using application jar:
 
 ```
-java -jar slowlight-proxy-<version>.jar config.json
+java -jar slowlight-proxy-<version>-dep.jar config.json
 ```
+
+__Note:__ *Slow Light Proxy Server* application entry point (main class) is *com.tacitknowledge.slowlight.proxyserver.server.SlowlightServer*.
+
 
 ## Sample configurations
 

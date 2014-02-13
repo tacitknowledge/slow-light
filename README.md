@@ -178,22 +178,22 @@ You can include Slow Light Embedded in your project via:
         <dependency>
           <groupId>com.tacitknowledge</groupId>
           <artifactId>slowlight</artifactId>
-          <version>1.0.1</version>
+          <version>2.0.0</version>
         </dependency>
 
     Ivy dependency:
 
-        <dependency org="com.tacitknowledge" name="slowlight" rev="1.0.1" />
+        <dependency org="com.tacitknowledge" name="slowlight" rev="2.0.0" />
 
     Grapes dependency:
 
         @Grapes(
-            @Grab(group='com.tacitknowledge', module='slowlight', version='1.0.1')
+            @Grab(group='com.tacitknowledge', module='slowlight', version='2.0.0')
         )
 
     Gradle dependency:
 
-        'com.tacitknowledge:slowlight:1.0.1'
+        'com.tacitknowledge:slowlight:2.0.0'
 
 Slow Light Proxy Server is not yet released as a jar, but you can build it from code in our _development_ branch
 
@@ -208,29 +208,18 @@ Feel free to write your own DegradationStrategy and pop it into the DegradationH
 
 **stable releases**
 
-Currently the _master_ branch and release version slowlight-1.0.1 reflects the embedded framework capabilities only.
- It is available in the public maven repository as com.tacitknowledge:slowlight:1.0.1
+Current Slowlight release is available in the public maven repository as com.tacitknowledge:slowlight:2.0.0
 ```
      <dependency>
        <groupId>com.tacitknowledge</groupId>
        <artifactId>slowlight</artifactId>
-       <version>1.0.1</version>
+       <version>2.0.0</version>
      </dependency>
 ```
-**unproven stuff**
-
-Slowlight-Proxy is available in the _development_ branch.  You may need to modify code for your needs.
-
-Feature development for embedded mode on concrete objects is also in the development branch.
-
-Neither are ready for public release
 
 # Release Notes
 
 Slow Light development progresses against the _development_ branch, with merges into master at releases.
-
-Currently Slow Light only supports embedded mode in its first release. Slow Light Proxy Server is on track for the second
-release. If you are feeling lucky, you can grab the Slow Light Proxy Server code in the development branch.
 
 
 

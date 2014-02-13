@@ -13,23 +13,23 @@ You can include Slow Light Embedded in your project via:
 
         <dependency>
           <groupId>com.tacitknowledge</groupId>
-          <artifactId>slowlight</artifactId>
-          <version>1.0.1</version>
+          <artifactId>slowlight-embedded</artifactId>
+          <version>2.0.0</version>
         </dependency>
 
     Ivy dependency:
 
-        <dependency org="com.tacitknowledge" name="slowlight" rev="1.0.1" />
+        <dependency org="com.tacitknowledge" name="slowlight-embedded" rev="2.0.0" />
 
     Grapes dependency:
 
         @Grapes(
-            @Grab(group='com.tacitknowledge', module='slowlight', version='1.0.1')
+            @Grab(group='com.tacitknowledge', module='slowlight-embedded', version='2.0.0')
         )
 
     Gradle dependency:
 
-        'com.tacitknowledge:slowlight:1.0.1'
+        'com.tacitknowledge:slowlight-embedded:2.0.0'
 
 # Use it!
 
