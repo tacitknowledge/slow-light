@@ -8,7 +8,7 @@
 
     <groupId>com.tacitknowledge</groupId>
     <artifactId>slowlight</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Slow Light</name>
