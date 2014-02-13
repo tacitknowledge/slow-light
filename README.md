@@ -171,32 +171,6 @@ For detailed information on how to configure and use Slow Light please use the f
 Slow Light is open source and is hosted at
 [Github](http://github.com/tacitknowledge/slow-light).
 
-You can include Slow Light Embedded in your project via:
-
-    Maven dependency:
-
-        <dependency>
-          <groupId>com.tacitknowledge</groupId>
-          <artifactId>slowlight</artifactId>
-          <version>2.0.0</version>
-        </dependency>
-
-    Ivy dependency:
-
-        <dependency org="com.tacitknowledge" name="slowlight" rev="2.0.0" />
-
-    Grapes dependency:
-
-        @Grapes(
-            @Grab(group='com.tacitknowledge', module='slowlight', version='2.0.0')
-        )
-
-    Gradle dependency:
-
-        'com.tacitknowledge:slowlight:2.0.0'
-
-Slow Light Proxy Server is not yet released as a jar, but you can build it from code in our _development_ branch
-
 # Notes
 The default implementations are thread safe.  You can re-use a single proxy across threads, assuming the target object
 is also safe.
@@ -209,13 +183,6 @@ Feel free to write your own DegradationStrategy and pop it into the DegradationH
 **stable releases**
 
 Current Slowlight release is available in the public maven repository as com.tacitknowledge:slowlight:2.0.0
-```
-     <dependency>
-       <groupId>com.tacitknowledge</groupId>
-       <artifactId>slowlight</artifactId>
-       <version>2.0.0</version>
-     </dependency>
-```
 
 # Release Notes
 
