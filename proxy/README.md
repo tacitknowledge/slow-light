@@ -40,7 +40,7 @@ mvn clean install
 Run *Slow Light Proxy Server* using application jar:
 
 ```
-java -jar slowlight-proxy-<version>-dep.jar config.json
+java -jar slowlight-proxy-<version>.jar config.json
 ```
 
 __Note:__ *Slow Light Proxy Server* application entry point (main class) is *com.tacitknowledge.slowlight.proxyserver.server.SlowlightServer*.
